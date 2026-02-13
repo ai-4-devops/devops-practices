@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "devops-practices": {
+      "command": "python3",
+      "args": ["/home/ukj/work/devops/protean/devops-practices-mcp/mcp-server.py"],
+      "env": {}
+    }
+  }
+}
