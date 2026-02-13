@@ -142,7 +142,7 @@ Claude: [Receives template content]
 Claude: [Creates populated TRACKER.md]
 ```
 
-### For DevOps Team
+### For Uttam Jaiswal
 **Update a Practice:**
 ```bash
 cd devops-practices-mcp
@@ -159,7 +159,7 @@ git push
 ## Governance
 
 ### Who Maintains This
-- **Owner**: DevOps Team Lead
+- **Owner**: Uttam Jaiswal Lead
 - **Contributors**: DevOps Engineers
 - **Review Process**: PR required for changes
 
@@ -233,6 +233,6 @@ MIT License - Free to use and modify
 
 ---
 
-**Maintained By**: DevOps Team
+**Maintained By**: Uttam Jaiswal
 **Last Updated**: 2026-02-13
 **Version**: 1.0.0

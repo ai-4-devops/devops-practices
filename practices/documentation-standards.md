@@ -403,7 +403,7 @@ configs/
 6. **Timestamp correctly** using UTC format
 7. **Cross-reference** related documents with markdown links
 
-### For DevOps Team
+### For Uttam Jaiswal
 
 1. **Follow the structure** - Don't create new top-level directories
 2. **Update living documents** when you discover changes

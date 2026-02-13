@@ -339,5 +339,5 @@ git add . && git commit -m "Update practice" && git push
 
 ---
 
-**Maintained By**: DevOps Team
+**Maintained By**: Uttam Jaiswal
 **Last Updated**: 2026-02-13

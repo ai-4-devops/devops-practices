@@ -299,7 +299,7 @@ Use consistent emoji status indicators:
 4. **Cross-reference** - Link to relevant documentation
 5. **Track blockers** - Document obstacles immediately
 
-### For DevOps Team
+### For Uttam Jaiswal
 
 1. **Review before status meetings** - Use for quick updates
 2. **Update after completing tasks** - Keep history accurate

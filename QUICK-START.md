@@ -276,5 +276,5 @@ The MCP server is working and Claude can now query shared DevOps practices acros
 
 **Questions?** See [SETUP.md](SETUP.md) for detailed troubleshooting.
 
-**Maintained By**: DevOps Team
+**Maintained By**: Uttam Jaiswal
 **Last Updated**: 2026-02-13

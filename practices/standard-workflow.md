@@ -323,6 +323,6 @@ Use air-gapped workflow when:
 
 ---
 
-**Maintained By**: DevOps Team
+**Maintained By**: Uttam Jaiswal
 **Last Updated**: 2026-02-13
 **Version**: 1.0.0
