@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-example-project DevOps Practices MCP Server
+DevOps Practices MCP Server
 
 Provides shared DevOps practices and templates for all example-project infrastructure projects.
 """
@@ -266,7 +266,7 @@ class MCPServer:
 
     def run(self):
         """Run the MCP server (stdio mode)."""
-        logger.info("Starting example-project DevOps Practices MCP Server")
+        logger.info("Starting DevOps Practices MCP Server")
         logger.info(f"Base directory: {BASE_DIR}")
         logger.info(f"Practices loaded: {', '.join(self.list_practices())}")
         logger.info(f"Templates loaded: {', '.join(self.list_templates())}")

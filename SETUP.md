@@ -1,4 +1,4 @@
-# Setup Guide - example-project DevOps Practices MCP Server
+# Setup Guide - DevOps Practices MCP Server
 
 This guide will help you set up the MCP server so Claude Code can access shared DevOps practices.
 
@@ -152,7 +152,7 @@ EOF
 git add .
 
 # Initial commit
-git commit -m "Initial commit: example-project DevOps Practices MCP Server
+git commit -m "Initial commit: DevOps Practices MCP Server
 
 - Add 6 practice documents (air-gapped workflow, documentation standards, etc.)
 - Add 3 template files (TRACKER, CURRENT-STATE, CLAUDE)
@@ -306,7 +306,7 @@ git push origin main
 
 1. **Test the MCP server** with Claude Code
 2. **Simplify kafka-project/CLAUDE.md** to reference MCP server
-3. **Use for other example-project projects** (monitoring, networking, etc.)
+3. **Use for other projects** (monitoring, networking, etc.)
 4. **Update practices** as needed (commit to git)
 
 ---
@@ -339,5 +339,5 @@ git add . && git commit -m "Update practice" && git push
 
 ---
 
-**Maintained By**: Infrastructure Team
+**Maintained By**: DevOps Team
 **Last Updated**: 2026-02-13

@@ -1,6 +1,6 @@
-# example-project DevOps Practices - MCP Server
+# DevOps Practices - MCP Server
 
-**Purpose**: Centralized DevOps practices and standards for all example-project infrastructure projects.
+**Purpose**: Centralized DevOps practices and standards for infrastructure projects.
 
 **Type**: Model Context Protocol (MCP) Server for Claude Code
 
@@ -10,7 +10,7 @@
 
 ## What This Provides
 
-This MCP server provides shared DevOps practices that are common across all example-project projects:
+This MCP server provides shared DevOps practices that are common across infrastructure projects:
 
 ### Available Practices
 1. **Air-Gapped Workflow** - Working across laptop, CloudShell, bastion, and EKS
@@ -58,7 +58,7 @@ devops-practices-mcp/
 ## How Projects Use This
 
 ### Project CLAUDE.md Structure
-Each example-project project has a simplified CLAUDE.md:
+Each project has a simplified CLAUDE.md:
 
 ```markdown
 # Claude AI Assistant - [Project Name]
@@ -159,7 +159,7 @@ git push
 ## Governance
 
 ### Who Maintains This
-- **Owner**: Infrastructure Team Lead
+- **Owner**: DevOps Team Lead
 - **Contributors**: DevOps Engineers
 - **Review Process**: PR required for changes
 
@@ -183,9 +183,9 @@ git push
 
 | Project | Purpose | Location |
 |---------|---------|----------|
-| kafka-project | Apache Kafka deployment | protean/kafka-project |
-| example-monitoring | Observability stack | protean/example-monitoring |
-| example-networking | Network infrastructure | protean/example-networking |
+| kafka-deployment | Apache Kafka deployment | Example project
+| observability-stack | Observability stack | Example project
+| network-infra | Network infrastructure | Example project
 
 ---
 
@@ -229,10 +229,10 @@ git push
 
 ## License
 
-Internal use only - example-project Infrastructure Team
+MIT License - Free to use and modify
 
 ---
 
-**Maintained By**: Infrastructure Team
+**Maintained By**: DevOps Team
 **Last Updated**: 2026-02-13
 **Version**: 1.0.0

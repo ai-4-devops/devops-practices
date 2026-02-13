@@ -1,6 +1,6 @@
 # Air-Gapped Environment Workflow
 
-**Purpose**: Standard workflow for working across air-gapped environments in example-project infrastructure.
+**Purpose**: Standard workflow for working across air-gapped environments in infrastructure.
 
 **CRITICAL**: NEVER FORGET THIS - The laptop where Claude runs has NO AWS access.
 

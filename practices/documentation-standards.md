@@ -1,6 +1,6 @@
 # Documentation Standards
 
-**Purpose**: Standard documentation structure for all example-project infrastructure projects.
+**Purpose**: Standard documentation structure for all infrastructure projects.
 
 **Principle**: Clear separation of HOW, WHAT, and WHY for maximum clarity and maintainability.
 

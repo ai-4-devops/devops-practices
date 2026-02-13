@@ -1,4 +1,4 @@
-# Quick Start - example-project DevOps Practices MCP Server
+# Quick Start - DevOps Practices MCP Server
 
 **5-Minute Setup Guide for Beginners**
 
@@ -270,11 +270,11 @@ When creating a new project:
 
 If you can ask Claude "List practices" and see 6 practices, **you're done!** 🎉
 
-The MCP server is working and Claude can now query shared DevOps practices across all your example-project projects.
+The MCP server is working and Claude can now query shared DevOps practices across all your projects.
 
 ---
 
 **Questions?** See [SETUP.md](SETUP.md) for detailed troubleshooting.
 
-**Maintained By**: Infrastructure Team
+**Maintained By**: DevOps Team
 **Last Updated**: 2026-02-13

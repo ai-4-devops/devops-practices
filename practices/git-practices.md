@@ -1,6 +1,6 @@
 # Git Best Practices
 
-**Purpose**: Standard git practices for example-project infrastructure projects.
+**Purpose**: Standard git practices for infrastructure projects.
 
 **Principle**: Preserve history, enable collaboration, ensure traceability.
 
