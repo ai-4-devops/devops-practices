@@ -581,6 +581,15 @@ See example-project project for real-world examples:
 
 ---
 
+## Related Practices
+
+- **[documentation-standards.md](documentation-standards.md)** - configs/ directory location and purpose
+- **[air-gapped-workflow.md](air-gapped-workflow.md)** - Deploying configurations in air-gapped environments
+- **[standard-workflow.md](standard-workflow.md)** - Deploying configurations with direct access
+- **[git-practices.md](git-practices.md)** - Version control and backup best practices
+
+---
+
 **Remember:** Configurations are code - treat them with the same care!
 
 **Last Updated:** 2026-02-13

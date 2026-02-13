@@ -453,6 +453,15 @@ See existing runbooks in example-project project:
 
 ---
 
+## Related Practices
+
+- **[documentation-standards.md](documentation-standards.md)** - Overall documentation structure (HOW/WHAT/WHY)
+- **[session-continuity.md](session-continuity.md)** - State tracking and session handoff
+- **[task-tracking.md](task-tracking.md)** - TRACKER.md guidelines
+- **[git-practices.md](git-practices.md)** - File naming and backup conventions
+
+---
+
 **Remember:** Runbooks are not just logs - they are reproducible deployment instructions!
 
 **Last Updated:** 2026-02-13

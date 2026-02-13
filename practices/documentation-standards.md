@@ -94,6 +94,8 @@ Every example-project project follows this standard structure:
 
 **Critical**: Do NOT miss ANY command or output. These are the single source of truth for troubleshooting and reproduction.
 
+> **📖 For detailed runbook standards**, see **[runbook-documentation.md](runbook-documentation.md)** practice.
+
 ---
 
 ### 3. Reports (docs/reports/) - "WHY We Did It"
@@ -300,81 +302,29 @@ Guides use descriptive names without timestamps:
 
 ## README Maintenance
 
-**CRITICAL PRACTICE**: Every directory with multiple files or subdirectories must have a `README.md`.
+**CRITICAL PRACTICE**: Every directory with multiple files or subdirectories must have a `README.md` that explains its purpose, contents, and usage.
 
-### Purpose
+**Benefits:**
 - Self-documenting structure
 - Easy navigation for team members
 - Clear handover documentation
 - Audit-friendly organization
 
-### Required READMEs
-
-```
-docs/
-├── README.md              # Overview of docs structure
-├── guides/README.md       # Summary of all guides
-├── RUNBOOKS/README.md     # Session log index
-├── reports/README.md      # Report types
-├── archive/README.md      # Historical content
-├── plans/README.md        # Architecture docs
-├── application/README.md  # Developer guides
-└── templates/README.md    # Request templates
-
-scripts/
-└── README.md              # Script categories
-
-configs/
-└── README.md              # Configuration structure
-```
-
-### README Contents Should Include
-
-1. **Purpose** - What this directory is for
-2. **Contents Overview** - What's inside (with brief descriptions)
-3. **Naming Conventions** - How files are named
-4. **When to Use** - Use cases for the contents
-5. **Navigation Links** - Links to related directories/files
-6. **Maintenance Notes** - How to keep directory organized
-
-### When to Create/Update READMEs
-
-- ✅ When creating a new directory with multiple files
-- ✅ When directory structure changes significantly
-- ✅ When adding new file types or categories
-- ✅ When archiving or reorganizing content
-- ✅ During handover preparation
-
-Claude should **proactively** create or update READMEs when working with directory structures.
+> **📖 For detailed README standards**, see **[readme-maintenance.md](readme-maintenance.md)** practice.
 
 ---
 
 ## Configuration Management
 
-### Folder Structure
+All environment-specific configurations are stored under `configs/<environment>/` directory.
 
-```
-configs/
-├── <environment>/                  # e.g., dev, staging, production
-│   ├── k8s/                        # Kubernetes resources
-│   │   ├── <namespace>/            # e.g., kafka, observability
-│   │   │   ├── <service>/          # e.g., kafka, otel-collector
-│   │   │   │   ├── values.yaml     # Helm values or config
-│   │   │   │   ├── deployment.yaml
-│   │   │   │   └── ...
-│   ├── ec2/                        # EC2-hosted services
-│   │   ├── <service>/              # e.g., elasticsearch
-│   │   │   ├── config/             # Service configuration
-│   │   │   └── setup/              # Installation scripts
-│   └── shared/                     # Cross-cutting configs
-```
-
-### Principles
-
+**Key Principles:**
 - **Environment isolation**: Each environment fully self-contained
 - **Service grouping**: Configs grouped by service, not file type
 - **No hardcoded values**: Use placeholders (e.g., `${ECR_REGISTRY}`)
 - **Version-controlled**: All configs live in git
+
+> **📖 For detailed configuration management standards**, see **[configuration-management.md](configuration-management.md)** practice.
 
 ---
 

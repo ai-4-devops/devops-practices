@@ -646,6 +646,14 @@ See example-project project for real-world examples:
 
 ---
 
+## Related Practices
+
+- **[documentation-standards.md](documentation-standards.md)** - Overall documentation structure
+- **[runbook-documentation.md](runbook-documentation.md)** - RUNBOOKS directory README requirements
+- **[configuration-management.md](configuration-management.md)** - configs/ directory README requirements
+
+---
+
 **Remember:** A well-maintained README is a gift to your future self and your team!
 
 **Last Updated:** 2026-02-13
