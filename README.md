@@ -12,20 +12,23 @@
 
 This MCP server provides shared DevOps practices that are common across infrastructure projects:
 
-### Available Practices
+### Available Practices (10)
 1. **Air-Gapped Workflow** - Working across laptop, CloudShell, bastion, and EKS
 2. **Documentation Standards** - HOW/WHAT/WHY structure, naming conventions
 3. **Session Continuity** - State tracking, handoff protocols
 4. **Task Tracking** - TRACKER.md, CURRENT-STATE.md, PENDING-CHANGES.md
 5. **Git Practices** - Using `git mv`, commit conventions, backup protocols
 6. **Efficiency Guidelines** - When to script vs copy-paste, batching commands
+7. **Standard Workflow** - Common operational patterns and workflows
+8. **Runbook Documentation** ⭐ - Mandatory session log standards and requirements
+9. **Configuration Management** ⭐ - Config organization, placeholders, environment isolation
+10. **README Maintenance** ⭐ - Directory documentation standards and best practices
 
-### Available Templates
+### Available Templates (4)
 1. **TRACKER.md** - Task tracking template
 2. **CURRENT-STATE.md** - Session handoff template
-3. **PENDING-CHANGES.md** - Infrastructure changes template
-4. **README.md** - Directory README template
-5. **Project CLAUDE.md** - Simplified project instructions template
+3. **CLAUDE.md** - Simplified project instructions template
+4. **RUNBOOK.md** ⭐ - Session log template with all required sections
 
 ---
 
@@ -51,6 +54,40 @@ devops-practices-mcp/
 │   └── CLAUDE-template.md
 └── config/                      # MCP configuration
     └── mcp-config.json          # Server configuration
+```
+
+---
+
+## Documentation
+
+### Quick Reference
+- **[PRACTICE-INDEX.md](PRACTICE-INDEX.md)** - Quick lookup guide for which practice to use when
+  - Organized by task type (deploying, documenting, troubleshooting, etc.)
+  - Common scenarios with recommended practices
+  - Practice dependencies and relationships
+
+### Migration Guide
+- **[MIGRATION-GUIDE.md](MIGRATION-GUIDE.md)** - Roll out MCP to existing projects
+  - Step-by-step migration from monolithic CLAUDE.md
+  - Configuration setup for Claude Desktop/Code
+  - Testing and validation procedures
+  - Rollback plan if needed
+
+### Version History
+- **[CHANGELOG.md](CHANGELOG.md)** - Complete version history and upgrade guides
+  - Version 1.0.0 (2026-02-13): 10 practices, 4 templates, health check tool
+  - Version 0.1.0 (2026-02-13): Initial release
+
+### Health Check
+- **[health-check.sh](health-check.sh)** - Validate MCP server before deployment
+  - 14 comprehensive checks (directory structure, files, Python environment, loading tests)
+  - Colored output with pass/fail counts
+  - Exit codes: 0 (healthy), 1 (unhealthy)
+
+**Usage:**
+```bash
+cd devops-practices-mcp
+bash health-check.sh
 ```
 
 ---
@@ -196,14 +233,25 @@ git push
 2. Use clear structure with examples
 3. Update `mcp-server.py` if needed
 4. Test with Claude
-5. Update this README
+5. Update this README (practice count)
+6. Update [PRACTICE-INDEX.md](PRACTICE-INDEX.md) (add to scenario lists)
+7. Update [CHANGELOG.md](CHANGELOG.md) (document the addition)
+8. Run health check: `bash health-check.sh`
 
 ### Adding a New Template
 1. Create template file in `templates/`
 2. Use placeholders: `${PROJECT_NAME}`, `${DATE}`, etc.
 3. Update `mcp-server.py` to handle substitutions
 4. Test template generation
-5. Update this README
+5. Update this README (template count)
+6. Update [CHANGELOG.md](CHANGELOG.md) (document the addition)
+7. Run health check: `bash health-check.sh`
+
+### Making Changes
+- **Before release:** Run health check to validate all files
+- **After changes:** Update CHANGELOG.md with version bump
+- **Breaking changes:** Update MIGRATION-GUIDE.md with migration notes
+- **New features:** Update PRACTICE-INDEX.md with usage scenarios
 
 ---
 
