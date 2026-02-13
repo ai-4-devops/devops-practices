@@ -69,43 +69,77 @@ echo '{"id":1,"method":"tools/list","params":{}}' | python3 mcp-server.py
 ### Step 2: Find Claude Config File (1 minute)
 
 ```bash
-# Find your Claude config (one of these will exist):
-ls ~/.config/claude/config.json       # Linux/WSL
-ls ~/.claude/config.json               # Alternative location
+# Find your Claude config (check these locations in order):
+ls ~/.claude.json                     # Most common (project-specific config)
+ls ~/.config/claude/config.json       # Alternative (global config)
 ls ~/Library/Application\ Support/Claude/config.json  # macOS
 
-# If none exist, create one:
-mkdir -p ~/.config/claude
-echo '{}' > ~/.config/claude/config.json
+# If none exist:
+echo "Config file not found - check Claude Code installation"
 ```
+
+**Most likely**: You have `~/.claude.json` with project-specific configurations.
 
 ---
 
 ### Step 3: Add MCP Server to Config (2 minutes)
 
-Edit the config file you found:
+#### Option A: Project-Specific Config (Most Common)
 
-```bash
-vim ~/.config/claude/config.json
-```
-
-Add this JSON (or merge if config already has content):
-
+If you have `~/.claude.json` with a structure like:
 ```json
 {
+  "projects": {
+    "/path/to/your/project": {
+      "mcpServers": {}
+    }
+  }
+}
+```
+
+**Find your project path** and add MCP server:
+```bash
+# Edit config
+vim ~/.claude.json
+
+# Find your project (search for the path), then update:
+"/path/to/your/kafka-project": {
   "mcpServers": {
     "devops-practices": {
       "command": "python3",
-      "args": ["/home/ukj/work/devops/protean/devops-practices-mcp/mcp-server.py"],
+      "args": ["/absolute/path/to/devops-practices-mcp/mcp-server.py"],
       "env": {}
     }
   }
 }
 ```
 
-**⚠️ IMPORTANT**: Use the **absolute path** shown above (adjust if your home directory is different).
+#### Option B: Global Config (Less Common)
 
-Save and exit.
+If you have `~/.config/claude/config.json` with simpler structure:
+```bash
+vim ~/.config/claude/config.json
+```
+
+Add at root level:
+```json
+{
+  "mcpServers": {
+    "devops-practices": {
+      "command": "python3",
+      "args": ["/absolute/path/to/devops-practices-mcp/mcp-server.py"],
+      "env": {}
+    }
+  }
+}
+```
+
+**⚠️ CRITICAL**:
+- Use **absolute path** to mcp-server.py
+- Replace `/absolute/path/to/` with your actual path
+- Save and exit
+
+---
 
 ---
 
