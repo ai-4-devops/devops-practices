@@ -27,42 +27,58 @@ example-networking/CLAUDE.md    → ~150 lines (only networking-specific)
 
 ## What's Inside
 
-### 6 Practice Documents
+### 10 Practice Documents
 1. **air-gapped-workflow.md** - How to work across laptop/CloudShell/bastion/EKS
 2. **documentation-standards.md** - HOW/WHAT/WHY structure, naming conventions
 3. **session-continuity.md** - State tracking, handoff protocols
 4. **task-tracking.md** - TRACKER.md guidelines
-5. **git-practices.md** - Using `git mv`, backup protocols
+5. **git-practices.md** ⭐ - GitLab Flow branching, `git mv`, backup protocols (200+ lines)
 6. **efficiency-guidelines.md** - Script vs copy-paste decisions
+7. **standard-workflow.md** - Common operational patterns
+8. **runbook-documentation.md** ⭐ - Mandatory session log standards
+9. **configuration-management.md** ⭐ - Config organization, placeholders
+10. **readme-maintenance.md** ⭐ - Directory documentation standards
 
-### 3 Template Files
+### 4 Template Files
 1. **TRACKER-template.md** - Task tracking template
 2. **CURRENT-STATE-template.md** - Session handoff template
 3. **CLAUDE-template.md** - Simplified project CLAUDE.md template
+4. **RUNBOOK-template.md** ⭐ - Session log template
 
-### 1 MCP Server
-- Python script that serves practices and templates
-- Works with Claude Code via stdio protocol
+### MCP Server + CI/CD
+- **mcp-server.py** - Python MCP server (5 tools: list/get practices & templates, render templates)
+- **health-check.sh** - Comprehensive validation script (14 checks)
+- **.gitlab-ci.yml** - Automated CI/CD pipeline (validates all changes)
+- **CONTRIBUTING.md** ⭐ - Complete contribution guide with GitLab Flow workflows
 - Zero dependencies (Python stdlib only)
 
 ---
 
 ## Setup (5 Minutes)
 
-### Step 1: Test the MCP Server (30 seconds)
+**Recommended Installation Location**: `~/.mcp-servers/devops-practices/`
+
+This keeps MCP servers organized and makes configuration easier.
+
+### Step 1: Clone & Test (1 minute)
 
 ```bash
-cd /home/ukj/work/devops/protean/devops-practices-mcp
+# Clone to recommended location
+git clone <repo-url> ~/.mcp-servers/devops-practices
+cd ~/.mcp-servers/devops-practices
 
-# Test server works
-echo '{"id":1,"method":"tools/list","params":{}}' | python3 mcp-server.py
+# Install dependencies (if needed)
+pip install -r requirements.txt
+
+# Run health check
+bash health-check.sh
 
 # Should see:
-# INFO - Loaded 6 practices and 3 templates
-# INFO - Practices loaded: air-gapped-workflow, documentation-standards, ...
+# ✅ All 14 checks passed!
+# ✅ MCP server is healthy
 ```
 
-✅ If you see the above, server works!
+✅ If all checks pass, server is ready!
 
 ---
 
@@ -106,15 +122,15 @@ vim ~/.claude.json
 "/path/to/your/kafka-project": {
   "mcpServers": {
     "devops-practices": {
-      "command": "python3",
-      "args": ["/absolute/path/to/devops-practices-mcp/mcp-server.py"],
+      "command": "python",
+      "args": ["/home/<username>/.mcp-servers/devops-practices/mcp-server.py"],
       "env": {}
     }
   }
 }
 ```
 
-#### Option B: Global Config (Less Common)
+#### Option B: Global Config (Recommended)
 
 If you have `~/.config/claude/config.json` with simpler structure:
 ```bash
@@ -126,8 +142,8 @@ Add at root level:
 {
   "mcpServers": {
     "devops-practices": {
-      "command": "python3",
-      "args": ["/absolute/path/to/devops-practices-mcp/mcp-server.py"],
+      "command": "python",
+      "args": ["/home/<username>/.mcp-servers/devops-practices/mcp-server.py"],
       "env": {}
     }
   }
@@ -136,7 +152,8 @@ Add at root level:
 
 **⚠️ CRITICAL**:
 - Use **absolute path** to mcp-server.py
-- Replace `/absolute/path/to/` with your actual path
+- Replace `<username>` with your actual username
+- Recommended: `~/.mcp-servers/devops-practices/mcp-server.py`
 - Save and exit
 
 ---
@@ -164,13 +181,17 @@ Start Claude Code and ask:
 ```
 
 **Expected Response**:
-Claude should list:
+Claude should list 10 practices:
 - air-gapped-workflow
 - documentation-standards
 - session-continuity
 - task-tracking
 - git-practices
 - efficiency-guidelines
+- standard-workflow
+- runbook-documentation
+- configuration-management
+- readme-maintenance
 
 ---
 
@@ -179,19 +200,26 @@ Claude should list:
 ### Test 1: List Practices ✅
 ```
 User: "List available practices"
-Claude: [Shows 6 practices from MCP server]
+Claude: [Shows 10 practices from MCP server]
 ```
 
 ### Test 2: Get a Practice ✅
 ```
-User: "Show me the air-gapped workflow"
-Claude: [Displays full air-gapped-workflow.md content]
+User: "Show me the git branching strategy"
+Claude: [Displays git-practices.md with GitLab Flow documentation]
 ```
 
-### Test 3: Get a Template ✅
+### Test 3: Render a Template ✅
 ```
-User: "Get the TRACKER template"
-Claude: [Displays TRACKER-template.md content]
+User: "Create a TRACKER.md for my project"
+Claude: [Uses render_template with auto-substituted variables]
+```
+
+### Test 4: Health Check ✅
+```bash
+cd ~/.mcp-servers/devops-practices
+bash health-check.sh
+# Should show: ✅ All 14 checks passed!
 ```
 
 ---
@@ -270,12 +298,16 @@ When creating a new project:
 
 | File | Purpose |
 |------|---------|
-| [README.md](README.md) | Architecture, usage, governance |
+| [README.md](README.md) | Architecture, usage, governance, branching strategy |
+| [CONTRIBUTING.md](CONTRIBUTING.md) ⭐ | Complete contribution guide with workflows |
 | [SETUP.md](SETUP.md) | Detailed setup instructions |
 | [QUICK-START.md](QUICK-START.md) | This file - 5-minute guide |
-| [mcp-server.py](mcp-server.py) | The MCP server itself |
-| [practices/](practices/) | 6 practice documents |
-| [templates/](templates/) | 3 template files |
+| [CHANGELOG.md](CHANGELOG.md) | Version history and upgrade guides |
+| [mcp-server.py](mcp-server.py) | The MCP server (5 tools) |
+| [health-check.sh](health-check.sh) | Validation script (14 checks) |
+| [.gitlab-ci.yml](.gitlab-ci.yml) | CI/CD pipeline configuration |
+| [practices/](practices/) | 10 practice documents |
+| [templates/](templates/) | 4 template files |
 
 ---
 
@@ -300,15 +332,41 @@ When creating a new project:
 
 ---
 
+## What's New in v1.2.0
+
+- **GitLab Flow Branching**: Complete branching strategy with `main`, `develop`, feature/*, release/*, hotfix/*
+- **CONTRIBUTING.md**: Step-by-step contribution workflows and code review guidelines
+- **Enhanced git-practices.md**: Expanded from 17 to 200+ lines with comprehensive branching docs
+- **CI/CD Pipeline**: Automated validation on all branches (main, develop, feature/*, etc.)
+- **render_template Tool**: Automatic variable substitution in templates
+- **3 New Practices**: runbook-documentation, configuration-management, readme-maintenance
+- **Recommended Location**: `~/.mcp-servers/devops-practices/` for better organization
+
+See [CHANGELOG.md](CHANGELOG.md) for complete version history.
+
+---
+
 ## Success!
 
-If you can ask Claude "List practices" and see 6 practices, **you're done!** 🎉
+If you can ask Claude "List practices" and see 10 practices, **you're done!** 🎉
 
 The MCP server is working and Claude can now query shared DevOps practices across all your projects.
+
+---
+
+## Contributing
+
+Now that you have the MCP server set up, if you want to contribute improvements:
+
+1. Read [CONTRIBUTING.md](CONTRIBUTING.md) for the complete workflow
+2. Follow GitLab Flow branching strategy
+3. Create feature branches from `develop`
+4. CI/CD validates all changes automatically
 
 ---
 
 **Questions?** See [SETUP.md](SETUP.md) for detailed troubleshooting.
 
 **Maintained By**: Uttam Jaiswal
-**Last Updated**: 2026-02-13
+**Last Updated**: 2026-02-14
+**Version**: 1.2.0
