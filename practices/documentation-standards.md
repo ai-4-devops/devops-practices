@@ -269,7 +269,7 @@ Every example-project project follows this standard structure:
 Use UTC timestamp prefix for session logs and reports:
 
 ```bash
-$(date -u +%Y%m%dT%H%M%SZ)-<descriptive-name>.<ext>
+$(date -u +%Y%m%dT%H%MZ)-<descriptive-name>.<ext>
 ```
 
 **Examples**:

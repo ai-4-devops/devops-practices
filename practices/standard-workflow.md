@@ -199,10 +199,10 @@ Same principles apply, but execution is simpler:
 
 ```bash
 # Backup deployment
-kubectl get deployment app -n production -o yaml > app-backup-$(date -u +%Y%m%dT%H%M%SZ).yaml
+kubectl get deployment app -n production -o yaml > app-backup-$(date -u +%Y%m%dT%H%MZ).yaml
 
 # Backup Helm values
-helm get values app -n production > app-values-backup-$(date -u +%Y%m%dT%H%M%SZ).yaml
+helm get values app -n production > app-values-backup-$(date -u +%Y%m%dT%H%MZ).yaml
 ```
 
 ### Rollback

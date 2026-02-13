@@ -199,8 +199,8 @@ All issues identified BEFORE attempting deployment, saving time and frustration.
 
 ```bash
 # ---- Backup Current State ----
-kubectl get deployment kafka -n kafka -o yaml > kafka-backup-$(date -u +%Y%m%dT%H%M%SZ).yaml
-echo "Backup saved: kafka-backup-$(date -u +%Y%m%dT%H%M%SZ).yaml"
+kubectl get deployment kafka -n kafka -o yaml > kafka-backup-$(date -u +%Y%m%dT%H%MZ).yaml
+echo "Backup saved: kafka-backup-$(date -u +%Y%m%dT%H%MZ).yaml"
 
 # ---- Apply Changes ----
 kubectl apply -f kafka-new-config.yaml -n kafka
@@ -221,7 +221,7 @@ kubectl logs -n kafka deployment/kafka --tail=50
 
 ```bash
 # ---- Backup Current Values ----
-helm get values kafka-operator -n kafka > kafka-operator-backup-$(date -u +%Y%m%dT%H%M%SZ).yaml
+helm get values kafka-operator -n kafka > kafka-operator-backup-$(date -u +%Y%m%dT%H%MZ).yaml
 
 # ---- Upgrade ----
 helm upgrade kafka-operator ./strimzi-operator -f new-values.yaml -n kafka
@@ -433,7 +433,7 @@ cmd1 && cmd2 && cmd3
 kubectl get namespace kafka || echo "⚠️ Missing"
 
 # Backup before changes (UTC timestamp)
-kubectl get resource -o yaml > backup-$(date -u +%Y%m%dT%H%M%SZ).yaml
+kubectl get resource -o yaml > backup-$(date -u +%Y%m%dT%H%MZ).yaml
 
 # Conciseness levels
 "quick" → Commands only

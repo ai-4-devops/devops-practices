@@ -50,7 +50,7 @@ git status --short
 **For Helm Deployments**:
 ```bash
 # Before helm upgrade
-helm get values <release> -n <namespace> > <release>-values-backup-$(date -u +%Y%m%dT%H%M%SZ).yaml
+helm get values <release> -n <namespace> > <release>-values-backup-$(date -u +%Y%m%dT%H%MZ).yaml
 
 # Perform upgrade
 helm upgrade <release> <chart> -f new-values.yaml -n <namespace>
@@ -58,26 +58,26 @@ helm upgrade <release> <chart> -f new-values.yaml -n <namespace>
 # Rollback if needed
 helm rollback <release> -n <namespace>
 # OR restore from backup
-helm upgrade <release> <chart> -f <release>-values-backup-20260213T180000Z.yaml -n <namespace>
+helm upgrade <release> <chart> -f <release>-values-backup-20260213T1800Z.yaml -n <namespace>
 ```
 
 **For Kubernetes Resources**:
 ```bash
 # Before kubectl apply
-kubectl get <resource> <name> -n <namespace> -o yaml > <resource>-backup-$(date -u +%Y%m%dT%H%M%SZ).yaml
+kubectl get <resource> <name> -n <namespace> -o yaml > <resource>-backup-$(date -u +%Y%m%dT%H%MZ).yaml
 
 # Perform update
 kubectl apply -f new-config.yaml -n <namespace>
 
 # Rollback if needed
-kubectl apply -f <resource>-backup-20260213T180000Z.yaml -n <namespace>
+kubectl apply -f <resource>-backup-20260213T1800Z.yaml -n <namespace>
 ```
 
 **Why UTC Timestamps**:
 - Unambiguous across timezones
 - Sorts chronologically
 - International consistency
-- Standard format: `YYYYMMDDTHHMMSSZ`
+- Standard format: `YYYYMMDDTHHMMz` (no seconds needed for backups)
 
 ---
 
@@ -405,8 +405,8 @@ git diff                              # Unstaged changes
 git diff --staged                     # Staged changes
 
 # Backup before changes
-helm get values release -n ns > backup-$(date -u +%Y%m%dT%H%M%SZ).yaml
-kubectl get resource -n ns -o yaml > backup-$(date -u +%Y%m%dT%H%M%SZ).yaml
+helm get values release -n ns > backup-$(date -u +%Y%m%dT%H%MZ).yaml
+kubectl get resource -n ns -o yaml > backup-$(date -u +%Y%m%dT%H%MZ).yaml
 
 # Commit
 git commit -m "Descriptive message"

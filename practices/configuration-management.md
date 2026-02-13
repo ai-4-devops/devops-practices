@@ -257,19 +257,29 @@ configs/production/k8s/
 
 Use **placeholders** for environment-specific values.
 
+**Placeholder Syntax:**
+- Format: `${VARIABLE_NAME}`
+- Uppercase with underscores
+- Descriptive and unambiguous
+
 **Common Placeholders:**
-- `${ECR_REGISTRY}` - ECR registry URL
-- `${CLUSTER_NAME}` - Cluster identifier
-- `${ES_ENDPOINT}` - Elasticsearch endpoint
-- `${PROMETHEUS_ENDPOINT}` - Prometheus endpoint
-- `${AWS_REGION}` - AWS region
-- `${VERSION}` - Component version
+- `${ECR_REGISTRY}` - ECR registry URL (e.g., `123456789012.dkr.ecr.ap-south-1.amazonaws.com`)
+- `${CLUSTER_NAME}` - Cluster identifier (e.g., `example-eks-cluster-prod`)
+- `${ES_ENDPOINT}` - Elasticsearch endpoint (e.g., `https://es.example.com:9200`)
+- `${PROMETHEUS_ENDPOINT}` - Prometheus endpoint (e.g., `http://prometheus:9090`)
+- `${AWS_REGION}` - AWS region (e.g., `ap-south-1`)
+- `${VERSION}` - Component version (e.g., `0.114.0`)
+- `${CLICKHOUSE_HOST}` - ClickHouse host (e.g., `10.251.10.172`)
+- `${CLICKHOUSE_PORT}` - ClickHouse port (e.g., `8124`)
 
 **✅ Good:**
 ```yaml
 image: ${ECR_REGISTRY}/otel-collector:${OTEL_VERSION}
 endpoint: ${PROMETHEUS_ENDPOINT}/api/v1/write
 cluster: ${CLUSTER_NAME}
+clickhouse:
+  host: ${CLICKHOUSE_HOST}
+  port: ${CLICKHOUSE_PORT}
 ```
 
 **❌ Bad:**
@@ -277,6 +287,9 @@ cluster: ${CLUSTER_NAME}
 image: 123456789012.dkr.ecr.ap-south-1.amazonaws.com/otel-collector:0.114.0
 endpoint: https://prometheus-prod.example.com/api/v1/write
 cluster: example-eks-cluster-cluster-prod
+clickhouse:
+  host: 10.251.10.172
+  port: 8124
 ```
 
 ### 4. Version Control

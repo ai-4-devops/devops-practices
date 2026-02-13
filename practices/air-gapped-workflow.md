@@ -179,7 +179,7 @@ aws ecr describe-images --repository-name strimzi/operator
 9. **ALWAYS backup working configurations before updates**
    - Before helm upgrade: `helm get values <release> -n <namespace> > backup.yaml`
    - Before kubectl apply: `kubectl get <resource> -n <namespace> -o yaml > backup.yaml`
-   - Store backups with UTC timestamp: `backup-$(date -u +%Y%m%dT%H%M%SZ).yaml`
+   - Store backups with UTC timestamp: `backup-$(date -u +%Y%m%dT%H%MZ).yaml`
    - Provide rollback commands
 
 ---
@@ -241,7 +241,7 @@ Every significant change must come with a rollback path:
 
 ```bash
 # ---- Backup Current State ----
-kubectl get deployment kafka -n kafka -o yaml > kafka-backup-$(date -u +%Y%m%dT%H%M%SZ).yaml
+kubectl get deployment kafka -n kafka -o yaml > kafka-backup-$(date -u +%Y%m%dT%H%MZ).yaml
 
 # ---- Apply Changes ----
 kubectl apply -f kafka-new-config.yaml -n kafka
