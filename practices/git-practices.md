@@ -191,20 +191,545 @@ Please remove AI attribution lines from your commit message.
 
 ### 6. Branch Strategy
 
-**Main Branch**:
-- `main` or `master` - production-ready code
-- Always deployable
-- Protected from force pushes
+#### Overview
 
-**Working**:
-- Work directly on main for simple projects
-- Use feature branches for complex changes
-- Use descriptive branch names: `feature/kafka-topics`, `fix/broker-oom`
+Choose a branching strategy based on project complexity and team size:
 
-**Never**:
-- ❌ Force push to main/master (unless explicitly requested)
-- ❌ Rebase published commits (use merge instead)
-- ❌ Amend published commits (unless explicitly requested)
+| Strategy | Best For | Key Branches |
+|----------|----------|--------------|
+| **Trunk-Based** | Simple projects, solo work | `main` only |
+| **GitHub Flow** | Continuous deployment | `main` + feature branches |
+| **GitLab Flow** | Versioned releases, multiple environments | `main` + `develop` + feature/release/hotfix |
+
+---
+
+#### Trunk-Based Development (Simple Projects)
+
+**When to Use**:
+- Solo developer or very small team
+- Simple projects without formal releases
+- Rapid iteration needed
+
+**Structure**:
+```
+main ← All work happens here (or short-lived feature branches)
+```
+
+**Workflow**:
+```bash
+# Work directly on main OR use short feature branches
+git checkout main
+git pull origin main
+
+# Make changes
+git add files
+git commit -m "Add feature"
+git push origin main
+```
+
+**Pros**: Simple, fast, minimal overhead
+**Cons**: Higher risk of breaking main, harder to manage releases
+
+---
+
+#### GitHub Flow (Continuous Deployment)
+
+**When to Use**:
+- Continuous deployment to production
+- Web applications, APIs
+- Every merge to main triggers deployment
+
+**Structure**:
+```
+main ← Production-ready, always deployable
+  ↑
+feature/* ← Short-lived feature branches
+hotfix/*  ← Critical production fixes
+```
+
+**Workflow**:
+```bash
+# Create feature branch from main
+git checkout main
+git pull origin main
+git checkout -b feature/add-authentication
+
+# Work on feature
+git add files
+git commit -m "Add authentication"
+git push origin feature/add-authentication
+
+# Create merge/pull request → main
+# CI/CD runs tests
+# Code review + approval
+# Merge to main (auto-deploys)
+
+# Delete feature branch
+git branch -d feature/add-authentication
+git push origin --delete feature/add-authentication
+```
+
+**Branch Protection**:
+- Require pull/merge requests
+- Require CI/CD passing
+- Require code review approval
+- Block force pushes
+
+**Pros**: Simple, fast feedback, continuous deployment
+**Cons**: No staging environment, harder to manage versions
+
+---
+
+#### GitLab Flow (Versioned Releases)
+
+**When to Use**:
+- Multiple environments (dev, staging, production)
+- Versioned releases (semantic versioning)
+- Shared libraries, infrastructure-as-code
+- MCP servers with dependent projects ← **Recommended for this repo**
+
+**Structure**:
+```
+main            ← Production releases only (v1.0.0, v1.1.0, etc.)
+  ↑
+develop         ← Integration branch, active development
+  ↑
+feature/*       ← New features
+  ↑
+release/*       ← Version preparation (v1.2.0-rc)
+  ↑
+hotfix/*        ← Critical fixes to production
+```
+
+**Branch Types**:
+
+| Branch Type | Naming | Purpose | Lifespan | Merges To |
+|-------------|--------|---------|----------|-----------|
+| `main` | `main` | Production releases | Permanent | N/A |
+| `develop` | `develop` | Active development | Permanent | `main` (via release) |
+| Feature | `feature/description` | New functionality | Days-weeks | `develop` |
+| Release | `release/v1.2.0` | Version preparation | Days | `main` + `develop` |
+| Hotfix | `hotfix/critical-bug` | Production fixes | Hours-days | `main` + `develop` |
+
+**Naming Conventions**:
+```bash
+# Features: feature/<short-description>
+feature/kafka-topics
+feature/add-authentication
+feature/cicd-pipeline
+
+# Releases: release/v<semver>
+release/v1.2.0
+release/v2.0.0-beta
+
+# Hotfixes: hotfix/<critical-issue>
+hotfix/security-patch
+hotfix/broker-crash
+hotfix/memory-leak
+
+# Avoid generic names
+❌ feature/update
+❌ feature/fix
+❌ feature/changes
+
+# Use descriptive names
+✅ feature/add-user-roles
+✅ feature/kafka-monitoring
+✅ hotfix/null-pointer-error
+```
+
+**Workflows**:
+
+**Feature Development**:
+```bash
+# Start feature from develop
+git checkout develop
+git pull origin develop
+git checkout -b feature/add-monitoring
+
+# Work on feature
+git add files
+git commit -m "Add Prometheus monitoring"
+git push origin feature/add-monitoring
+
+# Create merge request → develop
+# CI/CD runs on feature branch
+# Code review + approval
+# Merge to develop
+# Delete feature branch
+```
+
+**Release Preparation**:
+```bash
+# Create release branch from develop
+git checkout develop
+git pull origin develop
+git checkout -b release/v1.2.0
+
+# Finalize version
+# Update CHANGELOG.md
+# Update version numbers
+# Bug fixes only (no new features)
+git add CHANGELOG.md
+git commit -m "Prepare v1.2.0 release"
+git push origin release/v1.2.0
+
+# Create MR → main
+# After approval and CI passing:
+# Merge to main
+# Tag the release
+git checkout main
+git pull origin main
+git tag -a v1.2.0 -m "Release v1.2.0: Add monitoring and performance improvements"
+git push origin v1.2.0
+
+# Merge release back to develop
+git checkout develop
+git merge release/v1.2.0
+git push origin develop
+
+# Delete release branch
+git branch -d release/v1.2.0
+git push origin --delete release/v1.2.0
+```
+
+**Hotfix for Production**:
+```bash
+# Create hotfix from main
+git checkout main
+git pull origin main
+git checkout -b hotfix/critical-security-patch
+
+# Fix the issue
+git add files
+git commit -m "Fix security vulnerability CVE-2026-1234"
+git push origin hotfix/critical-security-patch
+
+# Create MR → main
+# Fast-track approval
+# Merge to main
+# Tag hotfix release
+git checkout main
+git pull origin main
+git tag -a v1.1.1 -m "Hotfix v1.1.1: Security patch"
+git push origin v1.1.1
+
+# Merge hotfix to develop
+git checkout develop
+git merge hotfix/critical-security-patch
+git push origin develop
+
+# Delete hotfix branch
+git branch -d hotfix/critical-security-patch
+git push origin --delete hotfix/critical-security-patch
+```
+
+---
+
+#### Keeping Develop Synchronized with Main
+
+**CRITICAL**: After any merge to `main` (especially hotfixes), always sync `develop` to prevent divergence.
+
+**When to Sync**:
+- ✅ After hotfix merges to main
+- ✅ After release merges to main
+- ✅ Periodically (weekly/bi-weekly) as a safety check
+- ✅ Before creating new release branches from develop
+
+**Sync Workflow**:
+```bash
+# Check if main has changes not in develop
+git checkout main
+git pull origin main
+
+git checkout develop
+git pull origin develop
+
+# Check for differences
+git log develop..main --oneline
+# If output shows commits, develop is behind main
+
+# Merge main into develop
+git merge main
+# OR rebase develop on main (if no conflicts expected)
+# git rebase main
+
+# Resolve any conflicts if they occur
+# Then push
+git push origin develop
+```
+
+**Automated Check** (recommended):
+```bash
+# Add to team workflow or CI/CD
+# Check if develop is behind main
+git fetch origin
+
+if git log origin/develop..origin/main --oneline | grep -q .; then
+  echo "⚠️  WARNING: develop is behind main!"
+  echo "Run: git checkout develop && git merge main"
+  exit 1
+fi
+```
+
+**Common Scenario - After Hotfix**:
+```bash
+# Hotfix v1.1.1 just merged to main
+# Now sync develop
+
+git checkout develop
+git pull origin develop
+git merge main  # Brings in the hotfix
+git push origin develop
+
+# Verify
+git log --oneline -5
+# Should show the hotfix commit in develop history
+```
+
+**Why This Matters**:
+- Prevents develop from missing critical fixes
+- Ensures next release includes all production changes
+- Avoids re-introducing bugs that were already fixed
+- Maintains consistency between branches
+
+---
+
+#### Branch Protection Rules
+
+**For `main` branch**:
+- ✅ Require merge/pull requests (no direct commits)
+- ✅ Require CI/CD pipeline passing
+- ✅ Require 1+ code review approvals
+- ✅ Block force pushes
+- ✅ Block branch deletion
+- ✅ Require linear history (optional)
+
+**For `develop` branch**:
+- ✅ Require merge/pull requests
+- ✅ Require CI/CD pipeline passing
+- ✅ Require code review (optional for small teams)
+- ✅ Block force pushes
+- ❌ Allow branch deletion (if needed)
+
+**For feature/hotfix branches**:
+- ❌ No restrictions (developers can force push to their own branches)
+- ✅ Require CI/CD passing before merge
+
+---
+
+#### Merge Strategies
+
+**Merge Commit (Recommended for main/develop)**:
+```bash
+git merge --no-ff feature/add-monitoring
+# Creates merge commit, preserves full history
+```
+
+**Pros**: Full history preserved, clear feature boundaries
+**Cons**: More commits, complex history graph
+
+**Squash Merge**:
+```bash
+git merge --squash feature/add-monitoring
+git commit -m "Add monitoring feature"
+# Combines all commits into one
+```
+
+**Pros**: Clean history, single commit per feature
+**Cons**: Loses detailed commit history
+
+**Rebase (For feature branches only)**:
+```bash
+# Update feature branch with latest develop
+git checkout feature/add-monitoring
+git rebase develop
+# Replays your commits on top of develop
+```
+
+**Pros**: Linear history, no merge commits
+**Cons**: Rewrites history (never rebase published branches)
+
+**When to Use**:
+- **Merge commit**: `develop` → `main`, major features
+- **Squash merge**: Small features, experimental work
+- **Rebase**: Keep feature branch up-to-date (before merging)
+
+**Never Rebase**:
+- ❌ `main` or `develop` branches
+- ❌ Branches others are working on
+- ❌ Commits already pushed to origin (unless you force push and coordinate)
+
+---
+
+#### Semantic Versioning & Tagging
+
+**Version Format**: `vMAJOR.MINOR.PATCH` (e.g., `v1.2.3`)
+
+| Change Type | Increment | Example |
+|-------------|-----------|---------|
+| Breaking changes | MAJOR | `v1.0.0` → `v2.0.0` |
+| New features (backward compatible) | MINOR | `v1.1.0` → `v1.2.0` |
+| Bug fixes (backward compatible) | PATCH | `v1.2.0` → `v1.2.1` |
+
+**Tagging Releases**:
+```bash
+# Annotated tags (recommended - stores metadata)
+git tag -a v1.2.0 -m "Release v1.2.0: Add monitoring and template rendering"
+git push origin v1.2.0
+
+# Lightweight tags (not recommended)
+git tag v1.2.0
+git push origin v1.2.0
+
+# List tags
+git tag -l
+
+# View tag details
+git show v1.2.0
+
+# Delete tag (if needed)
+git tag -d v1.2.0
+git push origin --delete v1.2.0
+```
+
+**Tag Message Format**:
+```bash
+git tag -a v1.2.0 -m "Release v1.2.0: Summary of key changes
+
+New Features:
+- Add Prometheus monitoring integration
+- Add template rendering with variable substitution
+
+Bug Fixes:
+- Fix memory leak in health check
+- Correct timestamp format in templates
+
+Breaking Changes: None
+"
+```
+
+---
+
+#### Branch Cleanup
+
+**After Merge**:
+```bash
+# Delete local branch
+git branch -d feature/add-monitoring
+
+# Delete remote branch
+git push origin --delete feature/add-monitoring
+
+# OR use -D to force delete (if not merged)
+git branch -D feature/abandoned-experiment
+```
+
+**Cleanup Stale Branches**:
+```bash
+# List merged branches
+git branch --merged develop
+
+# List remote branches
+git branch -r
+
+# Prune deleted remote branches
+git fetch --prune
+
+# Delete all local branches merged to develop
+git branch --merged develop | grep -v "\* develop" | xargs -n 1 git branch -d
+```
+
+**Automation** (GitLab CI/CD):
+```yaml
+# .gitlab-ci.yml - Auto-delete merged branches
+delete-merged-branches:
+  stage: cleanup
+  script:
+    - git fetch --prune
+    - git branch --merged develop | grep -v "develop\|main" | xargs -n 1 git branch -d
+  only:
+    - develop
+  when: manual
+```
+
+---
+
+#### Quick Decision Guide
+
+**Choose Trunk-Based If**:
+- ✅ Solo developer or 2-3 person team
+- ✅ Rapid prototyping or experimentation
+- ✅ No formal releases needed
+- ✅ Simple project structure
+
+**Choose GitHub Flow If**:
+- ✅ Continuous deployment to production
+- ✅ Every commit should be deployable
+- ✅ Web apps, APIs, SaaS products
+- ✅ Fast feedback cycles
+
+**Choose GitLab Flow If**:
+- ✅ Multiple environments (dev, staging, prod)
+- ✅ Versioned releases with semantic versioning
+- ✅ Shared libraries, infrastructure-as-code, MCP servers
+- ✅ Need to support multiple versions
+- ✅ Require release candidates and testing
+
+---
+
+#### Common Anti-Patterns
+
+**❌ Long-Lived Feature Branches**:
+```bash
+# Feature branch diverges for weeks/months
+feature/massive-refactor (200+ commits behind develop)
+# Result: Merge conflicts, integration hell
+```
+
+**✅ Solution**: Break into smaller features, merge frequently
+
+**❌ Developing on Main**:
+```bash
+# Directly commit to main without review
+git commit -m "Quick fix"
+git push origin main
+# Result: Breaking changes, no review, hard to rollback
+```
+
+**✅ Solution**: Always use feature branches + merge requests
+
+**❌ Not Deleting Merged Branches**:
+```bash
+git branch -a
+# Shows 100+ old feature branches
+# Result: Confusion, clutter, hard to find active work
+```
+
+**✅ Solution**: Delete branches immediately after merge
+
+**❌ Inconsistent Naming**:
+```bash
+feature/add-thing
+feature-update-stuff
+AddMonitoring
+fix_bug
+# Result: Hard to filter, unclear purpose
+```
+
+**✅ Solution**: Use consistent naming convention
+
+---
+
+#### Never Do This
+
+- ❌ Force push to `main` or `develop` (unless explicitly requested and coordinated)
+- ❌ Rebase published commits on shared branches
+- ❌ Amend commits that others have based work on
+- ❌ Merge without CI/CD passing (bypassing checks)
+- ❌ Skip code review for non-trivial changes
+- ❌ Create releases without updating CHANGELOG.md
+- ❌ Use generic branch names like `update`, `fix`, `test`
 
 ---
 

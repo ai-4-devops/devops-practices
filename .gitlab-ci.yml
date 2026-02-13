@@ -1,10 +1,22 @@
 # GitLab CI/CD Pipeline for DevOps Practices MCP Server
 #
-# Runs health checks on every commit to ensure MCP server integrity
+# Branching Strategy: GitLab Flow
+# - main: Production releases (tagged with semantic versions)
+# - develop: Active development, integration branch
+# - feature/*: New features, merge to develop
+# - release/*: Version preparation, merge to main + develop
+# - hotfix/*: Critical fixes, merge to main + develop
+#
+# Pipeline runs on:
+# - All merge requests (validates before merge)
+# - main branch (production validation)
+# - develop branch (integration validation)
+# - feature/*, release/*, hotfix/* branches (development validation)
 
 stages:
   - validate
   - test
+  - release
 
 # Health Check Job
 health-check:
@@ -20,6 +32,13 @@ health-check:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_COMMIT_BRANCH == "main"'
     - if: '$CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_COMMIT_BRANCH =~ /^feature\/.*/'
+    - if: '$CI_COMMIT_BRANCH =~ /^release\/.*/'
+    - if: '$CI_COMMIT_BRANCH =~ /^hotfix\/.*/'
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_COMMIT_BRANCH =~ /^feature\/.*/'
+    - if: '$CI_COMMIT_BRANCH =~ /^release\/.*/'
+    - if: '$CI_COMMIT_BRANCH =~ /^hotfix\/.*/'
   artifacts:
     when: on_failure
     paths:
@@ -40,6 +59,10 @@ python-validation:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_COMMIT_BRANCH =~ /^feature\/.*/'
+    - if: '$CI_COMMIT_BRANCH =~ /^release\/.*/'
+    - if: '$CI_COMMIT_BRANCH =~ /^hotfix\/.*/'
 
 # Practice File Validation
 practice-validation:
@@ -60,6 +83,10 @@ practice-validation:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_COMMIT_BRANCH =~ /^feature\/.*/'
+    - if: '$CI_COMMIT_BRANCH =~ /^release\/.*/'
+    - if: '$CI_COMMIT_BRANCH =~ /^hotfix\/.*/'
 
 # Template File Validation
 template-validation:
@@ -84,6 +111,10 @@ template-validation:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_COMMIT_BRANCH =~ /^feature\/.*/'
+    - if: '$CI_COMMIT_BRANCH =~ /^release\/.*/'
+    - if: '$CI_COMMIT_BRANCH =~ /^hotfix\/.*/'
 
 # Documentation Link Checker
 link-checker:
@@ -104,3 +135,53 @@ link-checker:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_COMMIT_BRANCH =~ /^feature\/.*/'
+    - if: '$CI_COMMIT_BRANCH =~ /^release\/.*/'
+    - if: '$CI_COMMIT_BRANCH =~ /^hotfix\/.*/'
+
+# Release Validation (for release/* and hotfix/* branches)
+release-validation:
+  stage: release
+  image: python:3.10-slim
+  script:
+    - echo "🚀 Validating release preparation"
+    - |
+      # Check CHANGELOG.md was updated
+      if ! grep -q "$CI_COMMIT_BRANCH" CHANGELOG.md; then
+        echo "⚠️  Warning: CHANGELOG.md may not be updated for this release"
+      fi
+    - |
+      # Extract version from branch name (e.g., release/v1.2.0 -> v1.2.0)
+      if [[ "$CI_COMMIT_BRANCH" =~ ^release/v([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+        VERSION="${BASH_REMATCH[1]}"
+        echo "✅ Valid semantic version: v$VERSION"
+      elif [[ "$CI_COMMIT_BRANCH" =~ ^hotfix/ ]]; then
+        echo "✅ Hotfix branch detected"
+      else
+        echo "⚠️  Warning: Branch name doesn't follow semver pattern"
+      fi
+    - echo "✅ Release validation complete"
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^release\/.*/'
+    - if: '$CI_COMMIT_BRANCH =~ /^hotfix\/.*/'
+
+# Branch Protection Reminder (informational only)
+branch-protection-check:
+  stage: release
+  image: alpine:latest
+  script:
+    - echo "ℹ️  Branch Protection Recommendations:"
+    - echo "  - main: Require MR, require CI passing, require 1+ approval, block force push"
+    - echo "  - develop: Require MR, require CI passing, block force push"
+    - echo "  - feature/*, release/*, hotfix/*: No restrictions (allow force push)"
+    - echo ""
+    - echo "📋 Current branch: $CI_COMMIT_BRANCH"
+    - |
+      if [[ "$CI_COMMIT_BRANCH" == "main" ]] || [[ "$CI_COMMIT_BRANCH" == "develop" ]]; then
+        echo "⚠️  CRITICAL: Ensure this branch has protection rules enabled in GitLab!"
+      fi
+  allow_failure: true
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_BRANCH == "develop"'

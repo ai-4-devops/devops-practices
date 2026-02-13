@@ -7,6 +7,105 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.2.0] - 2026-02-14
+
+### Added
+
+**Branching Strategy (GitLab Flow):**
+- **develop branch** - New permanent integration branch for active development
+  - Created from `main` with full history
+  - All new features merge here first before release
+  - CI/CD runs on develop, feature/*, release/*, hotfix/* branches
+
+- **CONTRIBUTING.md** (13K) - Comprehensive contribution guide
+  - Step-by-step workflows for features, releases, hotfixes
+  - Branching strategy overview with examples
+  - Code review guidelines
+  - Commit message conventions
+  - Branch naming standards
+  - Testing and CI/CD documentation
+  - Recommended installation location: `~/.mcp-servers/devops-practices/`
+
+**Documentation Enhancements:**
+- **Branching Strategy section** in README.md
+  - Visual branch structure diagram
+  - Branch types table with purposes
+  - Quick workflow examples
+  - Links to detailed documentation
+
+- **Enhanced git-practices.md** (Section 6 expanded from 17 to 200+ lines)
+  - Complete GitLab Flow documentation
+  - Trunk-Based, GitHub Flow, GitLab Flow comparison
+  - Branch protection rules
+  - Merge strategies (merge commit, squash, rebase)
+  - Semantic versioning and tagging
+  - Branch cleanup automation
+  - Keeping develop synchronized with main (critical after hotfixes)
+  - Decision guide for choosing strategies
+  - Common anti-patterns and mistakes
+
+### Changed
+
+**CI/CD Pipeline:**
+- Updated `.gitlab-ci.yml` for multi-branch workflow
+  - Now runs on: MRs, main, develop, feature/*, release/*, hotfix/*
+  - Added `release` stage with validation jobs
+  - Added `release-validation` job for semantic version checking
+  - Added `branch-protection-check` job (informational)
+  - All jobs now support full branch spectrum
+
+**Installation:**
+- Updated README.md installation instructions
+  - **Recommended location**: `~/.mcp-servers/devops-practices/`
+  - Clearer clone and setup steps
+  - Updated MCP server configuration example
+
+**Governance:**
+- Updated "Update Protocol" in README.md
+  - Separate workflows for features, releases, hotfixes
+  - References CONTRIBUTING.md for details
+
+**Versioning:**
+- README.md version: `1.1.0` → `1.2.0`
+- CONTRIBUTING.md version: `1.2.0`
+
+### Impact
+
+**For Contributors:**
+- ✅ Clear contribution workflow with step-by-step examples
+- ✅ Safe feature development on `develop` branch
+- ✅ Production stability guaranteed on `main` branch
+- ✅ CI/CD validates all changes before merge
+
+**For Dependent Projects:**
+- ✅ `main` branch is now production-only (no breaking changes without release)
+- ✅ Can safely pull from `main` for stable versions
+- ✅ Can follow `develop` for upcoming features (optional)
+- ✅ Semantic versioning with git tags (`v1.2.0`)
+
+**For Maintainers:**
+- ✅ Controlled release process with release branches
+- ✅ Hotfix workflow for critical production issues
+- ✅ Automated CI/CD validation on all branches
+- ✅ Clear governance and update protocols
+
+### Migration Notes
+
+**No breaking changes.** Existing installations continue to work.
+
+**Recommended actions:**
+1. Update local clone: `git pull origin main`
+2. Switch to `develop` for new work: `git checkout develop`
+3. Read [CONTRIBUTING.md](CONTRIBUTING.md) before creating branches
+4. Follow new branching conventions for future changes
+
+**Branch strategy:**
+- `main` - Pull for production-ready code (tagged releases)
+- `develop` - Pull for latest development (pre-release)
+- Feature work - Create from `develop`, merge back to `develop`
+
+---
+
 ## [1.1.0] - 2026-02-14
 
 ### Added
@@ -146,6 +245,7 @@ Initial release with core DevOps practices extracted from multiple infrastructur
 
 | Version | Date | Practices | Templates | MCP Tools | Scripts | Notes |
 |---------|------|-----------|-----------|-----------|---------|-------|
+| 1.2.0 | 2026-02-14 | 10 | 4 | 5 | CI/CD | GitLab Flow branching, CONTRIBUTING.md, enhanced docs |
 | 1.1.0 | 2026-02-14 | 10 | 4 | 5 | CI/CD | Added render_template, GitLab CI/CD pipeline |
 | 1.0.0 | 2026-02-13 | 10 | 4 | 4 | 1 | Production-ready with runbook, config, README practices |
 | 0.1.0 | 2026-02-13 | 7 | 3 | 4 | 0 | Initial release |
@@ -153,6 +253,58 @@ Initial release with core DevOps practices extracted from multiple infrastructur
 ---
 
 ## Upgrade Guide
+
+### From 1.1.0 to 1.2.0
+
+**Breaking Changes:** None
+
+**New Features:**
+- GitLab Flow branching strategy (`main`, `develop`, `feature/*`, `release/*`, `hotfix/*`)
+- CONTRIBUTING.md with detailed contribution workflows
+- Enhanced git-practices.md with comprehensive branching documentation
+- Recommended installation location: `~/.mcp-servers/devops-practices/`
+
+**Migration Steps:**
+
+1. Pull latest changes and switch to main:
+   ```bash
+   cd ~/.mcp-servers/devops-practices  # Or your installation path
+   git checkout main
+   git pull origin main
+   ```
+
+2. New `develop` branch is now available:
+   ```bash
+   # For viewing upcoming features (optional)
+   git checkout develop
+   git pull origin develop
+
+   # Switch back to main for stable version
+   git checkout main
+   ```
+
+3. Read new contribution guide:
+   ```bash
+   cat CONTRIBUTING.md
+   # Or read in your browser
+   ```
+
+4. If you contribute to this repo:
+   - Create feature branches from `develop` (not `main`)
+   - Follow new branching conventions in CONTRIBUTING.md
+   - CI/CD now validates all branches before merge
+
+5. No MCP server configuration changes needed
+
+**Recommended:**
+- If you haven't already, clone/move repo to: `~/.mcp-servers/devops-practices/`
+- Update your MCP config to use this path for consistency
+
+**Projects Affected:** All projects using devops-practices MCP
+
+**Impact:** Production stability improved - `main` branch now contains only released versions
+
+---
 
 ### From 1.0.0 to 1.1.0
 
@@ -226,15 +378,23 @@ Initial release with core DevOps practices extracted from multiple infrastructur
 
 ## Contributing
 
-To propose changes to practices or templates:
+**See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed contribution workflow.**
 
-1. Create feature branch
+**Quick summary:**
+
+1. Create feature branch from `develop`: `git checkout -b feature/your-feature`
 2. Update practice/template files
 3. Run health check: `bash health-check.sh`
 4. Test with sample project
-5. Update CHANGELOG.md (Unreleased section)
-6. Create PR with description
-7. After merge, maintainer will tag new version
+5. Update CHANGELOG.md and documentation
+6. Create MR: `feature/your-feature` → `develop`
+7. After review and CI/CD passes, merge to `develop`
+8. Maintainer will create release branch and tag new version
+
+**Branching:**
+- Features → `develop` branch
+- Releases → `main` branch (via release/*)
+- Hotfixes → `main` + `develop` branches
 
 ---
 

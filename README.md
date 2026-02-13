@@ -196,13 +196,23 @@ Claude has access to shared DevOps practices via MCP:
 
 ## Installation & Setup
 
-### 1. Install Dependencies
+**Recommended Location**: `~/.mcp-servers/devops-practices/`
+
+This keeps MCP servers organized and makes configuration easier. All examples below use this location.
+
+### 1. Clone Repository
 ```bash
-cd devops-practices-mcp
+# Clone to recommended location
+git clone <repo-url> ~/.mcp-servers/devops-practices
+cd ~/.mcp-servers/devops-practices
+```
+
+### 2. Install Dependencies
+```bash
 pip install -r requirements.txt
 ```
 
-### 2. Configure MCP Server
+### 3. Configure MCP Server
 Edit `~/.config/claude/config.json` (or wherever Claude config lives):
 
 ```json
@@ -210,12 +220,14 @@ Edit `~/.config/claude/config.json` (or wherever Claude config lives):
   "mcpServers": {
     "devops-practices": {
       "command": "python",
-      "args": ["/full/path/to/devops-practices-mcp/mcp-server.py"],
+      "args": ["/home/<username>/.mcp-servers/devops-practices/mcp-server.py"],
       "env": {}
     }
   }
 }
 ```
+
+**Note**: Replace `<username>` with your actual username, or use the full absolute path.
 
 ### 3. Restart Claude Code
 ```bash
@@ -276,6 +288,74 @@ git push
 
 ---
 
+## Branching Strategy
+
+This repository uses **GitLab Flow** with semantic versioning to ensure stability for dependent projects.
+
+### Branch Structure
+
+```
+main            ← Production releases only (v1.0.0, v1.1.0, etc.)
+  ↑
+develop         ← Active development, integration branch
+  ↑
+feature/*       ← New practices, templates
+release/*       ← Version preparation (v1.2.0)
+hotfix/*        ← Critical production fixes
+```
+
+### Branch Types
+
+| Branch | Purpose | Created From | Merges To |
+|--------|---------|--------------|-----------|
+| `main` | Production releases (tagged) | - | - |
+| `develop` | Active development | `main` | `main` (via release) |
+| `feature/*` | New functionality | `develop` | `develop` |
+| `release/*` | Version preparation | `develop` | `main` + `develop` |
+| `hotfix/*` | Critical fixes | `main` | `main` + `develop` |
+
+### Why GitLab Flow?
+
+- ✅ **Stability**: `main` always contains tested, production-ready code
+- ✅ **Safety**: Changes go through `develop` before reaching production
+- ✅ **Testing**: CI/CD validates all changes before merge
+- ✅ **Versioning**: Clear semantic version releases (v1.0.0, v1.1.0, etc.)
+- ✅ **Traceability**: Full history of what changed and when
+
+### Quick Workflows
+
+**Add New Practice/Template**:
+```bash
+git checkout develop
+git checkout -b feature/add-security-practice
+# Make changes, commit
+git push origin feature/add-security-practice
+# Create MR → develop
+```
+
+**Create Release**:
+```bash
+git checkout develop
+git checkout -b release/v1.2.0
+# Update CHANGELOG.md, version numbers
+# Create MR → main
+# Tag release: git tag v1.2.0
+# Merge back to develop
+```
+
+**Critical Hotfix**:
+```bash
+git checkout main
+git checkout -b hotfix/critical-bug
+# Fix, commit, push
+# Create MR → main (fast-track)
+# Also merge to develop
+```
+
+**Full Documentation**: See [CONTRIBUTING.md](CONTRIBUTING.md) and [git-practices.md](practices/git-practices.md)
+
+---
+
 ## Governance
 
 ### Who Maintains This
@@ -284,13 +364,33 @@ git push
 - **Review Process**: PR required for changes
 
 ### Update Protocol
-1. Create branch for changes
+
+**For New Practices/Templates**:
+1. Create feature branch from `develop`
 2. Update practice or template files
-3. Test with sample project
-4. Create PR with description of changes
-5. Review by team
-6. Merge to main
-7. Announce to team (affects all projects)
+3. Run health check: `bash health-check.sh`
+4. Update documentation (README.md, PRACTICE-INDEX.md)
+5. Create MR with description → `develop`
+6. Code review by team
+7. Merge to `develop` after CI/CD passes
+
+**For Releases**:
+1. Create release branch from `develop`: `release/v1.x.0`
+2. Update CHANGELOG.md and version numbers
+3. Create MR → `main`
+4. Tag release after merge: `git tag v1.x.0`
+5. Merge release back to `develop`
+6. Announce to team (affects all dependent projects)
+
+**For Critical Fixes**:
+1. Create hotfix branch from `main`: `hotfix/issue-name`
+2. Fix issue and test thoroughly
+3. Create MR → `main` (fast-track approval)
+4. Tag hotfix release: `git tag v1.x.1`
+5. Merge to `develop` to keep in sync
+6. Announce urgent fix to team
+
+**See**: [CONTRIBUTING.md](CONTRIBUTING.md) for detailed workflows
 
 ### Versioning
 - **Major version** (2.0): Breaking changes to structure
@@ -310,6 +410,8 @@ git push
 ---
 
 ## Development
+
+**See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed contribution workflow, branching strategy, and code review process.**
 
 ### Adding a New Practice
 1. Create markdown file in `practices/`
@@ -366,4 +468,4 @@ MIT License - Free to use and modify
 
 **Maintained By**: Uttam Jaiswal
 **Last Updated**: 2026-02-14
-**Version**: 1.1.0
+**Version**: 1.2.0
