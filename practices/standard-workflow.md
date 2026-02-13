@@ -323,6 +323,15 @@ Use air-gapped workflow when:
 
 ---
 
+## Related Practices
+
+- **[air-gapped-workflow.md](air-gapped-workflow.md)** - Alternative workflow for air-gapped/secure environments
+- **[configuration-management.md](configuration-management.md)** - Direct deployment of configs with full access
+- **[documentation-standards.md](documentation-standards.md)** - Same documentation standards apply regardless of access method
+- **[efficiency-guidelines.md](efficiency-guidelines.md)** - Efficiency considerations without S3 transfer overhead
+
+---
+
 **Maintained By**: Uttam Jaiswal
 **Last Updated**: 2026-02-13
 **Version**: 1.0.0

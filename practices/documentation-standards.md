@@ -364,6 +364,16 @@ All environment-specific configurations are stored under `configs/<environment>/
 
 ---
 
+## Related Practices
+
+- **[runbook-documentation.md](runbook-documentation.md)** - RUNBOOKS directory requirements (WHAT we did)
+- **[readme-maintenance.md](readme-maintenance.md)** - Directory self-documentation standards
+- **[session-continuity.md](session-continuity.md)** - CURRENT-STATE.md and handoff protocols
+- **[task-tracking.md](task-tracking.md)** - TRACKER.md structure and maintenance
+- **[configuration-management.md](configuration-management.md)** - configs/ directory organization
+
+---
+
 **Maintained By**: Infrastructure Team
 **Last Updated**: 2026-02-13
 **Version**: 1.0.0

@@ -418,6 +418,15 @@ git log --follow -- file.md           # File history
 
 ---
 
+## Related Practices
+
+- **[session-continuity.md](session-continuity.md)** - Everything lives in git for session resumption
+- **[configuration-management.md](configuration-management.md)** - Version control for configs, use git mv for reorganization
+- **[runbook-documentation.md](runbook-documentation.md)** - File naming conventions with UTC timestamps
+- **[documentation-standards.md](documentation-standards.md)** - Commit best practices and conventions
+
+---
+
 **Maintained By**: Infrastructure Team
 **Last Updated**: 2026-02-13
 **Version**: 1.0.0

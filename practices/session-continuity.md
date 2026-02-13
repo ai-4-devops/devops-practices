@@ -297,6 +297,15 @@ Session N (Today, Different System):
 
 ---
 
+## Related Practices
+
+- **[task-tracking.md](task-tracking.md)** - TRACKER.md for tracking progress across sessions
+- **[runbook-documentation.md](runbook-documentation.md)** - Session logs enable reproducibility
+- **[git-practices.md](git-practices.md)** - Commit conventions and version control
+- **[documentation-standards.md](documentation-standards.md)** - CURRENT-STATE.md structure and location
+
+---
+
 **Maintained By**: Infrastructure Team
 **Last Updated**: 2026-02-13
 **Version**: 1.0.0

@@ -443,6 +443,14 @@ Default → Commands + brief comments
 
 ---
 
+## Related Practices
+
+- **[air-gapped-workflow.md](air-gapped-workflow.md)** - S3 transfer overhead drives copy-paste vs script decisions
+- **[standard-workflow.md](standard-workflow.md)** - Efficiency considerations for direct access environments
+- **[runbook-documentation.md](runbook-documentation.md)** - Document commands regardless of delivery method
+
+---
+
 **Maintained By**: Infrastructure Team
 **Last Updated**: 2026-02-13
 **Version**: 1.0.0

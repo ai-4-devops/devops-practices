@@ -274,6 +274,15 @@ kubectl get pods -n kafka
 
 ---
 
+## Related Practices
+
+- **[efficiency-guidelines.md](efficiency-guidelines.md)** - Copy-paste vs script decisions in air-gapped environments
+- **[configuration-management.md](configuration-management.md)** - Deploying configurations via S3 transfer
+- **[standard-workflow.md](standard-workflow.md)** - Alternative workflow when direct access is available
+- **[runbook-documentation.md](runbook-documentation.md)** - Document all commands executed across laptop/CloudShell/bastion
+
+---
+
 **Maintained By**: Infrastructure Team
 **Last Updated**: 2026-02-13
 **Version**: 1.0.0

@@ -309,6 +309,15 @@ Use consistent emoji status indicators:
 
 ---
 
+## Related Practices
+
+- **[session-continuity.md](session-continuity.md)** - CURRENT-STATE.md works with TRACKER.md for handoffs
+- **[runbook-documentation.md](runbook-documentation.md)** - Link completed tasks to session runbooks
+- **[documentation-standards.md](documentation-standards.md)** - TRACKER.md location and purpose
+- **[git-practices.md](git-practices.md)** - Reference commits in task completion notes
+
+---
+
 **Maintained By**: Infrastructure Team
 **Last Updated**: 2026-02-13
 **Version**: 1.0.0
