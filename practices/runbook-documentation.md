@@ -464,4 +464,8 @@ See existing runbooks in example-project project:
 
 **Remember:** Runbooks are not just logs - they are reproducible deployment instructions!
 
-**Last Updated:** 2026-02-13
+---
+
+**Maintained By**: Infrastructure Team
+**Last Updated**: 2026-02-13
+**Version**: 1.0.0

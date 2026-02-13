@@ -39,22 +39,93 @@ devops-practices-mcp/
 ├── README.md                    # This file
 ├── mcp-server.py                # MCP server implementation
 ├── requirements.txt             # Python dependencies
-├── practices/                   # Shared practice documents
+├── .gitlab-ci.yml               # GitLab CI/CD pipeline
+├── health-check.sh              # Health validation script
+├── practices/                   # Shared practice documents (10 files)
 │   ├── air-gapped-workflow.md
 │   ├── documentation-standards.md
 │   ├── session-continuity.md
 │   ├── task-tracking.md
 │   ├── git-practices.md
-│   └── efficiency-guidelines.md
-├── templates/                   # File templates
+│   ├── efficiency-guidelines.md
+│   ├── standard-workflow.md
+│   ├── runbook-documentation.md
+│   ├── configuration-management.md
+│   └── readme-maintenance.md
+├── templates/                   # File templates (4 files)
 │   ├── TRACKER-template.md
 │   ├── CURRENT-STATE-template.md
-│   ├── PENDING-CHANGES-template.md
-│   ├── README-template.md
-│   └── CLAUDE-template.md
+│   ├── CLAUDE-template.md
+│   └── RUNBOOK-template.md
 └── config/                      # MCP configuration
     └── mcp-config.json          # Server configuration
 ```
+
+---
+
+## MCP Tools
+
+The MCP server provides 5 tools for Claude to query practices and templates:
+
+| Tool | Description | Example |
+|------|-------------|---------|
+| `list_practices` | List all available practices | Returns list of 10 practices |
+| `get_practice` | Get practice content by name | `get_practice("task-tracking")` |
+| `list_templates` | List all available templates | Returns list of 4 templates |
+| `get_template` | Get template content by name | `get_template("TRACKER-template")` |
+| `render_template` | Render template with variable substitution | `render_template("TRACKER-template", {"PROJECT_NAME": "my-project"})` |
+
+### Template Variable Substitution
+
+Templates support `${VARIABLE}` placeholders that are automatically substituted:
+
+**Auto-provided variables:**
+- `${DATE}` - Current date (YYYY-MM-DD format)
+- `${TIMESTAMP}` - UTC timestamp (YYYYMMDDTHHMMz format)
+- `${USER}` - Current system user
+- `${YEAR}` - Current year
+
+**Custom variables:**
+Pass any additional variables when rendering:
+```python
+render_template("RUNBOOK-template", {
+    "SESSION_NUMBER": "1",
+    "TITLE": "Kafka Deployment",
+    "CLUSTER_NAME": "example-eks-cluster-uat",
+    "OBJECTIVE_DESCRIPTION": "Deploy Kafka cluster to UAT"
+})
+```
+
+All `${...}` placeholders in the template are replaced with provided values.
+
+---
+
+## CI/CD Pipeline
+
+This repository includes a **GitLab CI/CD pipeline** (`.gitlab-ci.yml`) that automatically validates changes:
+
+### Pipeline Jobs
+
+**On every merge request and commit to main/develop:**
+
+1. **health-check** - Runs the comprehensive health check script
+2. **python-validation** - Validates Python syntax and dependencies
+3. **practice-validation** - Ensures all practice files exist
+4. **template-validation** - Ensures templates contain variable placeholders
+5. **link-checker** - Checks documentation cross-references
+
+### Benefits
+
+- ✅ Prevents breaking changes from reaching main branch
+- ✅ Catches missing files or syntax errors automatically
+- ✅ Ensures consistent quality standards
+- ✅ No manual validation needed
+
+### Pipeline Status
+
+Check pipeline status in GitLab:
+- **Green checkmark** ✅ - All checks passed, safe to merge
+- **Red X** ❌ - Checks failed, review errors before merging
 
 ---
 
@@ -171,12 +242,24 @@ Claude: [Receives markdown content]
 Claude: "Here's the air-gapped workflow..."
 ```
 
-**Get Template:**
+**Get Template (Raw):**
 ```
-User: "Create a TRACKER.md for this project"
-Claude: [Queries MCP: get_template("TRACKER")]
-Claude: [Receives template content]
-Claude: [Creates populated TRACKER.md]
+User: "Show me the TRACKER template"
+Claude: [Queries MCP: get_template("TRACKER-template")]
+Claude: [Receives template with ${VARIABLES}]
+Claude: "Here's the template..."
+```
+
+**Render Template (With Variables):**
+```
+User: "Create a TRACKER.md for my kafka-deployment project"
+Claude: [Queries MCP: render_template("TRACKER-template", {
+    "PROJECT_NAME": "kafka-deployment",
+    "DATE": "2026-02-14",
+    "PHASE_NAME": "UAT Deployment"
+})]
+Claude: [Receives rendered template with all variables substituted]
+Claude: [Creates TRACKER.md with actual values]
 ```
 
 ### For Uttam Jaiswal
@@ -240,9 +323,9 @@ git push
 
 ### Adding a New Template
 1. Create template file in `templates/`
-2. Use placeholders: `${PROJECT_NAME}`, `${DATE}`, etc.
-3. Update `mcp-server.py` to handle substitutions
-4. Test template generation
+2. Use placeholders: `${PROJECT_NAME}`, `${DATE}`, etc. (see auto-provided variables in MCP Tools section)
+3. No code changes needed - `render_template` handles all `${...}` substitutions automatically
+4. Test template: `render_template("your-template", {"VAR": "value"})`
 5. Update this README (template count)
 6. Update [CHANGELOG.md](CHANGELOG.md) (document the addition)
 7. Run health check: `bash health-check.sh`
@@ -282,5 +365,5 @@ MIT License - Free to use and modify
 ---
 
 **Maintained By**: Uttam Jaiswal
-**Last Updated**: 2026-02-13
-**Version**: 1.0.0
+**Last Updated**: 2026-02-14
+**Version**: 1.1.0

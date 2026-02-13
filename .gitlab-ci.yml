@@ -1,0 +1,106 @@
+# GitLab CI/CD Pipeline for DevOps Practices MCP Server
+#
+# Runs health checks on every commit to ensure MCP server integrity
+
+stages:
+  - validate
+  - test
+
+# Health Check Job
+health-check:
+  stage: validate
+  image: python:3.10-slim
+  before_script:
+    - echo "🔍 Starting MCP Server Health Check"
+    - python --version
+    - pip --version
+  script:
+    - bash health-check.sh
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+  artifacts:
+    when: on_failure
+    paths:
+      - health-check.log
+    expire_in: 1 week
+
+# Python Environment Validation
+python-validation:
+  stage: validate
+  image: python:3.10-slim
+  before_script:
+    - pip install -r requirements.txt
+  script:
+    - echo "✅ Validating Python environment"
+    - python -c "import json; import logging; import sys; from pathlib import Path; print('All imports successful')"
+    - python -m py_compile mcp-server.py
+    - echo "✅ Python syntax validation passed"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+# Practice File Validation
+practice-validation:
+  stage: test
+  image: python:3.10-slim
+  script:
+    - echo "📝 Validating practice files"
+    - |
+      # Check all practice files are valid markdown
+      for file in practices/*.md; do
+        if [ ! -f "$file" ]; then
+          echo "❌ Practice file not found: $file"
+          exit 1
+        fi
+        echo "✅ Found: $file"
+      done
+    - echo "✅ All practice files validated"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+# Template File Validation
+template-validation:
+  stage: test
+  image: python:3.10-slim
+  script:
+    - echo "📋 Validating template files"
+    - |
+      # Check all template files exist and contain variables
+      for file in templates/*.md; do
+        if [ ! -f "$file" ]; then
+          echo "❌ Template file not found: $file"
+          exit 1
+        fi
+        # Check if template contains at least one variable placeholder
+        if ! grep -q '\${' "$file"; then
+          echo "⚠️  Warning: Template may not contain variable placeholders: $file"
+        fi
+        echo "✅ Found: $file"
+      done
+    - echo "✅ All template files validated"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+# Documentation Link Checker
+link-checker:
+  stage: test
+  image: python:3.10-slim
+  script:
+    - echo "🔗 Checking documentation links"
+    - |
+      # Check for broken internal links in README
+      if ! grep -l 'practices/' README.md; then
+        echo "⚠️  Warning: README may not reference practices"
+      fi
+      if ! grep -l 'templates/' README.md; then
+        echo "⚠️  Warning: README may not reference templates"
+      fi
+    - echo "✅ Documentation link check complete"
+  allow_failure: true
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'

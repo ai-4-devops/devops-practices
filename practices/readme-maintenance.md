@@ -656,4 +656,8 @@ See example-project project for real-world examples:
 
 **Remember:** A well-maintained README is a gift to your future self and your team!
 
-**Last Updated:** 2026-02-13
+---
+
+**Maintained By**: Infrastructure Team
+**Last Updated**: 2026-02-13
+**Version**: 1.0.0

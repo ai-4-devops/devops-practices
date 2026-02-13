@@ -7,6 +7,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.0] - 2026-02-14
+
+### Added
+
+**New MCP Tool:**
+- **render_template** - Render templates with automatic variable substitution
+  - Supports `${VARIABLE}` placeholder format
+  - Auto-provides: `${DATE}`, `${TIMESTAMP}`, `${USER}`, `${YEAR}`
+  - Accepts custom variables via dictionary parameter
+  - Eliminates need for manual template substitution
+  - Example: `render_template("TRACKER-template", {"PROJECT_NAME": "my-project"})`
+
+**CI/CD Pipeline:**
+- **GitLab CI/CD** configuration (`.gitlab-ci.yml`)
+  - 5 automated validation jobs (health-check, python-validation, practice-validation, template-validation, link-checker)
+  - Runs on merge requests and main/develop branches
+  - Prevents breaking changes from reaching main branch
+  - Uses GitLab.com free runners
+  - Colored output with pass/fail status
+
+### Changed
+
+**Practice Metadata:**
+- Standardized metadata footers across all 10 practice files
+  - All practices now include: `Maintained By`, `Last Updated`, `Version`
+  - Consistent format for easier tracking
+
+**Documentation:**
+- Added "MCP Tools" section to README documenting all 5 tools
+- Added "CI/CD Pipeline" section explaining automated validation
+- Updated architecture diagram to include `.gitlab-ci.yml` and `health-check.sh`
+- Updated usage examples to demonstrate `render_template`
+- Improved template development workflow documentation
+
+### Technical
+
+**Code Improvements:**
+- Added `datetime` import to `mcp-server.py` for timestamp generation
+- Implemented `render_template()` method with default variable support
+- Added `render_template` tool to MCP protocol
+- Variable substitution supports both `${VAR}` and `$VAR` formats
+- MCP server now provides 5 tools (was 4)
+
+**Impact:**
+- Templates are now fully automated - no manual substitution needed
+- CI/CD ensures quality and prevents accidental breakage
+- Consistent metadata across all practices for better tracking
+
+---
+
 ## [1.0.0] - 2026-02-13
 
 ### Added
@@ -94,14 +144,50 @@ Initial release with core DevOps practices extracted from multiple infrastructur
 
 ## Version History
 
-| Version | Date | Practices | Templates | Tools | Notes |
-|---------|------|-----------|-----------|-------|-------|
-| 1.0.0 | 2026-02-13 | 10 | 4 | 1 | Production-ready with runbook, config, README practices |
-| 0.1.0 | 2026-02-13 | 7 | 3 | 0 | Initial release |
+| Version | Date | Practices | Templates | MCP Tools | Scripts | Notes |
+|---------|------|-----------|-----------|-----------|---------|-------|
+| 1.1.0 | 2026-02-14 | 10 | 4 | 5 | CI/CD | Added render_template, GitLab CI/CD pipeline |
+| 1.0.0 | 2026-02-13 | 10 | 4 | 4 | 1 | Production-ready with runbook, config, README practices |
+| 0.1.0 | 2026-02-13 | 7 | 3 | 4 | 0 | Initial release |
 
 ---
 
 ## Upgrade Guide
+
+### From 1.0.0 to 1.1.0
+
+**Breaking Changes:** None
+
+**New Features:**
+- `render_template` MCP tool for automatic variable substitution
+- GitLab CI/CD pipeline for automated validation
+- Standardized practice metadata
+
+**Migration Steps:**
+
+1. Pull latest changes:
+   ```bash
+   cd devops-practices-mcp
+   git pull origin main
+   ```
+
+2. Restart Claude Code to load new `render_template` tool:
+   ```bash
+   # Restart Claude Code
+   ```
+
+3. (Optional) Enable GitLab CI/CD:
+   - Pipeline activates automatically on next push
+   - Requires GitLab runners (GitLab.com provides free runners)
+   - No configuration changes needed
+
+4. Update usage:
+   - Old way: `get_template("TRACKER-template")` → Manual substitution
+   - New way: `render_template("TRACKER-template", {"PROJECT_NAME": "my-project"})` → Automatic substitution
+
+**Projects Affected:** All projects using devops-practices MCP
+
+---
 
 ### From 0.1.0 to 1.0.0
 
@@ -154,4 +240,4 @@ To propose changes to practices or templates:
 
 **Maintainer:** Uttam Jaiswal
 **Repository:** devops-practices-mcp
-**Last Updated:** 2026-02-13
+**Last Updated:** 2026-02-14

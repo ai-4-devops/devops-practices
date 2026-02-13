@@ -605,4 +605,8 @@ See example-project project for real-world examples:
 
 **Remember:** Configurations are code - treat them with the same care!
 
-**Last Updated:** 2026-02-13
+---
+
+**Maintained By**: Infrastructure Team
+**Last Updated**: 2026-02-13
+**Version**: 1.0.0

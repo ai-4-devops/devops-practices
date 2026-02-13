@@ -8,7 +8,9 @@ Provides shared DevOps practices and templates for all example-project infrastru
 import json
 import logging
 import os
+import re
 import sys
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -96,6 +98,49 @@ class MCPServer:
         """List all available templates."""
         return list(self.templates.keys())
 
+    def render_template(self, name: str, variables: dict[str, str] | None = None) -> str | None:
+        """
+        Render a template with variable substitution.
+
+        Args:
+            name: Template name
+            variables: Dictionary of variable values to substitute
+
+        Returns:
+            Rendered template content or None if template not found
+        """
+        template = self.templates.get(name)
+        if not template:
+            logger.warning(f"Template not found: {name}")
+            return None
+
+        # Default variables
+        # Use timezone-aware datetime (Python 3.11+) or fallback to utcnow()
+        try:
+            now_utc = datetime.now(datetime.UTC)
+        except AttributeError:
+            now_utc = datetime.utcnow()
+
+        defaults = {
+            'DATE': now_utc.strftime('%Y-%m-%d'),
+            'TIMESTAMP': now_utc.strftime('%Y%m%dT%H%MZ'),
+            'USER': os.getenv('USER', 'user'),
+            'YEAR': str(now_utc.year),
+        }
+
+        # Merge user variables with defaults (user variables take precedence)
+        all_variables = {**defaults, **(variables or {})}
+
+        # Perform substitution
+        rendered = template
+        for key, value in all_variables.items():
+            # Support both ${VAR} and $VAR formats
+            rendered = rendered.replace(f'${{{key}}}', value)
+            rendered = rendered.replace(f'${key}', value)
+
+        logger.info(f"Rendered template: {name} with {len(all_variables)} variables")
+        return rendered
+
     def handle_request(self, request: dict[str, Any]) -> dict[str, Any]:
         """Handle an MCP request."""
         method = request.get('method', '')
@@ -171,6 +216,27 @@ class MCPServer:
                         'inputSchema': {
                             'type': 'object',
                             'properties': {}
+                        }
+                    },
+                    {
+                        'name': 'render_template',
+                        'description': 'Render a template with variable substitution. Supports ${VAR} format. Auto-provides DATE, TIMESTAMP, USER, YEAR.',
+                        'inputSchema': {
+                            'type': 'object',
+                            'properties': {
+                                'name': {
+                                    'type': 'string',
+                                    'description': 'Name of the template (e.g., "TRACKER-template", "RUNBOOK-template")'
+                                },
+                                'variables': {
+                                    'type': 'object',
+                                    'description': 'Dictionary of variables to substitute (e.g., {"PROJECT_NAME": "my-project", "SESSION_NUMBER": "1"})',
+                                    'additionalProperties': {
+                                        'type': 'string'
+                                    }
+                                }
+                            },
+                            'required': ['name']
                         }
                     }
                 ]
@@ -255,6 +321,30 @@ class MCPServer:
                     ]
                 }
             }
+
+        elif tool_name == 'render_template':
+            template_name = tool_args.get('name', '')
+            variables = tool_args.get('variables', {})
+            content = self.render_template(template_name, variables)
+            if content:
+                return {
+                    'result': {
+                        'content': [
+                            {
+                                'type': 'text',
+                                'text': content
+                            }
+                        ]
+                    }
+                }
+            else:
+                available = ', '.join(self.list_templates())
+                return {
+                    'error': {
+                        'code': -32602,
+                        'message': f'Template not found: {template_name}. Available: {available}'
+                    }
+                }
 
         else:
             return {
