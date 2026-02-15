@@ -14,11 +14,16 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-# Configure logging
+# Configure logging to file instead of stderr (to avoid interfering with stdio protocol)
+import os
+log_dir = os.path.expanduser('~/.cache/claude')
+os.makedirs(log_dir, exist_ok=True)
+log_file = os.path.join(log_dir, 'mcp-devops-practices.log')
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[logging.StreamHandler(sys.stderr)]
+    handlers=[logging.FileHandler(log_file)]
 )
 logger = logging.getLogger('devops-practices')
 
@@ -149,7 +154,9 @@ class MCPServer:
         logger.info(f"Handling request: {method}")
 
         try:
-            if method == 'tools/list':
+            if method == 'initialize':
+                return self._initialize(params)
+            elif method == 'tools/list':
                 return self._list_tools()
             elif method == 'tools/call':
                 return self._call_tool(params)
@@ -168,6 +175,21 @@ class MCPServer:
                     'message': f'Internal error: {str(e)}'
                 }
             }
+
+    def _initialize(self, params: dict[str, Any]) -> dict[str, Any]:
+        """Handle MCP initialize request."""
+        return {
+            'result': {
+                'protocolVersion': '2024-11-05',
+                'capabilities': {
+                    'tools': {}
+                },
+                'serverInfo': {
+                    'name': 'devops-practices',
+                    'version': '1.2.0'
+                }
+            }
+        }
 
     def _list_tools(self) -> dict[str, Any]:
         """Return list of available tools."""
@@ -368,6 +390,17 @@ class MCPServer:
 
                 try:
                     request = json.loads(line)
+
+                    # Check if this is a notification (no id field)
+                    is_notification = 'id' not in request
+
+                    # Handle notifications separately (they don't get responses)
+                    if is_notification:
+                        method = request.get('method', '')
+                        logger.info(f"Received notification: {method}")
+                        # Notifications like "notifications/initialized" don't need responses
+                        continue
+
                     response = self.handle_request(request)
 
                     # Add request ID if present

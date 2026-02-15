@@ -189,24 +189,39 @@ print_info "Testing MCP server loading..."
 
 if python3 -c "
 import sys
+import os
 sys.path.insert(0, '.')
 
 try:
-    # Import and instantiate server
+    # Import and instantiate server (but don't run it)
     from pathlib import Path
-    import os
 
-    # Set up paths
-    BASE_DIR = Path.cwd()
+    # Read the file content
+    mcp_server_path = os.path.abspath('mcp-server.py')
+    with open(mcp_server_path, 'r') as f:
+        code = f.read()
 
-    # Simple test - can we import?
-    exec(open('mcp-server.py').read(), {'__name__': '__main__', '__file__': 'mcp-server.py'})
+    # Compile to check syntax
+    compile(code, 'mcp-server.py', 'exec')
 
-    print('Server code can be executed')
+    # Test if we can import the MCPServer class
+    namespace = {
+        '__file__': mcp_server_path,
+        '__name__': 'mcp_server_test'  # Not '__main__' to avoid running the server
+    }
+    exec(code, namespace)
+
+    # Try to instantiate the server class (without running it)
+    if 'MCPServer' in namespace:
+        server = namespace['MCPServer']()
+        print('Server code can be loaded and instantiated')
+    else:
+        raise Exception('MCPServer class not found')
+
 except Exception as e:
     print(f'Error: {e}')
     sys.exit(1)
-" 2>&1 | grep -q "Server code can be executed"; then
+" 2>&1 | grep -q "Server code can be loaded and instantiated"; then
     print_success "MCP server code can be loaded"
 else
     print_failure "MCP server failed to load (check Python syntax)"
