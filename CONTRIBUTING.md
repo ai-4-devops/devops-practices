@@ -24,7 +24,10 @@ Thank you for contributing! This guide will help you understand our workflow and
 git clone <repo-url> ~/.mcp-servers/devops-practices
 cd ~/.mcp-servers/devops-practices
 
-# Install dependencies
+# Install dependencies (using modern tooling - recommended)
+uv pip install -r requirements.txt
+
+# Or using traditional pip
 pip install -r requirements.txt
 
 # Run health check
@@ -34,6 +37,18 @@ bash health-check.sh
 **Recommended Installation Location**: `~/.mcp-servers/devops-practices/`
 
 This location keeps MCP servers organized and makes configuration easier.
+
+**Modern Development Tooling (Recommended):**
+- **[uv](https://github.com/astral-sh/uv)**: Fast Python package installer (10-100x faster than pip)
+  ```bash
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  ```
+- **[volta](https://volta.sh/)**: JavaScript tool version manager for Node.js/npm
+  ```bash
+  curl https://get.volta.sh | bash
+  ```
+
+These tools provide faster, more reliable dependency and version management.
 
 ---
 

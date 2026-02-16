@@ -208,9 +208,26 @@ cd ~/.mcp-servers/devops-practices
 ```
 
 ### 2. Install Dependencies
+
+**Using uv (recommended - 10-100x faster):**
+```bash
+# Install uv if not already installed
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Install dependencies
+uv pip install -r requirements.txt
+```
+
+**Or using traditional pip:**
 ```bash
 pip install -r requirements.txt
 ```
+
+**Why uv?**
+- 10-100x faster than pip
+- Better dependency resolution
+- Built in Rust for performance
+- Drop-in replacement for pip
 
 ### 3. Configure MCP Server
 Edit `~/.config/claude/config.json` (or wherever Claude config lives):

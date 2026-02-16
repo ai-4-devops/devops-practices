@@ -68,6 +68,10 @@ git clone <repo-url> ~/.mcp-servers/devops-practices
 cd ~/.mcp-servers/devops-practices
 
 # Install dependencies (if needed)
+# Using uv (recommended - faster, better dependency resolution)
+uv pip install -r requirements.txt
+
+# Or using traditional pip
 pip install -r requirements.txt
 
 # Run health check
