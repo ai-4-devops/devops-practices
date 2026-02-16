@@ -1,2 +1,6 @@
 # example-project DevOps Practices MCP Server Requirements
-# No external dependencies required - uses Python standard library only
+
+# For SDK-based server (mcp-server-sdk.py) - recommended
+mcp>=1.26.0
+
+# Custom server (mcp-server.py) uses Python standard library only (no dependencies)
