@@ -467,6 +467,176 @@ configs/
 
 ---
 
+## Multi-Environment Consistency
+
+### Purpose
+
+When deploying the same service across multiple environments (dev → test → production), maintain consistency by copying working configurations and customizing only environment-specific values.
+
+### Workflow: Copy and Customize
+
+**Instead of:** Creating configurations from scratch or exports for each environment
+
+**Do this:** Copy a proven reference environment and customize systematically
+
+**Steps:**
+
+1. **Identify Reference Environment**
+   - Use the most recently deployed/tested environment (usually dev or test)
+   - Ensure reference config is working and verified
+
+2. **Copy Configuration Files**
+   ```bash
+   # Example: Deploy to test using dev as reference
+   cp configs/dev/k8s/observability/otel-collector.yaml \
+      configs/test/k8s/observability/otel-collector.yaml
+
+   # Or copy entire service directory
+   cp -r configs/dev/k8s/observability/service-name \
+         configs/test/k8s/observability/
+   ```
+
+3. **Customize Environment-Specific Values**
+
+   Use `sed` for bulk replacements:
+   ```bash
+   # In the new environment's files
+   cd configs/test/k8s/observability/
+
+   # Replace cluster labels
+   sed -i 's/cluster: example-eks-cluster-cluster-dev/cluster: example-eks-cluster-cluster-test/g' *.yaml
+
+   # Replace environment labels
+   sed -i 's/environment: dev/environment: test/g' *.yaml
+
+   # Replace ECR registry (account-specific)
+   sed -i 's/747030889179/877559199145/g' *.yaml
+
+   # Replace other environment-specific values
+   sed -i 's/prometheus-dev/prometheus-test/g' *.yaml
+   ```
+
+4. **Verify Changes with Diff**
+
+   **Critical:** Always diff to confirm only expected changes:
+   ```bash
+   diff -u configs/dev/k8s/observability/service.yaml \
+           configs/test/k8s/observability/service.yaml
+   ```
+
+   **Expected differences only:**
+   - ✅ Cluster name/labels (`dev` → `test`)
+   - ✅ Environment labels (`dev` → `test`)
+   - ✅ ECR registry (different AWS account IDs)
+   - ✅ Endpoint URLs (environment-specific)
+   - ❌ **Anything else is unexpected** - investigate!
+
+5. **Document Improvements**
+
+   If the new environment has better configuration than the reference:
+   - Track in `TRACKER.md` under "Improvements to Backport"
+   - Apply back to reference environment later
+   - Example:
+     ```markdown
+     ## Improvements to Backport
+
+     | # | Improvement | From → To | Status | Notes |
+     |---|-------------|-----------|--------|-------|
+     | 1 | Add serviceaccounts RBAC | Test → Dev | Pending | More complete permissions |
+     ```
+
+### Common Environment-Specific Values
+
+Values that typically differ between environments:
+
+| Value Type | Example | Pattern |
+|------------|---------|---------|
+| Cluster Labels | `example-eks-cluster-cluster-dev` | `example-eks-cluster-cluster-{env}` |
+| Environment Labels | `environment: dev` | `environment: {env}` |
+| ECR Registry | `123456789012.dkr.ecr...` | `{account-id}.dkr.ecr...` |
+| Endpoint URLs | `prometheus-dev.example.com` | `prometheus-{env}.example.com` |
+| Replica Counts | `replicas: 1` (dev) vs `replicas: 3` (prod) | Scale based on env |
+| Resource Limits | Lower in dev, higher in prod | Adjust per environment needs |
+| Namespace | `observability` | Usually same, but verify |
+
+### Example: Full Workflow
+
+Deploying kube-state-metrics from dev to test:
+
+```bash
+# 1. Copy dev config as starting point
+cp configs/dev/k8s/kube-state-metrics.yaml \
+   configs/test/k8s/kube-state-metrics.yaml
+
+# 2. Customize for test environment
+cd configs/test/k8s/
+sed -i 's/example-eks-cluster-cluster-dev/example-eks-cluster-cluster-test/g' kube-state-metrics.yaml
+sed -i 's/environment: dev/environment: test/g' kube-state-metrics.yaml
+sed -i 's/747030889179/877559199145/g' kube-state-metrics.yaml
+
+# 3. Verify only expected changes
+diff -u ../dev/k8s/kube-state-metrics.yaml kube-state-metrics.yaml
+
+# Expected output:
+# -    cluster: example-eks-cluster-cluster-dev
+# +    cluster: example-eks-cluster-cluster-test
+# -    environment: dev
+# +    environment: test
+# -    image: 747030889179.dkr.ecr.ap-south-1.amazonaws.com/...
+# +    image: 877559199145.dkr.ecr.ap-south-1.amazonaws.com/...
+
+# 4. If verification passes, commit
+git add configs/test/k8s/kube-state-metrics.yaml
+git commit -m "feat: Add kube-state-metrics config for test environment"
+```
+
+### Benefits
+
+**Consistency:**
+- Same RBAC permissions across environments
+- Same resource configurations
+- Same annotations and labels (except environment-specific)
+- No missing fields or components
+
+**Efficiency:**
+- Faster deployment preparation (seconds vs minutes)
+- Less error-prone than manual creation
+- Easy verification with diff
+
+**Maintainability:**
+- Single reference for "correct" configuration
+- Clear diff shows environment-specific changes
+- Improvements can flow both directions
+
+### Anti-Patterns to Avoid
+
+**❌ Creating from scratch for each environment**
+- Risk of missing RBAC rules, annotations, or fields
+- Wastes time recreating known-good configs
+
+**❌ Creating from kubectl exports without reference**
+- Exports may have cluster-specific runtime state
+- Hard to know what's intentional vs auto-generated
+
+**❌ Not verifying with diff**
+- May introduce unintended differences
+- Hard to debug inconsistencies later
+
+**❌ Not tracking improvements**
+- Better configs in newer environments get lost
+- Reference environments become stale
+
+### When to Backport Improvements
+
+If you discover during deployment that:
+1. New environment has better/more complete config
+2. Reference environment is missing something
+3. Configuration has evolved since reference was created
+
+**Action:** Track and backport to maintain consistency
+
+---
+
 ## Best Practices
 
 ### 1. Keep It Simple
@@ -608,5 +778,5 @@ See example-project project for real-world examples:
 ---
 
 **Maintained By**: Infrastructure Team
-**Last Updated**: 2026-02-13
-**Version**: 1.0.0
+**Last Updated**: 2026-02-16
+**Version**: 1.1.0
