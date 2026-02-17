@@ -8,20 +8,34 @@
 
 ## Directory Structure
 
-All environment-specific configurations are stored in a structured hierarchy:
+### Hybrid Resource-Type-First Approach
+
+Separates **configuration** (declarative state), **scripts** (automation), and **documentation** (knowledge) at the top level, with environment-specific configurations nested under `configs/`:
 
 ```
 configs/
-├── <environment>/                  # e.g., dev, test, staging, production
+├── <environment>/                  # e.g., dev, test, uat, production
 │   ├── k8s/                        # Kubernetes resources
 │   │   ├── <namespace>/            # e.g., observability, tracing, monitoring
-│   │   │   ├── <service>/          # e.g., jaeger, otel-collector, prometheus
-│   │   │   │   ├── values.yaml     # Helm values or config
+│   │   │   ├── <component>/        # e.g., jaeger, otel-collector, prometheus
+│   │   │   │   ├── values.yaml     # Helm values
 │   │   │   │   ├── deployment.yaml
 │   │   │   │   ├── service.yaml
 │   │   │   │   ├── configmap.yaml
 │   │   │   │   └── ...
 │   │   │   └── ...
+│   │   └── ...
+│   ├── ecs/                        # ECS task definitions & services
+│   │   ├── <service>/              # e.g., api-gateway, worker-service
+│   │   │   ├── task-definition.json
+│   │   │   ├── service-definition.json
+│   │   │   └── container-config.json
+│   │   └── ...
+│   ├── rds/                        # RDS configurations
+│   │   ├── <database>/             # e.g., postgres, mysql
+│   │   │   ├── parameter-group.json
+│   │   │   ├── option-group.json
+│   │   │   └── init-scripts/
 │   │   └── ...
 │   ├── ec2/                        # EC2-hosted services
 │   │   ├── <service>/              # e.g., elasticsearch, clickhouse
@@ -33,13 +47,84 @@ configs/
 │   │   │       ├── install.sh
 │   │   │       └── configure.sh
 │   │   └── ...
-│   └── shared/                     # Cross-cutting configs
-│       ├── iam/                    # IAM policies, roles
-│       ├── secrets/                # Secret templates (not actual secrets!)
-│       ├── network/                # Security groups, NACLs
-│       └── ...
+│   ├── terraform/                  # Terraform configurations
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   ├── outputs.tf
+│   │   └── modules/
+│   ├── helm-values/                # Helm chart value overrides
+│   │   ├── <chart-name>/           # e.g., kafka, nginx-ingress
+│   │   │   └── values.yaml
+│   │   └── ...
+│   └── ...
+├── shared/                         # Shared configs across all environments
+│   ├── iam/                        # IAM policies, roles (templates)
+│   ├── secrets/                    # Secret templates (not actual secrets!)
+│   ├── network/                    # Security groups, NACLs (templates)
+│   └── ...
 └── ...
+
+scripts/                            # Parameterized, reusable automation
+├── deploy.sh                       # Takes --env parameter
+├── backup.sh
+├── rollback.sh
+└── lib/                            # Shared script libraries
+    └── helpers.sh
+
+docs/                               # Shared documentation
+├── guides/                         # HOW-TO deployment procedures
+│   ├── deployment-guide.md
+│   └── troubleshooting-guide.md
+└── runbooks/                       # Session logs (env-specific if needed)
+    ├── dev/
+    ├── test/
+    ├── uat/
+    └── shared/
 ```
+
+### Service Types Reference
+
+The structure supports multiple infrastructure service types:
+
+| Service Type | Purpose | Typical Contents |
+|--------------|---------|------------------|
+| **k8s/** | Kubernetes manifests | Deployments, Services, ConfigMaps, Helm values |
+| **ecs/** | ECS configurations | Task definitions, service definitions |
+| **rds/** | Database configurations | Parameter groups, option groups, init scripts |
+| **ec2/** | EC2 instance configs | Service configs, installation scripts |
+| **terraform/** | Infrastructure as Code | .tf files, modules, state configs |
+| **helm-values/** | Helm value overrides | values.yaml files per chart |
+| **lambda/** | Serverless functions | Function configs, IAM roles |
+| **s3/** | S3 bucket configs | Bucket policies, lifecycle rules |
+
+Add new service types as needed - the structure is extensible.
+
+### Rationale: Why This Structure?
+
+**1. Separation of Concerns**
+- **Config** = Declarative state (what infrastructure should look like)
+- **Scripts** = Imperative automation (how to deploy/manage)
+- **Docs** = Knowledge and procedures (why and how-to)
+
+**2. Prevents Duplication**
+- Scripts are **reusable** across environments (take `--env` parameter)
+- Docs are **mostly shared** (guides, troubleshooting)
+- Config **truly differs** per environment (different values/sizing)
+
+**3. Clear Boundaries**
+- Configuration never gets confused with executable code
+- Executable scripts are clearly separated from declarative config
+- Documentation is centralized, not scattered across environment folders
+
+**4. Scalable**
+- Easy to add new service types under `config/$env/`
+- Easy to add new environments (`staging/`, `dr/`, `sandbox/`)
+- Easy to find all automation in one place (`scripts/`)
+
+**5. Access Control Friendly**
+- Grant read-only to `config/` for auditors
+- Grant write access to `scripts/` for automation team
+- Separate sensitive configs from general documentation
 
 ---
 
@@ -88,7 +173,7 @@ Use descriptive, lowercase names with hyphens:
 
 ### Example 1: Kubernetes Deployment
 
-**Path:** `configs/production/k8s/tracing/jaeger/deployment.yaml`
+**Path:** `configs/production/k8s/observability/jaeger/deployment.yaml`
 
 ```yaml
 apiVersion: apps/v1
@@ -311,24 +396,27 @@ All configs live in git - **the repo is the single source of truth**.
 
 **From Laptop (where Claude runs):**
 
-1. **Edit config files** in git repo
-2. **Replace placeholders** with actual values (via script or sed)
+1. **Edit config files** in git repo under `configs/`
+2. **Use scripts** from `scripts/` directory (parameterized for environment)
 3. **Upload to S3** for bastion transfer
-4. **Apply on bastion** (copy/paste commands)
+4. **Execute on bastion** (copy/paste commands)
 
 **Example workflow:**
 
 ```bash
 # 1. On Laptop - Edit config
-vim configs/production/k8s/tracing/jaeger/deployment.yaml
+vim configs/production/k8s/observability/jaeger/deployment.yaml
 
-# 2. Generate actual config (replace placeholders)
+# 2. Use deployment script (takes environment as parameter)
+./scripts/deploy.sh --env production --service k8s/observability/jaeger
+
+# Or manually: Generate actual config (replace placeholders)
 export ECR_REGISTRY="123456789012.dkr.ecr.ap-south-1.amazonaws.com"
 export JAEGER_VERSION="v2.14.1"
 export CLUSTER_NAME="example-eks-cluster-cluster-prod"
 export ES_ENDPOINT="https://10.254.0.186:9200"
 
-envsubst < configs/production/k8s/tracing/jaeger/deployment.yaml \
+envsubst < configs/production/k8s/observability/jaeger/deployment.yaml \
   > /tmp/jaeger-deployment-prod.yaml
 
 # 3. Upload to S3
@@ -336,7 +424,7 @@ aws s3 cp /tmp/jaeger-deployment-prod.yaml s3://example-s3-bucket/jaeger/
 
 # 4. On Bastion - Download and apply
 aws s3 cp s3://example-s3-bucket/jaeger/jaeger-deployment-prod.yaml .
-kubectl apply -f jaeger-deployment-prod.yaml -n tracing
+kubectl apply -f jaeger-deployment-prod.yaml -n observability
 ```
 
 ### Updating Configurations
@@ -766,17 +854,26 @@ See example-project project for real-world examples:
 
 ## Related Practices
 
-- **[documentation-standards.md](documentation-standards.md)** - configs/ directory location and purpose
+- **[documentation-standards.md](documentation-standards.md)** - Overall repository organization
 - **[air-gapped-workflow.md](air-gapped-workflow.md)** - Deploying configurations in air-gapped environments
 - **[standard-workflow.md](standard-workflow.md)** - Deploying configurations with direct access
 - **[git-practices.md](git-practices.md)** - Version control and backup best practices
 
 ---
 
+## Summary
+
+**Key Principles:**
+1. **Separate concerns**: `configs/` (declarative state), `scripts/` (automation), `docs/` (knowledge)
+2. **Environment-first under configs**: `configs/$env/$service/`
+3. **Reusable scripts**: Scripts take `--env` parameter, not duplicated per environment
+4. **Shared docs**: Documentation centralized in `docs/`, not scattered per environment
+5. **Service types**: `k8s/`, `ecs/`, `rds/`, `ec2/`, `terraform/`, `helm-values/`, etc.
+
 **Remember:** Configurations are code - treat them with the same care!
 
 ---
 
 **Maintained By**: Infrastructure Team
-**Last Updated**: 2026-02-16
-**Version**: 1.1.0
+**Last Updated**: 2026-02-17
+**Version**: 2.0.0

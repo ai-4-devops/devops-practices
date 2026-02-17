@@ -50,6 +50,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Reflected new practice and template counts
   - Added issue tracking to capabilities
 
+- **Enhanced configuration-management.md** (v1.1.0 → v2.0.0):
+  - Changed from basic environment-first to **Hybrid Resource-Type-First** structure
+  - Added separation: `configs/` (declarative), `scripts/` (automation), `docs/` (knowledge)
+  - Expanded service type support: Added ecs/, rds/, terraform/, helm-values/, lambda/, s3/
+  - New sections: "Service Types Reference" table, "Rationale: Why This Structure?", "Summary"
+  - Reusable scripts pattern: Scripts take `--env` parameter (no duplication)
+  - Better examples: Changed "tracing" → "observability" namespace
+  - +118 lines, -21 lines (net +97 lines of guidance)
+  - Prevents anti-patterns: No script duplication, centralized documentation
+
 ### Impact
 
 **For Users:**
