@@ -258,7 +258,7 @@ chmod +x /home/ukj/work/devops/protean/devops-practices-mcp/mcp-server.py
 
 ## Verifying It Works
 
-When working on a example-project project, Claude should:
+When working on a example project, Claude should:
 
 1. **Have access to practices** without them being in CLAUDE.md
 2. **Query practices when needed** instead of you providing them
@@ -271,7 +271,7 @@ User: "What's the air-gapped workflow?"
 
 Claude: [Queries MCP: get_practice("air-gapped-workflow")]
 Claude: [Receives full practice content]
-Claude: "Here's the air-gapped workflow for example-project:
+Claude: "Here's the air-gapped workflow:
 
 The laptop where Claude runs has NO AWS access...
 [Full content from air-gapped-workflow.md]

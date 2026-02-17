@@ -349,7 +349,7 @@ Use **placeholders** for environment-specific values.
 
 **Common Placeholders:**
 - `${ECR_REGISTRY}` - ECR registry URL (e.g., `123456789012.dkr.ecr.ap-south-1.amazonaws.com`)
-- `${CLUSTER_NAME}` - Cluster identifier (e.g., `example-eks-cluster-prod`)
+- `${CLUSTER_NAME}` - Cluster identifier (e.g., `example-eks-prod`)
 - `${ES_ENDPOINT}` - Elasticsearch endpoint (e.g., `https://es.example.com:9200`)
 - `${PROMETHEUS_ENDPOINT}` - Prometheus endpoint (e.g., `http://prometheus:9090`)
 - `${AWS_REGION}` - AWS region (e.g., `ap-south-1`)
@@ -371,7 +371,7 @@ clickhouse:
 ```yaml
 image: 123456789012.dkr.ecr.ap-south-1.amazonaws.com/otel-collector:0.114.0
 endpoint: https://prometheus-prod.example.com/api/v1/write
-cluster: example-eks-cluster-cluster-prod
+cluster: example-eks-cluster-prod
 clickhouse:
   host: 10.251.10.172
   port: 8124
@@ -413,17 +413,17 @@ vim configs/production/k8s/observability/jaeger/deployment.yaml
 # Or manually: Generate actual config (replace placeholders)
 export ECR_REGISTRY="123456789012.dkr.ecr.ap-south-1.amazonaws.com"
 export JAEGER_VERSION="v2.14.1"
-export CLUSTER_NAME="example-eks-cluster-cluster-prod"
+export CLUSTER_NAME="example-eks-cluster-prod"
 export ES_ENDPOINT="https://10.254.0.186:9200"
 
 envsubst < configs/production/k8s/observability/jaeger/deployment.yaml \
   > /tmp/jaeger-deployment-prod.yaml
 
 # 3. Upload to S3
-aws s3 cp /tmp/jaeger-deployment-prod.yaml s3://example-s3-bucket/jaeger/
+aws s3 cp /tmp/jaeger-deployment-prod.yaml s3://example-bucket/jaeger/
 
 # 4. On Bastion - Download and apply
-aws s3 cp s3://example-s3-bucket/jaeger/jaeger-deployment-prod.yaml .
+aws s3 cp s3://example-bucket/jaeger/jaeger-deployment-prod.yaml .
 kubectl apply -f jaeger-deployment-prod.yaml -n observability
 ```
 
@@ -592,7 +592,7 @@ When deploying the same service across multiple environments (dev → test → p
    cd configs/test/k8s/observability/
 
    # Replace cluster labels
-   sed -i 's/cluster: example-eks-cluster-cluster-dev/cluster: example-eks-cluster-cluster-test/g' *.yaml
+   sed -i 's/cluster: example-eks-cluster-dev/cluster: example-eks-cluster-test/g' *.yaml
 
    # Replace environment labels
    sed -i 's/environment: dev/environment: test/g' *.yaml
@@ -639,7 +639,7 @@ Values that typically differ between environments:
 
 | Value Type | Example | Pattern |
 |------------|---------|---------|
-| Cluster Labels | `example-eks-cluster-cluster-dev` | `example-eks-cluster-cluster-{env}` |
+| Cluster Labels | `example-eks-cluster-dev` | `example-eks-cluster-{env}` |
 | Environment Labels | `environment: dev` | `environment: {env}` |
 | ECR Registry | `123456789012.dkr.ecr...` | `{account-id}.dkr.ecr...` |
 | Endpoint URLs | `prometheus-dev.example.com` | `prometheus-{env}.example.com` |
@@ -658,7 +658,7 @@ cp configs/dev/k8s/kube-state-metrics.yaml \
 
 # 2. Customize for test environment
 cd configs/test/k8s/
-sed -i 's/example-eks-cluster-cluster-dev/example-eks-cluster-cluster-test/g' kube-state-metrics.yaml
+sed -i 's/example-eks-cluster-dev/example-eks-cluster-test/g' kube-state-metrics.yaml
 sed -i 's/environment: dev/environment: test/g' kube-state-metrics.yaml
 sed -i 's/747030889179/877559199145/g' kube-state-metrics.yaml
 
@@ -666,8 +666,8 @@ sed -i 's/747030889179/877559199145/g' kube-state-metrics.yaml
 diff -u ../dev/k8s/kube-state-metrics.yaml kube-state-metrics.yaml
 
 # Expected output:
-# -    cluster: example-eks-cluster-cluster-dev
-# +    cluster: example-eks-cluster-cluster-test
+# -    cluster: example-eks-cluster-dev
+# +    cluster: example-eks-cluster-test
 # -    environment: dev
 # +    environment: test
 # -    image: 747030889179.dkr.ecr.ap-south-1.amazonaws.com/...
@@ -749,7 +749,7 @@ In each config directory, add a `README.md`:
 
 - `${ECR_REGISTRY}`: ECR registry URL (e.g., 123456789012.dkr.ecr.ap-south-1.amazonaws.com)
 - `${OTEL_VERSION}`: OTel Collector version (e.g., 0.114.0)
-- `${CLUSTER_NAME}`: Cluster identifier (e.g., example-eks-cluster-cluster-prod)
+- `${CLUSTER_NAME}`: Cluster identifier (e.g., example-eks-cluster-prod)
 - `${PROMETHEUS_ENDPOINT}`: Prometheus remote_write endpoint
 
 ## Deployment
@@ -845,7 +845,7 @@ echo $ECR_REGISTRY  # Should show value, not empty
 
 ## Examples
 
-See example-project project for real-world examples:
+See example project for real-world examples:
 - `configs/dev/k8s/` - Development configurations
 - `configs/monitoring/k8s/` - Monitoring account configurations
 - `configs/production/ec2/` - EC2 service configurations

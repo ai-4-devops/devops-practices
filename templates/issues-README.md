@@ -2,7 +2,7 @@
 
 ## Overview
 
-This directory contains individual issue files for tracking work items, bugs, features, technical debt, and improvements for the example-project Observability Stack project.
+This directory contains individual issue files for tracking work items, bugs, features, technical debt, and improvements for the Example Observability Stack project.
 
 ## Issue Lifecycle
 

@@ -199,7 +199,7 @@ Document before/after states:
 [FILTER]
     Name                modify
     Match               kube.*
-    Add                 cluster example-eks-cluster-cluster
+    Add                 cluster example-eks-cluster
 \`\`\`
 
 **After:**
@@ -207,7 +207,7 @@ Document before/after states:
 [FILTER]
     Name                modify
     Match               kube.*
-    Add                 cluster example-eks-cluster-cluster-mon
+    Add                 cluster example-eks-cluster-mon
 \`\`\`
 
 **Reason:** Align cluster label with new naming convention.
@@ -446,7 +446,7 @@ Before finishing a runbook, verify:
 
 ## Examples
 
-See existing runbooks in example-project project:
+See existing runbooks in example project:
 - `docs/RUNBOOKS/20260203T1430Z-SESSION8-PHASE2-COMPLETE-RECORD.md` - Comprehensive example
 - `docs/RUNBOOKS/20260212T0830Z-SESSION11-GRAFANA-DASHBOARD-DEPLOYMENT.md` - Interactive session example
 - `docs/RUNBOOKS/20260128T0000Z-SESSION6-COMPLETE-RECORD.md` - Multi-component deployment

@@ -8,7 +8,7 @@
 
 ## Directory Structure
 
-Every example-project project follows this standard structure:
+Every example project follows this standard structure:
 
 ```
 /                           # Repo root
@@ -181,7 +181,7 @@ Every example-project project follows this standard structure:
 **Naming**: `ADR-<number>-<title>.md`, `<COMPONENT>-ARCHITECTURE.md`
 
 **Examples**:
-- `ADR-001_Kafka_Platform_Decision_example-project.md`
+- `ADR-001_Kafka_Platform_Decision.md`
 - `OBSERVABILITY-ARCHITECTURE.md`
 
 ---

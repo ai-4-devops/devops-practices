@@ -639,7 +639,7 @@ find . -type d -exec sh -c '
 
 ## Examples
 
-See example-project project for real-world examples:
+See example project for real-world examples:
 - `docs/guides/README.md` - Comprehensive guide index
 - `docs/RUNBOOKS/README.md` - Session log index
 - `docs/reports/README.md` - Report types and conventions

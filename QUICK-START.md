@@ -6,21 +6,21 @@
 
 ## What You Just Got
 
-A **centralized knowledge base** for all your example-project DevOps projects. Instead of copying 580 lines of instructions into every project's CLAUDE.md, Claude now queries this MCP server for shared practices.
+A **centralized knowledge base** for all your DevOps projects. Instead of copying 580 lines of instructions into every project's CLAUDE.md, Claude now queries this MCP server for shared practices.
 
 **Before MCP**:
 ```
 kafka-project/CLAUDE.md         → 580 lines (70% shared, 30% project-specific)
-example-monitoring/CLAUDE.md    → 580 lines (same 70% duplicated)
-example-networking/CLAUDE.md    → 580 lines (same 70% duplicated)
+monitoring-stack/CLAUDE.md      → 580 lines (same 70% duplicated)
+network-infra/CLAUDE.md         → 580 lines (same 70% duplicated)
 ```
 
 **After MCP**:
 ```
-devops-practices-mcp/   → Shared practices (used by all)
+devops-practices-mcp/      → Shared practices (used by all)
 kafka-project/CLAUDE.md         → ~150 lines (only Kafka-specific)
-example-monitoring/CLAUDE.md    → ~150 lines (only monitoring-specific)
-example-networking/CLAUDE.md    → ~150 lines (only networking-specific)
+monitoring-stack/CLAUDE.md      → ~150 lines (only monitoring-specific)
+network-infra/CLAUDE.md         → ~150 lines (only networking-specific)
 ```
 
 ---
@@ -236,7 +236,7 @@ bash health-check.sh
 
 ## What This Means for You
 
-### When Working on kafka-project (or any example-project project):
+### When Working on Your Projects:
 
 **Before MCP**:
 - Claude had to read 580-line CLAUDE.md every session
@@ -260,23 +260,23 @@ Claude: "Here's the air-gapped workflow:
 ..."
 ```
 
-Claude **automatically** knows the answer without it being in kafka-project/CLAUDE.md!
+Claude **automatically** knows the answer without it being in your project's CLAUDE.md!
 
 ---
 
 ## Next Steps
 
-### For kafka-project Project:
+### For Existing Projects:
 
 1. **Simplify CLAUDE.md** to reference MCP server
-2. **Keep only Kafka-specific instructions** in CLAUDE.md
+2. **Keep only project-specific instructions** in CLAUDE.md
 3. **Test** that Claude can still do everything needed
 
 See [SETUP.md](SETUP.md) for detailed instructions on updating project CLAUDE.md files.
 
 ---
 
-### For New example-project Projects:
+### For New Projects:
 
 When creating a new project:
 

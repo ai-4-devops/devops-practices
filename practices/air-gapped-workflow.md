@@ -60,7 +60,7 @@
 vim configs/production/k8s/kafka/deployment.yaml
 
 # Claude provides this command for S3 upload
-aws s3 cp configs/production/k8s/kafka/deployment.yaml s3://example-s3-bucket/kafka/
+aws s3 cp configs/production/k8s/kafka/deployment.yaml s3://example-bucket/kafka/
 ```
 
 ### 2. On CloudShell/VPS (ECR Image Uploads)
@@ -113,26 +113,26 @@ docker push ${ECR_REGISTRY}/strimzi/operator:0.50.0
 **From Laptop to S3**:
 ```bash
 # Upload single file
-aws s3 cp local-file.yaml s3://example-s3-bucket/path/file.yaml
+aws s3 cp local-file.yaml s3://example-bucket/path/file.yaml
 
 # Upload directory
-aws s3 cp configs/ s3://example-s3-bucket/configs/ --recursive
+aws s3 cp configs/ s3://example-bucket/configs/ --recursive
 
 # Upload tarball (for multiple files)
 tar -czf kafka-manifests.tar.gz k8s-manifests/ helm-values/
-aws s3 cp kafka-manifests.tar.gz s3://example-s3-bucket/
+aws s3 cp kafka-manifests.tar.gz s3://example-bucket/
 ```
 
 **From S3 to Bastion** (user copy/pastes):
 ```bash
 # Download single file
-aws s3 cp s3://example-s3-bucket/path/file.yaml ./file.yaml
+aws s3 cp s3://example-bucket/path/file.yaml ./file.yaml
 
 # Download directory
-aws s3 cp s3://example-s3-bucket/configs/ ./configs/ --recursive
+aws s3 cp s3://example-bucket/configs/ ./configs/ --recursive
 
 # Download and extract tarball
-aws s3 cp s3://example-s3-bucket/kafka-manifests.tar.gz .
+aws s3 cp s3://example-bucket/kafka-manifests.tar.gz .
 tar -xzf kafka-manifests.tar.gz
 ```
 

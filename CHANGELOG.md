@@ -244,7 +244,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Required contents: metadata, commands, outputs, issues, verification
   - What to capture / never omit guidelines
   - Quality checklist and common mistakes to avoid
-  - Extracted from example-project observability stack project
+  - Extracted from example observability stack project
 
 - **configuration-management.md** (15K) - Configuration organization patterns
   - Directory structure standards (`configs/<env>/k8s/`, `configs/<env>/ec2/`)
@@ -252,21 +252,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Service grouping patterns
   - Placeholder conventions for environment-specific values (`${ECR_REGISTRY}`, etc.)
   - Deployment workflows and best practices
-  - Extracted from example-project observability stack project
+  - Extracted from example observability stack project
 
 - **readme-maintenance.md** (15K) - Directory documentation standards
   - When to create/update READMEs (CRITICAL practice)
   - Required README structure and contents
   - Proactive README creation triggers
   - Quality checklist and examples by directory type
-  - Extracted from example-project observability stack project
+  - Extracted from example observability stack project
 
 **New Templates (1):**
 - **RUNBOOK-template.md** (3.9K) - Standard session log template
   - All required sections pre-formatted
   - Placeholder variables for easy customization
   - Supports runbook-documentation.md practice
-  - Extracted from example-project project runbook patterns
+  - Extracted from example project runbook patterns
 
 **New Tools (1):**
 - **health-check.sh** - Comprehensive MCP server health validation
@@ -281,7 +281,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Context
 
-These additions were extracted from the example-project (Banking Supervision and Infrastructure Framework) observability stack project after identifying common patterns that should be shared across all infrastructure projects.
+These additions were extracted from the example observability stack project after identifying common patterns that should be shared across all infrastructure projects.
 
 **Impact:**
 - Total: 10 practices, 4 templates, 1 health check tool

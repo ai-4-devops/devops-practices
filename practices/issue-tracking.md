@@ -321,7 +321,7 @@ When adopting issue tracking mid-project, create retrospective issues for comple
 4. Set resolved date to actual completion date
 5. Document achievements, learnings, time investment
 
-**Example** (example-project project):
+**Example** (example project):
 - Created 22 retrospective issues for completed work
 - Documented 54+ hours of work
 - Captured 8-hour troubleshooting session
@@ -402,7 +402,7 @@ Update ISSUES.md to reflect archived issues
 
 ## Example: High-Impact Issue Documentation
 
-**ISSUE-017: Deploy Jaeger v2** (from example-project project)
+**ISSUE-017: Deploy Jaeger v2** (from example project)
 
 **Why impactful**:
 - 8 hours of troubleshooting documented
@@ -496,7 +496,7 @@ Track these metrics in ISSUES.md:
 
 ## Real-World Example
 
-**example-project Observability Stack Project**:
+**Example Observability Stack Project**:
 - **Duration**: Jan 05 - Feb 17 (6 weeks)
 - **Total Issues**: 31 (22 closed, 9 open)
 - **Work Documented**: 54+ hours
@@ -566,4 +566,4 @@ A: Maintain both. Use this for granular tracking, sync key items to Jira for vis
 **Maintained By**: MCP Community
 **Version**: 1.0.0
 **Created**: 2026-02-17
-**Based On**: example-project Observability Stack POC implementation
+**Based On**: Example Observability Stack POC implementation

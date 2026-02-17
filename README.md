@@ -101,7 +101,7 @@ Pass any additional variables when rendering:
 render_template("RUNBOOK-template", {
     "SESSION_NUMBER": "1",
     "TITLE": "Kafka Deployment",
-    "CLUSTER_NAME": "example-eks-cluster-uat",
+    "CLUSTER_NAME": "example-eks-uat",
     "OBJECTIVE_DESCRIPTION": "Deploy Kafka cluster to UAT"
 })
 ```
@@ -271,7 +271,7 @@ Claude should be able to query the MCP server and list practices.
 ## Usage Examples
 
 ### For Claude
-When working on a example-project project:
+When working on your projects:
 
 **Query Practice:**
 ```

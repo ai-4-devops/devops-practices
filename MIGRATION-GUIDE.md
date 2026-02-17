@@ -166,7 +166,7 @@ git add CLAUDE.md.backup-*
 
 **Strategy:** Remove duplicated practices, add MCP reference instead.
 
-**Before (Example - example-project CLAUDE.md):**
+**Before (Example - Project CLAUDE.md):**
 ```markdown
 # Claude AI Assistant - Working Context
 
@@ -594,7 +594,7 @@ git push origin main
 
 ## Examples
 
-### Example 1: example-project Project (Already Migrated)
+### Example 1: Example Project (Already Migrated)
 
 **Before:**
 - CLAUDE.md: 650 lines (practices + project-specific)

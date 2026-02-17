@@ -77,8 +77,8 @@ Use consistent emoji status indicators:
 ```markdown
 - [x] **Deploy Kafka Cluster (UAT)** - Completed 2026-01-21
   - 3 brokers (KRaft mode), RF=3, min ISR=2
-  - Cluster name: kafka-project-cluster
-  - Bootstrap: kafka-project-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092
+  - Cluster name: example-kafka-cluster
+  - Bootstrap: example-kafka-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092
   - Reference: [docs/RUNBOOKS/20260121-1730-KAFKA-4-FINAL-CONFIG.md](docs/RUNBOOKS/20260121-1730-KAFKA-4-FINAL-CONFIG.md)
   - Commit: c47b26b
 ```

@@ -262,7 +262,7 @@ kafkatopic.kafka.strimzi.io/quote-requested created
 ## Verification
 kubectl get kafkatopic quote-requested -n kafka
 NAME              CLUSTER                  PARTITIONS   REPLICATION FACTOR   READY
-quote-requested   kafka-project-cluster-dev   1            1                    True
+quote-requested   example-kafka-cluster-dev   1            1                    True
 ```
 
 ---
