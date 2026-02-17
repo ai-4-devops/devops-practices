@@ -103,6 +103,33 @@
 
 ---
 
+### 📊 When Managing Complex Projects (Advanced)
+
+**Use Issue Tracking When:**
+- Project has >20 work items beyond high-level milestones
+- Need granular tracking of bugs, features, technical debt
+- Want complete historical record for reports/reviews
+- Team needs searchable, filterable work item management
+- Project duration >1 month with many moving parts
+
+**Practice:**
+- **[Issue Tracking](practices/issue-tracking.md)** 🆕 - In-repository Jira-like issue system
+
+**Related Templates:**
+- **[ISSUE-TEMPLATE.md](templates/ISSUE-TEMPLATE.md)** - Individual issue template
+- **[ISSUES.md](templates/ISSUES.md)** - Issue index with dashboard
+- **[issues/README.md](templates/issues-README.md)** - How to use the system
+
+**Tool:**
+- **[issue-manager.sh](tools/issue-manager.sh)** - CLI for creating, listing, updating issues
+
+**Relationship to TRACKER.md:**
+- TRACKER.md: High-level milestones (e.g., "Deploy Test environment")
+- ISSUES.md: Granular work items (e.g., "Fix OTLP bug", "Deploy kube-state-metrics")
+- Use together: TRACKER for "where we are", ISSUES for "what needs doing"
+
+---
+
 ## By Practice
 
 ### Core Practices (Use on Every Project)
@@ -173,6 +200,15 @@
     - **Why:** Consistent approach across all infrastructure projects
     - **Key concept:** Overall structure and best practices
     - **Related:** All practices (this is the overview)
+
+11. **[Issue Tracking](practices/issue-tracking.md)** 🆕 **ADVANCED**
+    - **When:** Complex projects with >20 work items, long duration (>1 month)
+    - **Why:** Granular tracking beyond TRACKER.md milestones, complete history
+    - **Key concept:** In-repository Jira-like system with CLI tool
+    - **Related:** Task Tracking (complements, not replaces)
+    - **Templates:** ISSUE-TEMPLATE.md, ISSUES.md, issues-README.md
+    - **Tool:** issue-manager.sh (CLI for management)
+    - **Note:** Optional - only use for complex projects needing detailed tracking
 
 ---
 

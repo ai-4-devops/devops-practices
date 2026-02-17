@@ -7,6 +7,74 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.0] - 2026-02-17
+
+### Added
+
+**Issue Tracking System (Advanced Feature):**
+- **New Practice: issue-tracking.md** (569 lines) - Comprehensive in-repository issue tracking
+  - Jira-like functionality without external dependencies
+  - Granular work item tracking (bugs, features, tasks, deployments, docs, tech debt)
+  - Complete issue lifecycle (Open → In Progress → Blocked → Resolved → Closed)
+  - Priority levels (Critical, High, Medium, Low)
+  - Complements TRACKER.md (milestones vs granular work items)
+  - Ideal for projects with >20 work items, duration >1 month
+
+- **New Templates (3):**
+  - **ISSUE-TEMPLATE.md** (44 lines) - Individual issue template with metadata, tasks, notes
+  - **ISSUES.md** (154 lines) - Issue index with stats dashboard and breakdowns
+  - **issues-README.md** (182 lines) - Complete guide for using the issue system
+
+- **New Tool:**
+  - **tools/issue-manager.sh** (429 lines) - CLI tool for issue management
+    - Create, list, update, close issues
+    - Query by status, priority, type
+    - Statistics and reporting
+    - Colored output for readability
+
+### Changed
+
+**Documentation Updates:**
+- Updated README.md:
+  - Practice count: 10 → **11**
+  - Template count: 4 → **7**
+  - Added tools/ directory to architecture
+  - Version: 1.2.0 → **1.3.0**
+
+- Updated PRACTICE-INDEX.md:
+  - Added new section: "When Managing Complex Projects"
+  - Added issue-tracking to Supporting Practices (#11)
+  - Cross-referenced relationship to TRACKER.md
+
+- Updated QUICK-START.md:
+  - Reflected new practice and template counts
+  - Added issue tracking to capabilities
+
+### Impact
+
+**For Users:**
+- ✅ Optional advanced feature - use only when needed
+- ✅ Provides Jira-like tracking for complex projects
+- ✅ Complete work history for performance reviews/reports
+- ✅ Git-based, no external dependencies
+- ✅ Automation via CLI tool
+
+**Positioning:**
+- **Advanced/Optional** - not required for simple projects
+- **Complements TRACKER.md** - doesn't replace it
+- **When to use:** Projects with >20 work items, long duration, need detailed tracking
+- **When to skip:** Simple projects (<5 tasks), use TRACKER.md only
+
+### Technical Details
+
+- Total addition: ~1,908 lines
+- All templates follow existing conventions
+- CLI tool uses bash with colored output
+- Maintains semantic versioning and git practices
+- No breaking changes to existing functionality
+
+---
+
 ## [1.2.0] - 2026-02-14
 
 ### Added
@@ -245,6 +313,7 @@ Initial release with core DevOps practices extracted from multiple infrastructur
 
 | Version | Date | Practices | Templates | MCP Tools | Scripts | Notes |
 |---------|------|-----------|-----------|-----------|---------|-------|
+| 1.3.0 | 2026-02-17 | 11 | 7 | 5 | CI/CD + CLI | Issue tracking system (advanced), 3 templates, issue-manager tool |
 | 1.2.0 | 2026-02-14 | 10 | 4 | 5 | CI/CD | GitLab Flow branching, CONTRIBUTING.md, enhanced docs |
 | 1.1.0 | 2026-02-14 | 10 | 4 | 5 | CI/CD | Added render_template, GitLab CI/CD pipeline |
 | 1.0.0 | 2026-02-13 | 10 | 4 | 4 | 1 | Production-ready with runbook, config, README practices |
@@ -253,6 +322,64 @@ Initial release with core DevOps practices extracted from multiple infrastructur
 ---
 
 ## Upgrade Guide
+
+### From 1.2.0 to 1.3.0
+
+**Breaking Changes:** None
+
+**New Features:**
+- Issue Tracking system (advanced/optional)
+- 3 new templates for issue management
+- CLI tool for automation (issue-manager.sh)
+
+**Migration Steps:**
+
+1. Pull latest changes:
+   ```bash
+   cd ~/.mcp-servers/devops-practices
+   git checkout main
+   git pull origin main
+   ```
+
+2. No configuration changes needed - MCP server automatically serves new practice and templates
+
+3. Issue tracking is **optional** - only use for complex projects:
+   - Project has >20 work items
+   - Duration >1 month
+   - Need detailed tracking beyond TRACKER.md milestones
+
+4. To use issue tracking in a project:
+   ```bash
+   # Copy templates to your project
+   cp ~/.mcp-servers/devops-practices/templates/ISSUES.md ./
+   mkdir -p issues
+   cp ~/.mcp-servers/devops-practices/templates/issues-README.md ./issues/README.md
+
+   # Optional: Install CLI tool
+   cp ~/.mcp-servers/devops-practices/tools/issue-manager.sh ./scripts/
+   chmod +x ./scripts/issue-manager.sh
+   ```
+
+5. Read the practice:
+   ```bash
+   cat practices/issue-tracking.md
+   # Or ask Claude: "Show me the issue tracking practice"
+   ```
+
+**When to use:**
+- ✅ Complex projects with many work items
+- ✅ Long-duration projects (>1 month)
+- ✅ Need complete work history for reports
+
+**When to skip:**
+- ❌ Simple projects (<5 tasks)
+- ❌ Use TRACKER.md only
+
+**Projects Affected:** None automatically - opt-in only
+
+**Impact:** No impact on existing workflows - this is an additional optional capability
+
+---
 
 ### From 1.1.0 to 1.2.0
 

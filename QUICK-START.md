@@ -27,7 +27,7 @@ example-networking/CLAUDE.md    → ~150 lines (only networking-specific)
 
 ## What's Inside
 
-### 10 Practice Documents
+### 11 Practice Documents
 1. **air-gapped-workflow.md** - How to work across laptop/CloudShell/bastion/EKS
 2. **documentation-standards.md** - HOW/WHAT/WHY structure, naming conventions
 3. **session-continuity.md** - State tracking, handoff protocols
@@ -38,19 +38,24 @@ example-networking/CLAUDE.md    → ~150 lines (only networking-specific)
 8. **runbook-documentation.md** ⭐ - Mandatory session log standards
 9. **configuration-management.md** ⭐ - Config organization, placeholders
 10. **readme-maintenance.md** ⭐ - Directory documentation standards
+11. **issue-tracking.md** 🆕 - In-repository issue tracking system (Advanced)
 
-### 4 Template Files
-1. **TRACKER-template.md** - Task tracking template
+### 7 Template Files
+1. **TRACKER-template.md** - Task tracking template (milestones)
 2. **CURRENT-STATE-template.md** - Session handoff template
 3. **CLAUDE-template.md** - Simplified project CLAUDE.md template
 4. **RUNBOOK-template.md** ⭐ - Session log template
+5. **ISSUE-TEMPLATE.md** 🆕 - Individual issue template (Advanced)
+6. **ISSUES.md** 🆕 - Issue index with dashboard (Advanced)
+7. **issues-README.md** 🆕 - Issue system guide (Advanced)
 
-### MCP Server + CI/CD
+### MCP Server + CI/CD + Tools
 - **mcp-server.py** - Python MCP server (5 tools: list/get practices & templates, render templates)
 - **health-check.sh** - Comprehensive validation script (14 checks)
 - **.gitlab-ci.yml** - Automated CI/CD pipeline (validates all changes)
 - **CONTRIBUTING.md** ⭐ - Complete contribution guide with GitLab Flow workflows
-- Zero dependencies (Python stdlib only)
+- **tools/issue-manager.sh** 🆕 - CLI tool for issue management (Advanced)
+- Zero dependencies for MCP server (Python stdlib only)
 
 ---
 
@@ -185,7 +190,7 @@ Start Claude Code and ask:
 ```
 
 **Expected Response**:
-Claude should list 10 practices:
+Claude should list 11 practices:
 - air-gapped-workflow
 - documentation-standards
 - session-continuity
@@ -196,6 +201,7 @@ Claude should list 10 practices:
 - runbook-documentation
 - configuration-management
 - readme-maintenance
+- issue-tracking (🆕 Advanced)
 
 ---
 
@@ -204,7 +210,7 @@ Claude should list 10 practices:
 ### Test 1: List Practices ✅
 ```
 User: "List available practices"
-Claude: [Shows 10 practices from MCP server]
+Claude: [Shows 11 practices from MCP server]
 ```
 
 ### Test 2: Get a Practice ✅
@@ -336,23 +342,27 @@ When creating a new project:
 
 ---
 
-## What's New in v1.2.0
+## What's New in v1.3.0
 
-- **GitLab Flow Branching**: Complete branching strategy with `main`, `develop`, feature/*, release/*, hotfix/*
-- **CONTRIBUTING.md**: Step-by-step contribution workflows and code review guidelines
-- **Enhanced git-practices.md**: Expanded from 17 to 200+ lines with comprehensive branching docs
-- **CI/CD Pipeline**: Automated validation on all branches (main, develop, feature/*, etc.)
-- **render_template Tool**: Automatic variable substitution in templates
-- **3 New Practices**: runbook-documentation, configuration-management, readme-maintenance
-- **Recommended Location**: `~/.mcp-servers/devops-practices/` for better organization
+- **Issue Tracking System** 🆕: In-repository Jira-like issue tracking (Advanced/Optional)
+  - Granular work item tracking (bugs, features, tasks, deployments, docs, tech debt)
+  - CLI tool (issue-manager.sh) for automation
+  - Complements TRACKER.md (milestones vs work items)
+  - 3 new templates: ISSUE, ISSUES index, issues/README
+  - Use for complex projects (>20 items, >1 month duration)
 
 See [CHANGELOG.md](CHANGELOG.md) for complete version history.
+
+**Previous Releases:**
+- v1.2.0: GitLab Flow branching, CONTRIBUTING.md, enhanced git-practices
+- v1.1.0: render_template tool, GitLab CI/CD pipeline
+- v1.0.0: runbook-documentation, configuration-management, readme-maintenance
 
 ---
 
 ## Success!
 
-If you can ask Claude "List practices" and see 10 practices, **you're done!** 🎉
+If you can ask Claude "List practices" and see 11 practices, **you're done!** 🎉
 
 The MCP server is working and Claude can now query shared DevOps practices across all your projects.
 
@@ -372,5 +382,5 @@ Now that you have the MCP server set up, if you want to contribute improvements:
 **Questions?** See [SETUP.md](SETUP.md) for detailed troubleshooting.
 
 **Maintained By**: Uttam Jaiswal
-**Last Updated**: 2026-02-14
-**Version**: 1.2.0
+**Last Updated**: 2026-02-17
+**Version**: 1.3.0

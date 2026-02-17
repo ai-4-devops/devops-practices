@@ -75,6 +75,12 @@ else
     print_failure "config/ directory not found"
 fi
 
+if [ -d "tools" ]; then
+    print_success "tools/ directory exists"
+else
+    print_info "tools/ directory not found (optional)"
+fi
+
 echo
 
 # Check 2: MCP server file
@@ -126,6 +132,7 @@ EXPECTED_PRACTICES=(
     "runbook-documentation.md"
     "configuration-management.md"
     "readme-maintenance.md"
+    "issue-tracking.md"
 )
 
 PRACTICE_COUNT=0
@@ -159,6 +166,9 @@ EXPECTED_TEMPLATES=(
     "CURRENT-STATE-template.md"
     "CLAUDE-template.md"
     "RUNBOOK-template.md"
+    "ISSUE-TEMPLATE.md"
+    "ISSUES.md"
+    "issues-README.md"
 )
 
 TEMPLATE_COUNT=0
@@ -184,7 +194,25 @@ print_info "Total template files: $TOTAL_TEMPLATES"
 
 echo
 
-# Check 6: Test MCP server can load
+# Check 6: Tool scripts (optional)
+print_info "Checking tool scripts..."
+
+if [ -f "tools/issue-manager.sh" ]; then
+    print_success "tools/issue-manager.sh exists"
+
+    # Check if executable
+    if [ -x "tools/issue-manager.sh" ]; then
+        print_success "tools/issue-manager.sh is executable"
+    else
+        print_info "tools/issue-manager.sh is not executable (chmod +x tools/issue-manager.sh)"
+    fi
+else
+    print_info "tools/issue-manager.sh not found (optional advanced feature)"
+fi
+
+echo
+
+# Check 8: Test MCP server can load
 print_info "Testing MCP server loading..."
 
 if python3 -c "
@@ -229,7 +257,7 @@ fi
 
 echo
 
-# Check 7: Test practices can be loaded
+# Check 9: Test practices can be loaded
 print_info "Testing practice loading..."
 
 LOAD_TEST=$(python3 << 'EOF'
@@ -264,7 +292,7 @@ fi
 
 echo
 
-# Check 8: Test templates can be loaded
+# Check 10: Test templates can be loaded
 print_info "Testing template loading..."
 
 TEMPLATE_LOAD_TEST=$(python3 << 'EOF'
@@ -299,7 +327,7 @@ fi
 
 echo
 
-# Check 9: Documentation files
+# Check 11: Documentation files
 print_info "Checking documentation files..."
 
 if [ -f "README.md" ]; then

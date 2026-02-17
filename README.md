@@ -4,7 +4,7 @@
 
 **Type**: Model Context Protocol (MCP) Server for Claude Code
 
-**Version**: 1.0.0
+**Version**: 1.3.0
 
 ---
 
@@ -12,23 +12,27 @@
 
 This MCP server provides shared DevOps practices that are common across infrastructure projects:
 
-### Available Practices (10)
+### Available Practices (11)
 1. **Air-Gapped Workflow** - Working across laptop, CloudShell, bastion, and EKS
 2. **Documentation Standards** - HOW/WHAT/WHY structure, naming conventions
 3. **Session Continuity** - State tracking, handoff protocols
 4. **Task Tracking** - TRACKER.md, CURRENT-STATE.md, PENDING-CHANGES.md
-5. **Git Practices** - Using `git mv`, commit conventions, backup protocols
+5. **Git Practices** - Using `git mv`, commit conventions, backup protocols, GitLab Flow
 6. **Efficiency Guidelines** - When to script vs copy-paste, batching commands
 7. **Standard Workflow** - Common operational patterns and workflows
 8. **Runbook Documentation** ⭐ - Mandatory session log standards and requirements
 9. **Configuration Management** ⭐ - Config organization, placeholders, environment isolation
 10. **README Maintenance** ⭐ - Directory documentation standards and best practices
+11. **Issue Tracking** 🆕 - In-repository Jira-like issue tracking system (Advanced)
 
-### Available Templates (4)
-1. **TRACKER.md** - Task tracking template
+### Available Templates (7)
+1. **TRACKER.md** - Task tracking template (milestones)
 2. **CURRENT-STATE.md** - Session handoff template
 3. **CLAUDE.md** - Simplified project instructions template
 4. **RUNBOOK.md** ⭐ - Session log template with all required sections
+5. **ISSUE.md** 🆕 - Individual issue template (Advanced)
+6. **ISSUES.md** 🆕 - Issue index template with stats dashboard (Advanced)
+7. **issues/README.md** 🆕 - How to use the issue system (Advanced)
 
 ---
 
@@ -41,7 +45,7 @@ devops-practices-mcp/
 ├── requirements.txt             # Python dependencies
 ├── .gitlab-ci.yml               # GitLab CI/CD pipeline
 ├── health-check.sh              # Health validation script
-├── practices/                   # Shared practice documents (10 files)
+├── practices/                   # Shared practice documents (11 files)
 │   ├── air-gapped-workflow.md
 │   ├── documentation-standards.md
 │   ├── session-continuity.md
@@ -51,12 +55,18 @@ devops-practices-mcp/
 │   ├── standard-workflow.md
 │   ├── runbook-documentation.md
 │   ├── configuration-management.md
-│   └── readme-maintenance.md
-├── templates/                   # File templates (4 files)
+│   ├── readme-maintenance.md
+│   └── issue-tracking.md        # 🆕 Advanced: In-repo issue tracking
+├── templates/                   # File templates (7 files)
 │   ├── TRACKER-template.md
 │   ├── CURRENT-STATE-template.md
 │   ├── CLAUDE-template.md
-│   └── RUNBOOK-template.md
+│   ├── RUNBOOK-template.md
+│   ├── ISSUE-TEMPLATE.md        # 🆕 Individual issue template
+│   ├── ISSUES.md                # 🆕 Issue index with dashboard
+│   └── issues-README.md         # 🆕 Issue system guide
+├── tools/                       # Automation tools 🆕
+│   └── issue-manager.sh         # CLI for managing issues
 └── config/                      # MCP configuration
     └── mcp-config.json          # Server configuration
 ```
@@ -484,5 +494,5 @@ MIT License - Free to use and modify
 ---
 
 **Maintained By**: Uttam Jaiswal
-**Last Updated**: 2026-02-14
-**Version**: 1.2.0
+**Last Updated**: 2026-02-17
+**Version**: 1.3.0
