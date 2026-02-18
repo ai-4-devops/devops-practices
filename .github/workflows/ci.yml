@@ -1,0 +1,195 @@
+name: CI/CD Pipeline
+
+# GitHub Actions Pipeline for DevOps Practices MCP Server
+#
+# Branching Strategy: GitHub Flow
+# - main: Production releases (tagged with semantic versions)
+# - develop: Active development, integration branch
+# - feature/*: New features, merge to develop
+# - release/*: Version preparation, merge to main + develop
+# - hotfix/*: Critical fixes, merge to main + develop
+#
+# Pipeline runs on:
+# - All pull requests (validates before merge)
+# - Push to main branch (production validation)
+# - Push to develop branch (integration validation)
+# - Push to feature/*, release/*, hotfix/* branches (development validation)
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'feature/**'
+      - 'release/**'
+      - 'hotfix/**'
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  # Health Check Job
+  health-check:
+    name: Health Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Display Python version
+        run: |
+          echo "🔍 Starting MCP Server Health Check"
+          python --version
+          pip --version
+
+      - name: Run health check
+        run: bash health-check.sh
+
+      - name: Upload health check logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: health-check-logs
+          path: health-check.log
+          retention-days: 7
+
+  # Python Environment Validation
+  python-validation:
+    name: Python Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Validate Python environment
+        run: |
+          echo "✅ Validating Python environment"
+          python -c "import json; import logging; import sys; from pathlib import Path; print('All imports successful')"
+          python -m py_compile mcp-server.py
+          echo "✅ Python syntax validation passed"
+
+  # Practice File Validation
+  practice-validation:
+    name: Practice Files Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate practice files
+        run: |
+          echo "📝 Validating practice files"
+          for file in practices/*.md; do
+            if [ ! -f "$file" ]; then
+              echo "❌ Practice file not found: $file"
+              exit 1
+            fi
+            echo "✅ Found: $file"
+          done
+          echo "✅ All practice files validated"
+
+  # Template File Validation
+  template-validation:
+    name: Template Files Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate template files
+        run: |
+          echo "📋 Validating template files"
+          for file in templates/*.md; do
+            if [ ! -f "$file" ]; then
+              echo "❌ Template file not found: $file"
+              exit 1
+            fi
+            # Check if template contains at least one variable placeholder
+            if ! grep -q '\${' "$file"; then
+              echo "⚠️  Warning: Template may not contain variable placeholders: $file"
+            fi
+            echo "✅ Found: $file"
+          done
+          echo "✅ All template files validated"
+
+  # Documentation Link Checker
+  link-checker:
+    name: Documentation Links
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check documentation links
+        run: |
+          echo "🔗 Checking documentation links"
+          if ! grep -l 'practices/' README.md; then
+            echo "⚠️  Warning: README may not reference practices"
+          fi
+          if ! grep -l 'templates/' README.md; then
+            echo "⚠️  Warning: README may not reference templates"
+          fi
+          echo "✅ Documentation link check complete"
+
+  # Release Validation (for release/* and hotfix/* branches)
+  release-validation:
+    name: Release Validation
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/heads/release/') || startsWith(github.ref, 'refs/heads/hotfix/')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate release preparation
+        run: |
+          echo "🚀 Validating release preparation"
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+
+          # Check CHANGELOG.md was updated
+          if ! grep -q "$BRANCH_NAME" CHANGELOG.md 2>/dev/null; then
+            echo "⚠️  Warning: CHANGELOG.md may not be updated for this release"
+          fi
+
+          # Extract version from branch name (e.g., release/v1.2.0 -> v1.2.0)
+          if [[ "$BRANCH_NAME" =~ ^release/v([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+            VERSION="${BASH_REMATCH[1]}"
+            echo "✅ Valid semantic version: v$VERSION"
+          elif [[ "$BRANCH_NAME" =~ ^hotfix/ ]]; then
+            echo "✅ Hotfix branch detected"
+          else
+            echo "⚠️  Warning: Branch name doesn't follow semver pattern"
+          fi
+          echo "✅ Release validation complete"
+
+  # Branch Protection Info
+  branch-info:
+    name: Branch Information
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    steps:
+      - name: Display branch protection recommendations
+        run: |
+          echo "ℹ️  Branch Protection Recommendations:"
+          echo "  - main: Require PR, require CI passing, require 1+ approval, block force push"
+          echo "  - develop: Require PR, require CI passing, block force push"
+          echo "  - feature/*, release/*, hotfix/*: No restrictions (allow force push)"
+          echo ""
+          echo "📋 Current branch: ${GITHUB_REF#refs/heads/}"
+          if [ "${GITHUB_REF#refs/heads/}" = "main" ] || [ "${GITHUB_REF#refs/heads/}" = "develop" ]; then
+            echo "⚠️  CRITICAL: Ensure this branch has protection rules enabled in GitHub!"
+          fi
