@@ -81,7 +81,62 @@ kubectl apply -f <resource>-backup-20260213T1800Z.yaml -n <namespace>
 
 ---
 
-### 3. Wait for Explicit Commit Request
+### 3. Safe File Operations
+
+**CRITICAL**: Use safe commands that fail on errors rather than destructive commands.
+
+#### Directory Removal
+
+**ALWAYS use `rmdir`**, NEVER use `rm -rf` for directory removal.
+
+**Why**:
+- `rmdir` only removes **empty** directories (safe, fails if content exists)
+- `rm -rf` removes **everything recursively** without confirmation (dangerous!)
+- Protects against accidental data loss
+
+**Bad** ❌:
+```bash
+rm -rf configs/     # Deletes everything, no confirmation, no recovery
+rm -rf /tmp/data    # Dangerous: typo could delete wrong directory
+```
+
+**Good** ✅:
+```bash
+rmdir configs/      # Safe: fails if directory not empty
+# Error: Directory not empty → investigate before proceeding
+
+# If directory truly needs removal with content:
+# 1. Verify first
+ls -la configs/
+# 2. Move to archive instead of deleting
+git mv configs/ docs/archive/configs-old/
+# 3. Or delete with explicit verification
+rm -r configs/     # At least prompts for confirmation (interactive)
+```
+
+**Best Practice**:
+```bash
+# For cleanup of empty directories after reorganization
+find . -type d -empty -exec rmdir {} \;
+
+# For verification before removal
+if [ -z "$(ls -A configs/)" ]; then
+    rmdir configs/
+else
+    echo "Directory not empty! Manual review needed."
+fi
+```
+
+**Exception**: Only use `rm -rf` when:
+- Working in disposable temp directories (`/tmp`, build artifacts)
+- Explicitly instructed by user
+- After triple-checking the path
+
+**Recovery**: Deleted files are NOT recoverable unless committed to git!
+
+---
+
+### 4. Wait for Explicit Commit Request
 
 **CRITICAL**: NEVER commit without explicit user request.
 
@@ -102,7 +157,7 @@ kubectl apply -f <resource>-backup-20260213T1800Z.yaml -n <namespace>
 
 ---
 
-### 4. Commit Message Standards
+### 5. Commit Message Standards
 
 **Structure**:
 ```
@@ -163,7 +218,7 @@ Benefits:
 
 ---
 
-### 5. Commit Hooks
+### 6. Commit Hooks
 
 **Be Aware**: Some projects have git hooks that enforce standards.
 
@@ -189,7 +244,7 @@ Please remove AI attribution lines from your commit message.
 
 ---
 
-### 6. Branch Strategy
+### 7. Branch Strategy
 
 #### Overview
 
@@ -733,7 +788,7 @@ fix_bug
 
 ---
 
-### 7. Git Safety Protocol
+### 8. Git Safety Protocol
 
 **NEVER**:
 - ❌ Update git config without permission
@@ -771,7 +826,7 @@ git commit -m "Add topics"
 
 ---
 
-### 8. Staging Best Practices
+### 9. Staging Best Practices
 
 **Prefer Specific Files**:
 ```bash
@@ -804,7 +859,7 @@ git restore --staged <file>
 
 ---
 
-### 9. Git Log Best Practices
+### 10. Git Log Best Practices
 
 **Useful Commands**:
 ```bash
@@ -826,7 +881,7 @@ git show <commit-hash>
 
 ---
 
-### 10. Handling Large Reorganizations
+### 11. Handling Large Reorganizations
 
 When moving many files (like repository reorganization):
 
