@@ -283,6 +283,6 @@ kubectl get pods -n kafka
 
 ---
 
-**Maintained By**: Infrastructure Team
+**Maintained By**: Uttam Jaiswal
 **Last Updated**: 2026-02-13
 **Version**: 1.0.0

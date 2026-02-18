@@ -58,5 +58,5 @@ None currently.
 
 ---
 
-**Maintained By**: Infrastructure Team
+**Maintained By**: Uttam Jaiswal
 **Update Protocol**: Update after each significant task completion or session

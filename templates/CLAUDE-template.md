@@ -83,5 +83,5 @@ You are my **expert ${ROLE}**. You bring deep expertise in ${EXPERTISE_AREAS}.
 
 ---
 
-**Maintained By**: Infrastructure Team
+**Maintained By**: Uttam Jaiswal
 **Last Updated**: ${DATE}

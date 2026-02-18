@@ -374,6 +374,6 @@ All environment-specific configurations are stored under `configs/<environment>/
 
 ---
 
-**Maintained By**: Infrastructure Team
+**Maintained By**: Uttam Jaiswal
 **Last Updated**: 2026-02-13
 **Version**: 1.0.0
