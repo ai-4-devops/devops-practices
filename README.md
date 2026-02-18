@@ -5,6 +5,8 @@
 [![Version](https://img.shields.io/badge/version-1.3.0-blue.svg)](https://github.com/ai-4-devops/devops-practices/releases)
 [![MCP Server](https://img.shields.io/badge/MCP-Server-purple.svg)](https://modelcontextprotocol.io)
 
+mcp-name: io.github.ai-4-devops/devops-practices
+
 **Purpose**: Centralized DevOps practices and standards for infrastructure projects.
 
 **Type**: Model Context Protocol (MCP) Server for Claude Code
