@@ -60,6 +60,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - +118 lines, -21 lines (net +97 lines of guidance)
   - Prevents anti-patterns: No script duplication, centralized documentation
 
+- **Enhanced configuration-management.md** (v2.0.0 → v2.1.0):
+  - Enhanced "Environment Isolation" → **"Environment Isolation & Audit Readiness"**
+  - Added comprehensive audit-ready requirements:
+    - Self-contained environment folders (no symlinks, no cross-references)
+    - Account-specific configurations (AWS account IDs per environment)
+    - Standalone deployable (can deploy/audit independently)
+    - Compliance considerations (SOC2/ISO27001 requirements)
+  - Added "Why This Matters" section explaining security audit benefits
+  - Enhanced examples with good/bad patterns for audit readiness
+  - Added cross-reference to Multi-Environment Consistency section
+  - Addresses real-world compliance and security audit requirements
+
+- **Added .claude/instructions.md**:
+  - Documentation standards: Avoid repetition, add cross-references
+  - Commit message guidelines (conventional commits)
+  - Content quality standards (generic examples, no client references)
+  - Version management guidance
+  - Will prevent need to remind about repetition/cross-references
+
 ### Impact
 
 **For Users:**

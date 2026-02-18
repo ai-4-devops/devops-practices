@@ -284,34 +284,63 @@ xpack.security.http.ssl.keystore.path: ${KEYSTORE_PATH}
 
 ## Principles
 
-### 1. Environment Isolation
+### 1. Environment Isolation & Audit Readiness
 
-Each environment is **fully self-contained** under its folder.
+Each environment is **fully self-contained and audit-ready** under its folder.
+
+**Rule**: Each environment folder must be:
+- ✅ **Self-contained** - All manifests specific to that environment
+- ✅ **Account-specific** - All scripts/configs with environment-specific account IDs
+- ✅ **No cross-references** - No symbolic links or references to other environments
+- ✅ **Standalone deployable** - Can be deployed/audited without accessing other environment folders
+- ✅ **Compliance-ready** - Auditors can review one environment folder independently
+
+**Why This Matters:**
+- **Security audits** - Auditors can review production configs without seeing dev/test
+- **Access control** - Grant environment-specific permissions without exposing others
+- **Deployment isolation** - Deploy one environment without dependencies on others
+- **Change tracking** - Git history shows changes per environment clearly
+- **Compliance** - Meets SOC2/ISO27001 requirements for environment separation
 
 **✅ Good:**
+```yaml
+# configs/production/k8s/observability/jaeger/deployment.yaml
+spec:
+  containers:
+  - name: jaeger
+    image: 123456789012.dkr.ecr.ap-south-1.amazonaws.com/jaeger:v2.14  # Production AWS account
+    env:
+    - name: ES_ENDPOINT
+      value: "https://prod-es.internal:9200"  # Production endpoint
 ```
-configs/
-├── production/
-│   ├── k8s/
-│   │   └── tracing/
-│   │       └── jaeger/
-│   │           └── deployment.yaml  # Production config
-└── dev/
-    ├── k8s/
-    │   └── tracing/
-    │       └── jaeger/
-    │           └── deployment.yaml  # Dev config (different values)
+
+```yaml
+# configs/dev/k8s/observability/jaeger/deployment.yaml
+spec:
+  containers:
+  - name: jaeger
+    image: 987654321098.dkr.ecr.ap-south-1.amazonaws.com/jaeger:v2.14  # Dev AWS account
+    env:
+    - name: ES_ENDPOINT
+      value: "https://dev-es.internal:9200"  # Dev endpoint
 ```
 
 **❌ Bad:**
+```bash
+# Using symlinks or references
+configs/production/jaeger/ -> ../shared/jaeger/  # ❌ Not self-contained
+configs/production/scripts/deploy.sh  # ❌ References ../dev/config.yaml
 ```
-configs/
-└── k8s/
-    └── tracing/
-        └── jaeger/
-            ├── deployment-prod.yaml  # Mixing environments
-            └── deployment-dev.yaml   # Hard to manage
+
+**❌ Bad:**
+```yaml
+# Mixing environments in one file
+configs/jaeger/deployment.yaml
+  # if ENV=prod then account=123456789012  # ❌ Not audit-friendly
+  # if ENV=dev then account=987654321098   # ❌ Can't isolate environments
 ```
+
+**See also:** [Multi-Environment Consistency](#multi-environment-consistency) for keeping environments synchronized
 
 ### 2. Service Grouping
 
@@ -875,5 +904,5 @@ See example project for real-world examples:
 ---
 
 **Maintained By**: Infrastructure Team
-**Last Updated**: 2026-02-17
-**Version**: 2.0.0
+**Last Updated**: 2026-02-18
+**Version**: 2.1.0
