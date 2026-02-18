@@ -1,65 +1,28 @@
 {
-  "name": "devops-practices",
-  "namespace": "io.github.ai-4-devops",
-  "version": "1.3.0",
-  "description": "AI-powered DevOps knowledge base for Claude - MCP server with 11 best practices, 7 templates, and automation tools for infrastructure teams",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.ai-4-devops/devops-practices",
+  "description": "AI-powered DevOps knowledge base with practices, templates, and automation tools",
   "repository": {
-    "type": "git",
-    "url": "https://github.com/ai-4-devops/devops-practices"
+    "url": "https://github.com/ai-4-devops/devops-practices",
+    "source": "github"
   },
-  "homepage": "https://github.com/ai-4-devops/devops-practices",
-  "author": {
-    "name": "Uttam Jaiswal",
-    "url": "https://github.com/ukjaiswal"
-  },
-  "license": "MIT",
-  "keywords": [
-    "devops",
-    "automation",
-    "best-practices",
-    "infrastructure",
-    "configuration-management",
-    "templates",
-    "knowledge-base",
-    "air-gapped",
-    "claude",
-    "mcp"
-  ],
-  "categories": [
-    "development-tools",
-    "devops"
-  ],
-  "runtime": {
-    "type": "python",
-    "command": "python3",
-    "args": ["mcp-server.py"]
-  },
-  "tools": [
+  "version": "1.3.0",
+  "packages": [
     {
-      "name": "get_practice",
-      "description": "Get a specific DevOps practice document by name"
-    },
-    {
-      "name": "list_practices",
-      "description": "List all available DevOps practice documents"
-    },
-    {
-      "name": "get_template",
-      "description": "Get a specific template file by name"
-    },
-    {
-      "name": "list_templates",
-      "description": "List all available template files"
+      "registryType": "github",
+      "identifier": "ai-4-devops/devops-practices",
+      "version": "1.3.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "runtimeHint": "python3",
+      "runtimeArguments": [
+        {
+          "type": "positional",
+          "value": "mcp-server.py"
+        }
+      ],
+      "environmentVariables": []
     }
-  ],
-  "features": [
-    "11 comprehensive DevOps practice documents",
-    "7 ready-to-use templates",
-    "Zero external dependencies",
-    "Air-gapped workflow support",
-    "Configuration management with audit readiness",
-    "Issue tracking system",
-    "GitLab Flow branching strategy",
-    "Runbook documentation standards"
   ]
 }
