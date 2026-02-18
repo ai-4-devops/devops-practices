@@ -9,17 +9,18 @@
   "version": "1.3.0",
   "packages": [
     {
-      "registryType": "github",
-      "identifier": "ai-4-devops/devops-practices",
+      "registryType": "pypi",
+      "identifier": "devops-practices-mcp",
       "version": "1.3.0",
       "transport": {
         "type": "stdio"
       },
       "runtimeHint": "python3",
-      "runtimeArguments": [
+      "packageArguments": [
         {
-          "type": "positional",
-          "value": "mcp-server.py"
+          "type": "named",
+          "name": "-m",
+          "value": "devops_practices_mcp"
         }
       ],
       "environmentVariables": []
