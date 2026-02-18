@@ -72,7 +72,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added cross-reference to Multi-Environment Consistency section
   - Addresses real-world compliance and security audit requirements
 
-- **Added .claude/instructions.md**:
+- **Enhanced configuration-management.md** (v2.1.0 → v2.2.0):
+  - Added **"Installation SOPs: Learn From Previous Environments"** section
+  - Addresses critical operational inefficiency: Repeating same issues across environments
+  - Solution: Create SOP during first environment (dev), reuse and improve for subsequent (test/uat/prod)
+  - Comprehensive workflow with before/after runbook examples
+  - Time savings: 56% reduction (12hrs → 5.25hrs for 4 environments)
+  - Benefits table showing impact on time, issues, knowledge, quality
+  - Cross-references to runbook-documentation.md and session-continuity.md
+  - Real-world problem: Claude starting fresh each environment instead of learning from previous
+
+- **Enhanced .claude/instructions.md**:
+  - Added **"Working on Client Projects"** section with multi-environment installation guidelines
+  - Operational guidelines: What to do for first vs subsequent environment installations
+  - Critical reminders: Never start fresh, always build on previous environment learnings
+  - Benefits metrics: Time savings, issues prevented, knowledge accumulated
+  - Cross-reference to configuration-management.md Installation SOPs section
+  - Purpose: Ensure Claude follows this pattern automatically without being reminded
+
+- **Added .claude/instructions.md** (initial creation):
   - Documentation standards: Avoid repetition, add cross-references
   - Commit message guidelines (conventional commits)
   - Content quality standards (generic examples, no client references)

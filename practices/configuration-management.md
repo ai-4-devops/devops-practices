@@ -662,6 +662,165 @@ When deploying the same service across multiple environments (dev → test → p
      | 1 | Add serviceaccounts RBAC | Test → Dev | Pending | More complete permissions |
      ```
 
+### Installation SOPs: Learn From Previous Environments
+
+**Critical Pattern**: When installing the same system across multiple environments (dev → test → uat → prod), create an **Installation SOP** during the first environment and reuse it for subsequent environments.
+
+**Problem This Solves:**
+
+❌ **Without Installation SOPs:**
+- Start fresh for each environment installation
+- Encounter same issues on dev, test, UAT, prod repeatedly
+- Re-discover solutions each time
+- Waste hours debugging identical problems
+- No knowledge transfer between environments
+
+✅ **With Installation SOPs:**
+- Document installation process during first environment (dev)
+- Copy and improve SOP for each subsequent environment
+- Learn from blockers and issues encountered
+- Accelerate subsequent installations (test, UAT, prod)
+- Build institutional knowledge
+
+**Workflow:**
+
+**1. First Environment (Dev):**
+
+Create detailed installation runbook:
+
+```markdown
+# RUNBOOK-01-Kafka-Installation-Dev.md
+
+## Environment: dev
+## Date: 2026-02-18
+## Objective: Install Kafka cluster on dev environment
+
+### Pre-requisites
+- [x] EKS cluster ready: example-eks-cluster-dev
+- [x] IAM roles created: kafka-service-account-role
+- [x] S3 bucket exists: example-dev-kafka-data
+
+### Installation Steps
+
+1. Create namespace
+   bash
+   kubectl create namespace kafka --context dev
+
+   **Issue Encountered**: Namespace already existed
+   **Resolution**: Used `kubectl get ns` to verify, proceeded
+
+2. Apply Kafka operator
+   bash
+   kubectl apply -f configs/dev/k8s/kafka/operator.yaml
+
+   **Issue Encountered**: CRD validation failed - version mismatch
+   **Resolution**: Updated CRD to v1beta2, reapplied successfully
+
+3. Deploy Kafka cluster
+   bash
+   kubectl apply -f configs/dev/k8s/kafka/kafka-cluster.yaml
+
+   **Blocker**: Pods stuck in Pending - insufficient CPU
+   **Resolution**: Reduced resource requests from 2CPU to 1CPU per pod
+   **Learning**: Dev environment has limited resources
+
+### Post-Installation Validation
+- [x] All pods running: kubectl get pods -n kafka
+- [x] Kafka accessible: telnet kafka-bootstrap.kafka.svc 9092
+- [x] Created test topic successfully
+
+### Issues & Resolutions Summary
+1. ❌ CRD version mismatch → ✅ Updated to v1beta2
+2. ❌ Resource constraints → ✅ Reduced CPU requests
+3. ❌ NetworkPolicy blocking → ✅ Added ingress rule
+
+### Time Taken: 3 hours
+```
+
+**2. Second Environment (Test):**
+
+Copy dev SOP, apply learnings:
+
+```markdown
+# RUNBOOK-02-Kafka-Installation-Test.md
+
+## Environment: test
+## Date: 2026-02-19
+## Based On: RUNBOOK-01-Kafka-Installation-Dev.md
+## Objective: Install Kafka cluster on test environment
+
+### Pre-requisites
+- [x] EKS cluster ready: example-eks-cluster-test
+- [x] IAM roles created: kafka-service-account-role
+- [x] S3 bucket exists: example-test-kafka-data
+
+### Installation Steps
+
+**Learning from Dev**: Apply CRD v1beta2 directly (skip v1beta1)
+
+1. Create namespace
+   bash
+   kubectl create namespace kafka --context test
+
+   **Pre-emptive check**: Verified namespace doesn't exist first
+   **Status**: ✅ Created successfully
+
+2. Apply Kafka operator (v1beta2)
+   bash
+   kubectl apply -f configs/test/k8s/kafka/operator.yaml
+
+   **Learning applied**: Used v1beta2 CRD from start
+   **Status**: ✅ No CRD issues
+
+3. Deploy Kafka cluster
+   bash
+   kubectl apply -f configs/test/k8s/kafka/kafka-cluster.yaml
+
+   **Learning applied**: Set CPU requests to 1CPU (not 2CPU)
+   **Status**: ✅ Pods started immediately
+
+   **Learning applied**: Added NetworkPolicy ingress rule from start
+   **Status**: ✅ No network issues
+
+### Post-Installation Validation
+- [x] All pods running
+- [x] Kafka accessible
+- [x] Test topic created
+
+### Improvements Over Dev
+1. ✅ No CRD version issues (started with v1beta2)
+2. ✅ No resource constraints (used learnings)
+3. ✅ No network issues (added policy proactively)
+
+### Time Taken: 45 minutes (vs 3 hours in dev)
+```
+
+**3. Subsequent Environments (UAT, Prod):**
+
+Continue improving SOP:
+- Add any new learnings from test environment
+- Document environment-specific differences
+- Update known issues list
+- Track time savings
+
+**Key Principle:**
+
+> **"The plan for new environment installation should be based on learnings from previous environment SOPs, not from internet research or starting fresh."**
+
+**Benefits:**
+
+| Aspect | Without SOPs | With SOPs |
+|--------|-------------|-----------|
+| **Time** | 3hrs per environment | 3hrs (first) + 45min (subsequent) |
+| **Issues** | Same issues repeated | Issues resolved once |
+| **Knowledge** | Lost between sessions | Documented and reusable |
+| **Quality** | Inconsistent | Consistent and improving |
+| **Onboarding** | Start from scratch | Read previous SOPs |
+
+**See also:**
+- [runbook-documentation.md](runbook-documentation.md) - How to document installation procedures
+- [session-continuity.md](session-continuity.md) - Maintaining context across sessions
+
 ### Common Environment-Specific Values
 
 Values that typically differ between environments:
@@ -905,4 +1064,4 @@ See example project for real-world examples:
 
 **Maintained By**: Infrastructure Team
 **Last Updated**: 2026-02-18
-**Version**: 2.1.0
+**Version**: 2.2.0
