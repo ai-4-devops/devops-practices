@@ -1,4 +1,4 @@
-# Publishing an MCP Server: A Complete Journey from Private GitLab to MCP Registry
+# Publishing an MCP Server: A Complete Journey to the MCP Registry
 
 **Author:** Uttam Jaiswal
 **Date:** February 2026
@@ -9,129 +9,29 @@
 ## Table of Contents
 
 1. [Introduction](#introduction)
-2. [Phase 1: Security First - Sanitizing Git History](#phase-1-security-first---sanitizing-git-history)
-3. [Phase 2: GitHub Organization Strategy](#phase-2-github-organization-strategy)
-4. [Phase 3: Repository Migration](#phase-3-repository-migration)
-5. [Phase 4: CI/CD Migration](#phase-4-cicd-migration)
-6. [Phase 5: MCP Registry Submission - The Dual Approach](#phase-5-mcp-registry-submission---the-dual-approach)
-7. [Phase 6: The PyPI Pivot](#phase-6-the-pypi-pivot)
-8. [Phase 7: Final Registry Publication](#phase-7-final-registry-publication)
-9. [Lessons Learned](#lessons-learned)
-10. [Complete Timeline](#complete-timeline)
+2. [Phase 1: Repository Setup and Configuration](#phase-1-repository-setup-and-configuration)
+3. [Phase 2: CI/CD Migration](#phase-2-cicd-migration)
+4. [Phase 3: MCP Registry Submission - The Dual Approach](#phase-3-mcp-registry-submission---the-dual-approach)
+5. [Phase 4: The PyPI Pivot](#phase-4-the-pypi-pivot)
+6. [Phase 5: Final Registry Publication](#phase-5-final-registry-publication)
+7. [Lessons Learned](#lessons-learned)
+8. [Complete Timeline](#complete-timeline)
 
 ---
 
 ## Introduction
 
-This is the story of publishing my first MCP (Model Context Protocol) server to Anthropic's official registry. What started as a simple submission turned into a comprehensive journey through git history rewriting, Python packaging, CI/CD migration, and navigating the MCP registry validation system.
+This is the story of publishing my first MCP (Model Context Protocol) server to Anthropic's official registry. What started as a simple submission turned into a comprehensive journey through Python packaging, CI/CD setup, and navigating the MCP registry validation system.
 
 **The Goal:** Publish a DevOps knowledge base MCP server that provides best practices and templates for infrastructure teams.
 
-**The Challenge:** The repository contained client-specific data in its history that needed complete sanitization before going public.
+**The Challenge:** Understanding the MCP registry requirements, dealing with validation errors, and choosing the right publishing approach when the initial path hit blockers.
 
-**The Outcome:** Successfully published to both PyPI and the MCP Registry with clean history and professional infrastructure.
-
----
-
-## Phase 1: Security First - Sanitizing Git History
-
-### The Problem
-
-My repository had 30 commits with confidential client data scattered throughout:
-- Client name in 56 locations across 14 files
-- Infrastructure-specific identifiers (client-specific bucket names, project identifiers, cluster names)
-- Internal email addresses
-- Commit messages containing client references
-
-### The Decision
-
-I had three options:
-- **Option A:** Rewrite full history (preserve timeline, clean all references)
-- **Option B:** Fresh start (new repo, lose history)
-- **Option C:** Move sensitive files (keep partial history)
-
-I chose **Option A** because preserving the development timeline was valuable for project credibility.
-
-### The Implementation
-
-Used `git-filter-repo` for comprehensive history rewriting:
-
-```bash
-# Step 1: Create backup
-git clone /home/ukj/.mcp-servers/devops-practices /home/ukj/.mcp-servers/devops-practices-backup
-
-# Step 2: Define replacements
-cat > /tmp/git-replacements.txt << 'EOF'
-CLIENT-NAME==>example-project
-client-bucket-name==>example-s3-bucket
-client-kafka==>kafka-project
-client-eks==>example-eks-cluster
-EOF
-
-# Step 3: Run git-filter-repo (multiple passes)
-cd /home/ukj/.mcp-servers/devops-practices
-git filter-repo --replace-text /tmp/git-replacements.txt --force
-git filter-repo --replace-message /tmp/git-replacements.txt --force
-```
-
-### The Result
-
-- ✅ All 56 client references removed
-- ✅ 30-commit development history preserved
-- ✅ Clean file contents and commit messages
-- ✅ Legitimate company email retained
-
-**Lesson:** Git history rewriting is powerful but requires careful backup and verification. Use `git log --all --oneline` and `git grep` to verify completeness.
+**The Outcome:** Successfully published to both PyPI and the MCP Registry with professional CI/CD infrastructure and comprehensive documentation.
 
 ---
 
-## Phase 2: GitHub Organization Strategy
-
-### The Dilemma
-
-Should I publish under:
-- Personal account (`ukjaiswal/devops-practices`)
-- New organization (`ai-4-devops/devops-practices` or `devops-to-ai/devops-practices`)
-
-### The Analysis
-
-**Organization Names Considered:**
-- `ai-4-devops` - AI-first identity, modern approach
-- `devops-to-ai` - Transition narrative, journey focus
-
-**Decision Factors:**
-1. **Scalability:** Organizations support multiple projects
-2. **Branding:** Professional appearance for MCP servers
-3. **Attribution:** Commit history preserves personal credit
-4. **Collaboration:** Teams can manage organization repositories
-
-**Personal GitHub Profile Evaluation:**
-- Profile: https://github.com/ukjaiswal/
-- Status: ~35% complete (basic info only)
-- Recommendations:
-  - Add profile README with introduction
-  - Pin important repositories
-  - Complete bio and social links
-
-### The Decision
-
-Created **ai-4-devops** organization with:
-- Clear mission: AI-powered DevOps tools and practices
-- Room for growth: Multiple future MCP servers
-- Professional identity: Separate from personal projects
-- Public membership: Required for MCP registry publishing
-
-**Setup Steps:**
-```bash
-# 1. Created organization at https://github.com/organizations/plan
-# 2. Created devops-practices repository
-# 3. Made organization membership public
-#    Settings → People → Changed from Private to Public
-```
-
----
-
-## Phase 3: Repository Migration
+## Phase 1: Repository Setup and Configuration
 
 ### Initial Setup
 
@@ -185,7 +85,7 @@ Configured comprehensive GitHub settings:
 
 ---
 
-## Phase 4: CI/CD Migration
+## Phase 2: CI/CD Migration
 
 ### The Challenge
 
@@ -268,7 +168,7 @@ git commit -m "ci: Remove GitLab CI configuration (migrated to GitHub Actions)"
 
 ---
 
-## Phase 5: MCP Registry Submission - The Dual Approach
+## Phase 3: MCP Registry Submission - The Dual Approach
 
 ### Understanding the Options
 
@@ -464,7 +364,7 @@ you may need to make your organization membership public
 
 ---
 
-## Phase 6: The PyPI Pivot
+## Phase 4: The PyPI Pivot
 
 ### The Decision Point
 
@@ -625,7 +525,7 @@ devops-practices-mcp --version
 
 ---
 
-## Phase 7: Final Registry Publication
+## Phase 5: Final Registry Publication
 
 ### Updating server.json for PyPI
 
@@ -743,61 +643,49 @@ git push origin main
 
 ## Lessons Learned
 
-### 1. Security Comes First
-- Always sanitize confidential data before going public
-- Git history rewriting is powerful but requires careful verification
-- Create backups before destructive operations
-- Use `git grep` and `git log` extensively for verification
-
-### 2. Organization vs Personal Account
-- Organizations provide better scalability for multiple projects
-- Personal attribution is preserved through commits and authorship
-- Public membership is required for publishing under organization namespace
-- Choose organization name carefully - it becomes part of your package identifier
-
-### 3. CI/CD Platform Migration
+### 1. CI/CD Platform Migration
 - GitHub Actions syntax differs significantly from GitLab CI
 - Core logic (validation scripts) remains the same
 - Pay attention to artifact upload/download differences
 - Test workflows thoroughly before relying on them
 
-### 4. MCP Registry Submission is Iterative
+### 2. MCP Registry Submission is Iterative
 - Dual approach (Discussion + CLI) provides redundancy
 - `server.json` schema is strict - expect multiple validation failures
 - Read error messages carefully - they're specific and helpful
 - Not all registry types are supported (github is NOT supported)
 
-### 5. PyPI Publishing Requirements
+### 3. PyPI Publishing Requirements
 - Proper Python package structure is essential (src layout recommended)
 - `pyproject.toml` with complete metadata improves discoverability
 - Use modern tools like `uv` for faster, simpler workflows
 - Account-scoped tokens for first upload, project-scoped for maintenance
 
-### 6. Ownership Validation
+### 4. Ownership Validation
 - MCP registry validates PyPI package ownership
 - `mcp-name: namespace/server-name` marker in README is required
 - Version bumps are needed when README changes
 - The marker links PyPI package to MCP server identity
 
-### 7. Authentication and Permissions
+### 5. Authentication and Permissions
 - OAuth tokens expire - keep authentication fresh
 - Organization membership must be public for publishing
 - Permission errors often indicate configuration issues, not bugs
 - Re-authenticate when in doubt
 
-### 8. Version Management
+### 6. Version Management
 - Semantic versioning (X.Y.Z) is expected
 - Bump patch version (Z) for documentation changes
 - Keep versions consistent across all files
 - Tag releases in git for traceability
 
-### 9. Documentation Quality Matters
+### 7. Documentation Quality Matters
 - Comprehensive README helps users and reviewers
 - Status badges communicate project health
 - Clear installation instructions are critical
 - Link to practices and templates for transparency
 
-### 10. Patience and Persistence
+### 8. Patience and Persistence
 - Publishing involves multiple subsystems (Git, GitHub, PyPI, MCP Registry)
 - Each system has its own validation rules and timing
 - Errors are learning opportunities
@@ -807,14 +695,11 @@ git push origin main
 
 ## Complete Timeline
 
-### Day 1: Security and Migration
-- ✅ Evaluated GitHub organization options
-- ✅ Analyzed personal GitHub profile
-- ✅ Decided on git history sanitization approach
-- ✅ Executed git-filter-repo to clean 56 client references
-- ✅ Created ai-4-devops organization
-- ✅ Migrated repository to GitHub
+### Day 1: Repository Setup
+- ✅ Set up GitHub repository under ai-4-devops organization
 - ✅ Configured repository settings and branch protection
+- ✅ Enabled Issues, Projects, Discussions, and Wiki
+- ✅ Added professional status badges to README
 
 ### Day 2: CI/CD and Initial Submission
 - ✅ Converted GitLab CI to GitHub Actions
@@ -858,7 +743,6 @@ git push origin main
 - **LinkedIn:** [Connect with me](https://linkedin.com/in/uttamjaiswal)
 
 ### Tools Used
-- **git-filter-repo:** Git history rewriting
 - **uv:** Python package management
 - **mcp-publisher:** MCP registry CLI
 - **GitHub Actions:** CI/CD automation
@@ -874,15 +758,15 @@ git push origin main
 
 ## Conclusion
 
-Publishing an MCP server to the official registry is more than just running a publish command. It's a journey through security considerations, packaging standards, registry validation, and infrastructure setup.
+Publishing an MCP server to the official registry is more than just running a publish command. It's a journey through packaging standards, registry validation, CI/CD setup, and navigating multiple publishing systems.
 
 The failures encountered along the way - from server.json validation errors to PyPI ownership validation - were not obstacles but learning opportunities. Each error message provided specific guidance on what needed to be fixed.
 
 For anyone attempting a similar journey:
-1. **Start with security** - clean your history before going public
-2. **Choose your identity** - organization vs personal matters
-3. **Structure properly** - proper Python packaging pays dividends
-4. **Document thoroughly** - help others learn from your experience
+1. **Set up proper infrastructure** - GitHub Actions, branch protection, and badges matter
+2. **Structure properly** - proper Python packaging pays dividends
+3. **Document thoroughly** - help others learn from your experience
+4. **Read error messages carefully** - they're specific and guide you to solutions
 5. **Be persistent** - multi-system publishing takes time and patience
 
 The DevOps Practices MCP Server is now live and available for the Claude AI community to use. It provides 11 best practices and 7 templates for infrastructure teams, all validated and published through proper channels.
@@ -892,7 +776,7 @@ The DevOps Practices MCP Server is now live and available for the Claude AI comm
 - ✅ PyPI: https://pypi.org/project/devops-practices-mcp/
 - ✅ MCP Registry: io.github.ai-4-devops/devops-practices v1.3.1
 - ✅ CI/CD: GitHub Actions with 7 validation jobs
-- ✅ History: Clean 30-commit timeline, no confidential data
+- ✅ Documentation: Comprehensive README and journey documentation
 
 Thank you for following this journey. I hope it helps you publish your own MCP servers successfully!
 
