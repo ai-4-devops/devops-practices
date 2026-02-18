@@ -1,5 +1,10 @@
 # DevOps Practices - MCP Server
 
+[![CI/CD Pipeline](https://github.com/ai-4-devops/devops-practices/actions/workflows/ci.yml/badge.svg)](https://github.com/ai-4-devops/devops-practices/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/version-1.3.0-blue.svg)](https://github.com/ai-4-devops/devops-practices/releases)
+[![MCP Server](https://img.shields.io/badge/MCP-Server-purple.svg)](https://modelcontextprotocol.io)
+
 **Purpose**: Centralized DevOps practices and standards for infrastructure projects.
 
 **Type**: Model Context Protocol (MCP) Server for Claude Code
