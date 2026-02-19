@@ -403,6 +403,9 @@ class MCPServer:
 
                     response = self.handle_request(request)
 
+                    # Add JSON-RPC 2.0 required field
+                    response['jsonrpc'] = '2.0'
+
                     # Add request ID if present
                     if 'id' in request:
                         response['id'] = request['id']
@@ -412,6 +415,8 @@ class MCPServer:
                 except json.JSONDecodeError as e:
                     logger.error(f"Invalid JSON: {e}")
                     error_response = {
+                        'jsonrpc': '2.0',
+                        'id': None,
                         'error': {
                             'code': -32700,
                             'message': 'Parse error'
