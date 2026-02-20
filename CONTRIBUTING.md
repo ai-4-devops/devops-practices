@@ -525,5 +525,5 @@ feature/WIP             # Not clear
 ---
 
 **Maintained By**: Uttam Jaiswal
-**Last Updated**: 2026-02-14
-**Version**: 1.2.0
+**Last Updated**: 2026-02-20
+**Version**: 1.4.0

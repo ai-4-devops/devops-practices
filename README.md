@@ -788,5 +788,5 @@ MIT License - Free to use and modify
 ---
 
 **Maintained By**: Uttam Jaiswal
-**Last Updated**: 2026-02-17
-**Version**: 1.3.0
+**Last Updated**: 2026-02-20
+**Version**: 1.4.0
