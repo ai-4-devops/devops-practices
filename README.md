@@ -23,6 +23,19 @@ This MCP server provides shared DevOps practices that are common across infrastr
 
 Organized using **GG-SS** prefix pattern (Group-Sequence) for better discoverability:
 
+**Naming Pattern:** `GG-SS-practice-name`
+- **GG** = Group ID (01-04) - Functional category
+- **SS** = Sequence ID (01-03) - Order within group
+- Example: `03-02-air-gapped-workflow` = Group 03, Sequence 02
+
+**Group Legend:**
+- **01** = Workflow & Processes (how to work effectively)
+- **02** = Version Control & Project Management (git, issues)
+- **03** = Infrastructure & Configuration (K8s, deployments, config)
+- **04** = Documentation Standards (docs, READMEs, runbooks)
+
+---
+
 #### Group 01: Workflow & Processes
 1. **01-01-session-continuity** - State tracking, handoff protocols, CURRENT-STATE.md
 2. **01-02-task-tracking** - TRACKER.md, CURRENT-STATE.md, PENDING-CHANGES.md
