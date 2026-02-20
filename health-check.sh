@@ -133,7 +133,6 @@ EXPECTED_PRACTICES=(
     "04-01-documentation-standards.md"
     "04-02-readme-maintenance.md"
     "04-03-runbook-documentation.md"
-    "issue-tracking.md"
 )
 
 PRACTICE_COUNT=0
