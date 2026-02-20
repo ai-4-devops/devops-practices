@@ -22,7 +22,7 @@ mcp-name: io.github.ai-4-devops/devops-practices
 
 **Solves the CLAUDE.md Bloat Problem**
 
-Tired of maintaining massive CLAUDE.md files (1000+ lines) across multiple projects? This MCP centralizes reusable DevOps instructions, saving context for actual work instead of repeated practices.
+Tired of maintaining massive CLAUDE.md files (1000+ lines) across multiple projects? This MCP centralizes reusable DevOps instructions for engineers working on multiple PoCs, eliminating repeated instructions across projects and folders.
 
 **The Problem:**
 - ❌ Large CLAUDE.md files eat up context window
