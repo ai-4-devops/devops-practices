@@ -8,13 +8,17 @@
 
 mcp-name: io.github.ai-4-devops/devops-practices
 
-**Purpose**: Centralized DevOps practices and standards for infrastructure projects.
+**Purpose**: Productivity framework for DevOps engineers - track your work, not how to track it.
 
 **Type**: Model Context Protocol (MCP) Server for Claude Code
 
 **Version**: 1.4.0
 
 **Status**: 🎉 **Officially Published** in the [MCP Registry](https://registry.modelcontextprotocol.io/?search=devops-practices) (Published: February 18, 2026)
+
+---
+
+> **Note:** This MCP doesn't teach you DevOps - it provides the structure (TRACKER, ISSUES, docs, SoPs) so you can focus on the actual work without worrying about how to document and track it.
 
 ---
 
@@ -32,18 +36,18 @@ Tired of maintaining massive CLAUDE.md files (1000+ lines) across multiple proje
 - ❌ Context wasted on instructions instead of actual work
 
 **The Solution:**
-- ✅ **Structured guidance** - Clear templates for TRACKER, ISSUES, documentation, SoPs
-- ✅ **Centralized knowledge** - Reference practices via MCP, not paste them
-- ✅ **Consistency** - Update once → affects all projects
-- ✅ **Faster PoC startup** - No more figuring out structure from scratch
-- ✅ **Context saved** - Focus on building, not documenting
+- ✅ **Pre-built structure** - Templates for TRACKER, ISSUES, docs, SoPs
+- ✅ **Focus on work** - Not on "how should I document this?"
+- ✅ **Consistency** - Same standards across all your PoCs
+- ✅ **Faster startup** - Copy template, start working
+- ✅ **Context saved** - No bloated CLAUDE.md files
 
-**What you get:**
-- 📋 **TRACKER.md template** - Start tracking tasks immediately
-- 🐛 **ISSUES.md system** - In-repo issue management (no Jira needed)
-- 📚 **Documentation standards** - HOW/WHAT/WHY structure already defined
-- 📖 **Runbook templates** - Operational SoPs ready to use
-- 🔄 **Session continuity** - Handoff protocols for Claude sessions
+**What you get (structure, not knowledge):**
+- 📋 **TRACKER.md template** - Start tracking immediately, don't design tracking
+- 🐛 **ISSUES.md system** - Start logging issues, don't setup Jira
+- 📚 **Documentation standards** - Start writing docs, don't debate structure
+- 📖 **Runbook templates** - Start documenting ops, don't create SoP formats
+- 🔄 **Session continuity** - Start handoffs, don't design handoff protocols
 
 When searching "devops" in the MCP Registry (as of February 2026), this is the only result. While other MCPs focus on:
 - 🔧 **Development tools** (code generation, testing, debugging)
