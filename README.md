@@ -27,14 +27,23 @@ Tired of maintaining massive CLAUDE.md files (1000+ lines) across multiple proje
 **The Problem:**
 - ❌ Large CLAUDE.md files eat up context window
 - ❌ Same practices duplicated across every project
-- ❌ Hard to maintain consistency when practices change
-- ❌ Context wasted on instructions instead of project-specific work
+- ❌ Reinventing TRACKER.md, ISSUES.md, docs, SoPs for every PoC
+- ❌ Inconsistent standards across projects
+- ❌ Context wasted on instructions instead of actual work
 
 **The Solution:**
-- ✅ Centralized DevOps knowledge base
-- ✅ Reference practices via MCP, not paste them
-- ✅ Update once → affects all projects
-- ✅ Context saved for R&D and PoC development
+- ✅ **Structured guidance** - Clear templates for TRACKER, ISSUES, documentation, SoPs
+- ✅ **Centralized knowledge** - Reference practices via MCP, not paste them
+- ✅ **Consistency** - Update once → affects all projects
+- ✅ **Faster PoC startup** - No more figuring out structure from scratch
+- ✅ **Context saved** - Focus on building, not documenting
+
+**What you get:**
+- 📋 **TRACKER.md template** - Start tracking tasks immediately
+- 🐛 **ISSUES.md system** - In-repo issue management (no Jira needed)
+- 📚 **Documentation standards** - HOW/WHAT/WHY structure already defined
+- 📖 **Runbook templates** - Operational SoPs ready to use
+- 🔄 **Session continuity** - Handoff protocols for Claude sessions
 
 When searching "devops" in the MCP Registry (as of February 2026), this is the only result. While other MCPs focus on:
 - 🔧 **Development tools** (code generation, testing, debugging)
