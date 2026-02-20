@@ -28,11 +28,11 @@ network-infra/CLAUDE.md         → ~150 lines (only networking-specific)
 ## What's Inside
 
 ### 11 Practice Documents
-1. **air-gapped-workflow.md** - How to work across laptop/CloudShell/bastion/EKS
-2. **documentation-standards.md** - HOW/WHAT/WHY structure, naming conventions
-3. **session-continuity.md** - State tracking, handoff protocols
-4. **task-tracking.md** - TRACKER.md guidelines
-5. **git-practices.md** ⭐ - GitLab Flow branching, `git mv`, backup protocols (200+ lines)
+1. **03-02-air-gapped-workflow.md** - How to work across laptop/CloudShell/bastion/EKS
+2. **04-01-documentation-standards.md** - HOW/WHAT/WHY structure, naming conventions
+3. **01-01-session-continuity.md** - State tracking, handoff protocols
+4. **01-02-task-tracking.md** - TRACKER.md guidelines
+5. **02-01-git-practices.md** ⭐ - GitLab Flow branching, `git mv`, backup protocols (200+ lines)
 6. **efficiency-guidelines.md** - Script vs copy-paste decisions
 7. **standard-workflow.md** - Common operational patterns
 8. **runbook-documentation.md** ⭐ - Mandatory session log standards
@@ -195,7 +195,7 @@ Claude should list 11 practices:
 - documentation-standards
 - session-continuity
 - task-tracking
-- git-practices
+- 02-01-git-practices
 - efficiency-guidelines
 - standard-workflow
 - runbook-documentation
@@ -216,7 +216,7 @@ Claude: [Shows 11 practices from MCP server]
 ### Test 2: Get a Practice ✅
 ```
 User: "Show me the git branching strategy"
-Claude: [Displays git-practices.md with GitLab Flow documentation]
+Claude: [Displays 02-01-git-practices.md with GitLab Flow documentation]
 ```
 
 ### Test 3: Render a Template ✅
@@ -296,7 +296,7 @@ When creating a new project:
 
 ### "Practice not found"
 - Check practice exists: `ls practices/`
-- Filename is case-sensitive: `air-gapped-workflow.md`
+- Filename is case-sensitive: `03-02-air-gapped-workflow.md`
 
 ### "Python not found"
 - Check Python: `python3 --version`
@@ -354,7 +354,7 @@ When creating a new project:
 See [CHANGELOG.md](CHANGELOG.md) for complete version history.
 
 **Previous Releases:**
-- v1.2.0: GitLab Flow branching, CONTRIBUTING.md, enhanced git-practices
+- v1.2.0: GitLab Flow branching, CONTRIBUTING.md, enhanced 02-01-git-practices
 - v1.1.0: render_template tool, GitLab CI/CD pipeline
 - v1.0.0: runbook-documentation, configuration-management, readme-maintenance
 

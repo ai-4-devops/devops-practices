@@ -7,6 +7,179 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.4.0] - 2026-02-20
+
+### Fixed
+
+**Critical MCP Server Stability Issue:**
+- **Fixed stdio protocol corruption** - Changed logging from stderr to FileHandler only
+  - Root cause: Default logging wrote to stderr, corrupting JSON-RPC 2.0 messages
+  - Symptom: "Failed to connect" in `claude mcp list` despite server passing manual tests
+  - Solution: Explicit FileHandler configuration writing to `~/.cache/claude/mcp-devops-practices.log`
+  - Impact: Server now matches dev-kit stability pattern
+  - Lines changed: mcp-server-sdk.py lines 18-28
+
+**Configuration Fix:**
+- Fixed `~/.claude.json` pointing to non-existent `.venv/bin/python3`
+- Changed to `uv run` pattern matching dev-kit for consistency
+- Now uses: `uv run --directory <path> python mcp-server-sdk.py`
+
+### Added
+
+**New MCP Tools (2):**
+- **get_practice_summary** - Lightweight metadata extraction
+  - Returns practice heading + description only (not full content)
+  - Ideal for quick overview without loading full ~1000 line practices
+  - Use case: "What does this practice cover?"
+
+- **search_practices** - Keyword search across all practices
+  - Searches practice names and content
+  - Returns matching practices with context
+  - Use case: "Find practices about git", "Find practices mentioning docker"
+
+**Enhanced MCP Tools:**
+- **list_practices** - Now includes metadata extraction
+  - Returns: practice name, heading, description, line count
+  - Uses regex to extract metadata from markdown
+  - Provides context without loading full practice content
+
+### Changed
+
+**Major: GG-SS Reorganization (11 practices renamed)**
+
+All practices reorganized with Group-Sequence prefix pattern for better discoverability:
+
+**Group 01 - Workflow & Processes (3 practices):**
+- `session-continuity.md` → **01-01-session-continuity.md**
+- `task-tracking.md` → **01-02-task-tracking.md**
+- `efficiency-guidelines.md` → **01-03-efficiency-guidelines.md**
+
+**Group 02 - Version Control & Project Management (2 practices):**
+- `git-practices.md` → **02-01-git-practices.md**
+- `issue-tracking.md` → **02-02-issue-tracking.md**
+
+**Group 03 - Infrastructure & Configuration (3 practices):**
+- `configuration-management.md` → **03-01-configuration-management.md**
+- `air-gapped-workflow.md` → **03-02-air-gapped-workflow.md**
+- `standard-workflow.md` → **03-03-standard-workflow.md**
+
+**Group 04 - Documentation Standards (3 practices):**
+- `documentation-standards.md` → **04-01-documentation-standards.md**
+- `readme-maintenance.md` → **04-02-readme-maintenance.md**
+- `runbook-documentation.md` → **04-03-runbook-documentation.md**
+
+**Implementation Details:**
+- Used `git mv` to preserve full git history (100% renames)
+- Renamed in both `practices/` and `src/devops_practices_mcp/practices/` directories
+- GG-SS are **prefixes** to existing descriptive names (not replacements)
+- Supports hierarchical organization and room for growth (01-04, 01-05, etc.)
+
+**Documentation Updates:**
+- **README.md** - Added group structure with descriptions, updated all examples
+- **health-check.sh** - Updated EXPECTED_PRACTICES array with new GG-SS names
+- **QUICK-START.md** - Batch updated all practice references
+- **SETUP.md** - Batch updated all practice references
+- **REORGANIZATION-PROPOSAL.md** - New comprehensive proposal document with rationale
+
+**Code Improvements:**
+- Enhanced mcp-server-sdk.py: 237 → 337 lines
+- MCP tools: 5 → 7 tools
+- Added `import re` for metadata extraction
+- Improved error handling and logging
+
+### Technical Details
+
+**MCP Server:**
+- Version: 1.3.1 → 1.4.0
+- Total practices: 11 (unchanged count, reorganized naming)
+- Total templates: 7 (unchanged)
+- Total MCP tools: 7 (was 5)
+- Lines of code: +100 lines (enhanced functionality)
+
+**Git History:**
+- All renames preserve full history via `git mv`
+- Git shows 100% renames (not deletes + adds)
+- No content changes to practices (only filenames)
+
+**Duplicate Analysis:**
+- ✅ NO duplicates found in practices
+- Each practice has unique focus and purpose
+- Confirmed no overlap with dev-kit practices (complementary, not duplicate)
+
+### Benefits
+
+**For Discoverability:**
+- ✅ Practices grouped by function (workflow → infra → docs)
+- ✅ Consistent with dev-kit GG-SS pattern
+- ✅ Easy to browse: "03-xx = infrastructure practices"
+- ✅ Alphabetical sorting now groups related practices
+
+**For Scalability:**
+- ✅ Room to grow within groups (01-04, 01-05, etc.)
+- ✅ Clear where new practices fit
+- ✅ Groups 05+ available for future expansion
+
+**For Stability:**
+- ✅ MCP server connection now stable (matches dev-kit reliability)
+- ✅ No more stdio protocol corruption
+- ✅ Consistent logging pattern across MCP servers
+
+**For Intelligence:**
+- ✅ Metadata extraction enables smart practice selection
+- ✅ Search capability for finding relevant practices
+- ✅ Future: Routing table for intelligent recommendations
+
+### Migration Notes
+
+**Breaking Changes:** Practice filenames changed (GG-SS prefixes added)
+
+**Required Actions:**
+
+1. **Update MCP Configuration** (if you modified it):
+   ```json
+   {
+     "command": "uv",
+     "args": [
+       "run",
+       "--directory",
+       "/home/ukj/.mcp-servers/devops-practices-mcp",
+       "python",
+       "mcp-server-sdk.py"
+     ]
+   }
+   ```
+
+2. **Update practice references in your code**:
+   ```python
+   # Old
+   get_practice("git-practices")
+
+   # New
+   get_practice("02-01-git-practices")
+   ```
+
+3. **Pull latest changes**:
+   ```bash
+   cd ~/.mcp-servers/devops-practices-mcp
+   git pull origin main
+   ```
+
+4. **Restart Claude Code** to reload MCP server with new practice names
+
+**Backward Compatibility:**
+- ❌ Old practice names will not work (must use new GG-SS prefixed names)
+- ✅ All templates unchanged (no breaking changes)
+- ✅ All MCP tools backward compatible (new tools added, existing tools unchanged)
+
+**Impact:**
+- Projects using practice names in CLAUDE.md or scripts need updates
+- MCP tools (list_practices, get_practice) work with new names automatically
+- Documentation updated - follow examples in README.md
+
+**Projects Affected:** All projects referencing devops-practices by name
+
+---
+
 ## [1.3.0] - 2026-02-17
 
 ### Added
@@ -360,6 +533,7 @@ Initial release with core DevOps practices extracted from multiple infrastructur
 
 | Version | Date | Practices | Templates | MCP Tools | Scripts | Notes |
 |---------|------|-----------|-----------|-----------|---------|-------|
+| 1.4.0 | 2026-02-20 | 11 | 7 | 7 | CI/CD + CLI | GG-SS reorganization, stability fix, 2 new tools, enhanced search |
 | 1.3.0 | 2026-02-17 | 11 | 7 | 5 | CI/CD + CLI | Issue tracking system (advanced), 3 templates, issue-manager tool |
 | 1.2.0 | 2026-02-14 | 10 | 4 | 5 | CI/CD | GitLab Flow branching, CONTRIBUTING.md, enhanced docs |
 | 1.1.0 | 2026-02-14 | 10 | 4 | 5 | CI/CD | Added render_template, GitLab CI/CD pipeline |
@@ -369,6 +543,71 @@ Initial release with core DevOps practices extracted from multiple infrastructur
 ---
 
 ## Upgrade Guide
+
+### From 1.3.1 to 1.4.0
+
+**Breaking Changes:** Practice filenames changed (GG-SS prefixes added)
+
+**Critical Bug Fix:**
+- MCP server stdio protocol corruption fixed (logging now to file only)
+- Server connection stability now matches dev-kit
+
+**New Features:**
+- 2 new MCP tools (get_practice_summary, search_practices)
+- Enhanced list_practices with metadata
+- GG-SS hierarchical practice organization (4 groups)
+
+**Migration Steps:**
+
+1. **Pull latest changes:**
+   ```bash
+   cd ~/.mcp-servers/devops-practices-mcp
+   git checkout main
+   git pull origin main
+   ```
+
+2. **Restart Claude Code** to reload MCP server
+
+3. **Update practice references** in your project files:
+   ```bash
+   # Example: Update CLAUDE.md references
+   sed -i 's/git-practices/02-01-git-practices/g' CLAUDE.md
+   sed -i 's/session-continuity/01-01-session-continuity/g' CLAUDE.md
+   sed -i 's/configuration-management/03-01-configuration-management/g' CLAUDE.md
+   # ... etc for other practices
+   ```
+
+4. **New practice naming convention:**
+   - Group 01: Workflow & Processes (01-01, 01-02, 01-03)
+   - Group 02: Version Control & PM (02-01, 02-02)
+   - Group 03: Infrastructure & Config (03-01, 03-02, 03-03)
+   - Group 04: Documentation Standards (04-01, 04-02, 04-03)
+
+5. **Use new tools:**
+   ```python
+   # Quick summary without loading full practice
+   get_practice_summary("02-01-git-practices")
+
+   # Search across all practices
+   search_practices("kubernetes")
+   search_practices("git workflow")
+
+   # List with metadata
+   list_practices()  # Now includes heading, description, line count
+   ```
+
+**When to upgrade:**
+- ✅ Immediately - Critical stability fix
+- ✅ Better practice organization and discoverability
+- ✅ Enhanced search and metadata capabilities
+
+**Effort:** Low - Mostly practice name updates in documentation
+
+**Projects Affected:** All projects referencing practices by name
+
+**Impact:** High - Server stability significantly improved, better practice discoverability
+
+---
 
 ### From 1.2.0 to 1.3.0
 

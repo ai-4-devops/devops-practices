@@ -122,17 +122,17 @@ echo
 print_info "Checking practice files..."
 
 EXPECTED_PRACTICES=(
-    "air-gapped-workflow.md"
-    "documentation-standards.md"
-    "session-continuity.md"
-    "task-tracking.md"
-    "git-practices.md"
-    "efficiency-guidelines.md"
-    "standard-workflow.md"
-    "runbook-documentation.md"
-    "configuration-management.md"
-    "readme-maintenance.md"
-    "issue-tracking.md"
+    "01-01-session-continuity.md"
+    "01-02-task-tracking.md"
+    "01-03-efficiency-guidelines.md"
+    "02-01-git-practices.md"
+    "02-02-issue-tracking.md"
+    "03-01-configuration-management.md"
+    "03-02-air-gapped-workflow.md"
+    "03-03-standard-workflow.md"
+    "04-01-documentation-standards.md"
+    "04-02-readme-maintenance.md"
+    "04-03-runbook-documentation.md"
 )
 
 PRACTICE_COUNT=0

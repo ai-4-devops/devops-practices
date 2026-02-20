@@ -20,17 +20,40 @@ mcp-name: io.github.ai-4-devops/devops-practices
 This MCP server provides shared DevOps practices that are common across infrastructure projects:
 
 ### Available Practices (11)
-1. **Air-Gapped Workflow** - Working across laptop, CloudShell, bastion, and EKS
-2. **Documentation Standards** - HOW/WHAT/WHY structure, naming conventions
-3. **Session Continuity** - State tracking, handoff protocols
-4. **Task Tracking** - TRACKER.md, CURRENT-STATE.md, PENDING-CHANGES.md
-5. **Git Practices** - Using `git mv`, commit conventions, backup protocols, GitLab Flow
-6. **Efficiency Guidelines** - When to script vs copy-paste, batching commands
-7. **Standard Workflow** - Common operational patterns and workflows
-8. **Runbook Documentation** ⭐ - Mandatory session log standards and requirements
-9. **Configuration Management** ⭐ - Config organization, placeholders, environment isolation
-10. **README Maintenance** ⭐ - Directory documentation standards and best practices
-11. **Issue Tracking** 🆕 - In-repository Jira-like issue tracking system (Advanced)
+
+Organized using **GG-SS** prefix pattern (Group-Sequence) for better discoverability:
+
+**Naming Pattern:** `GG-SS-practice-name`
+- **GG** = Group ID (01-04) - Functional category
+- **SS** = Sequence ID (01-03) - Order within group
+- Example: `03-02-air-gapped-workflow` = Group 03, Sequence 02
+
+**Group Legend:**
+- **01** = Workflow & Processes (how to work effectively)
+- **02** = Version Control & Project Management (git, issues)
+- **03** = Infrastructure & Configuration (K8s, deployments, config)
+- **04** = Documentation Standards (docs, READMEs, runbooks)
+
+---
+
+#### Group 01: Workflow & Processes
+1. **01-01-session-continuity** - State tracking, handoff protocols, CURRENT-STATE.md
+2. **01-02-task-tracking** - TRACKER.md, CURRENT-STATE.md, PENDING-CHANGES.md
+3. **01-03-efficiency-guidelines** - When to script vs copy-paste, batching commands
+
+#### Group 02: Version Control & Project Management
+4. **02-01-git-practices** - Using `git mv`, commit conventions, backup protocols, GitLab Flow
+5. **02-02-issue-tracking** 🆕 - In-repository Jira-like issue tracking system (Advanced)
+
+#### Group 03: Infrastructure & Configuration
+6. **03-01-configuration-management** ⭐ - Config organization, placeholders, environment isolation
+7. **03-02-air-gapped-workflow** - Working across laptop, CloudShell, bastion, and EKS
+8. **03-03-standard-workflow** - Common operational patterns and workflows
+
+#### Group 04: Documentation Standards
+9. **04-01-documentation-standards** - HOW/WHAT/WHY structure, naming conventions
+10. **04-02-readme-maintenance** ⭐ - Directory documentation standards and best practices
+11. **04-03-runbook-documentation** ⭐ - Mandatory session log standards and requirements
 
 ### Available Templates (7)
 1. **TRACKER.md** - Task tracking template (milestones)
@@ -52,18 +75,18 @@ devops-practices-mcp/
 ├── requirements.txt             # Python dependencies
 ├── .gitlab-ci.yml               # GitLab CI/CD pipeline
 ├── health-check.sh              # Health validation script
-├── practices/                   # Shared practice documents (11 files)
-│   ├── air-gapped-workflow.md
-│   ├── documentation-standards.md
-│   ├── session-continuity.md
-│   ├── task-tracking.md
-│   ├── git-practices.md
-│   ├── efficiency-guidelines.md
-│   ├── standard-workflow.md
-│   ├── runbook-documentation.md
-│   ├── configuration-management.md
-│   ├── readme-maintenance.md
-│   └── issue-tracking.md        # 🆕 Advanced: In-repo issue tracking
+├── practices/                   # Shared practice documents (11 files, GG-SS organized)
+│   ├── 01-01-session-continuity.md
+│   ├── 01-02-task-tracking.md
+│   ├── 01-03-efficiency-guidelines.md
+│   ├── 02-01-git-practices.md
+│   ├── 02-02-issue-tracking.md  # 🆕 Advanced: In-repo issue tracking
+│   ├── 03-01-configuration-management.md
+│   ├── 03-02-air-gapped-workflow.md
+│   ├── 03-03-standard-workflow.md
+│   ├── 04-01-documentation-standards.md
+│   ├── 04-02-readme-maintenance.md
+│   └── 04-03-runbook-documentation.md
 ├── templates/                   # File templates (7 files)
 │   ├── TRACKER-template.md
 │   ├── CURRENT-STATE-template.md
@@ -87,7 +110,7 @@ The MCP server provides 5 tools for Claude to query practices and templates:
 | Tool | Description | Example |
 |------|-------------|---------|
 | `list_practices` | List all available practices | Returns list of 10 practices |
-| `get_practice` | Get practice content by name | `get_practice("task-tracking")` |
+| `get_practice` | Get practice content by name | `get_practice("01-02-task-tracking")` |
 | `list_templates` | List all available templates | Returns list of 4 templates |
 | `get_template` | Get template content by name | `get_template("TRACKER-template")` |
 | `render_template` | Render template with variable substitution | `render_template("TRACKER-template", {"PROJECT_NAME": "my-project"})` |
@@ -301,7 +324,7 @@ Claude should be able to query the MCP server and list practices.
 - Git practices documented differently everywhere
 
 **With MCP**:
-- Claude queries `get_practice("git-practices")`
+- Claude queries `get_practice("02-01-git-practices")`
 - Everyone gets same 200+ line GitLab Flow documentation
 - Single source of truth for git standards
 
