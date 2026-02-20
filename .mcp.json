@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "devops-practices": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        ".",
+        "python",
+        "mcp-server-sdk.py"
+      ]
+    }
+  }
+}
