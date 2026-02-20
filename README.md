@@ -20,7 +20,21 @@ mcp-name: io.github.ai-4-devops/devops-practices
 
 ## Why This MCP Server?
 
-**Designed for DevOps R&D and PoC Efficiency**
+**Solves the CLAUDE.md Bloat Problem**
+
+Tired of maintaining massive CLAUDE.md files (1000+ lines) across multiple projects? This MCP centralizes reusable DevOps instructions, saving context for actual work instead of repeated practices.
+
+**The Problem:**
+- ❌ Large CLAUDE.md files eat up context window
+- ❌ Same practices duplicated across every project
+- ❌ Hard to maintain consistency when practices change
+- ❌ Context wasted on instructions instead of project-specific work
+
+**The Solution:**
+- ✅ Centralized DevOps knowledge base
+- ✅ Reference practices via MCP, not paste them
+- ✅ Update once → affects all projects
+- ✅ Context saved for R&D and PoC development
 
 When searching "devops" in the MCP Registry (as of February 2026), this is the only result. While other MCPs focus on:
 - 🔧 **Development tools** (code generation, testing, debugging)
