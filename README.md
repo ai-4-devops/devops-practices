@@ -97,7 +97,7 @@ The MCP server provides 5 tools for Claude to query practices and templates:
 | Tool | Description | Example |
 |------|-------------|---------|
 | `list_practices` | List all available practices | Returns list of 10 practices |
-| `get_practice` | Get practice content by name | `get_practice("task-tracking")` |
+| `get_practice` | Get practice content by name | `get_practice("01-02-task-tracking")` |
 | `list_templates` | List all available templates | Returns list of 4 templates |
 | `get_template` | Get template content by name | `get_template("TRACKER-template")` |
 | `render_template` | Render template with variable substitution | `render_template("TRACKER-template", {"PROJECT_NAME": "my-project"})` |
@@ -311,7 +311,7 @@ Claude should be able to query the MCP server and list practices.
 - Git practices documented differently everywhere
 
 **With MCP**:
-- Claude queries `get_practice("git-practices")`
+- Claude queries `get_practice("02-01-git-practices")`
 - Everyone gets same 200+ line GitLab Flow documentation
 - Single source of truth for git standards
 
