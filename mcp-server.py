@@ -186,7 +186,7 @@ class MCPServer:
                 },
                 'serverInfo': {
                     'name': 'devops-practices',
-                    'version': '1.2.0'
+                    'version': '1.4.0'
                 }
             }
         }

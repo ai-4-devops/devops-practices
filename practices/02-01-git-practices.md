@@ -695,16 +695,21 @@ git fetch --prune
 git branch --merged develop | grep -v "\* develop" | xargs -n 1 git branch -d
 ```
 
-**Automation** (GitLab CI/CD):
+**Automation** (GitHub Actions):
 ```yaml
-# .gitlab-ci.yml - Auto-delete merged branches
-delete-merged-branches:
-  stage: cleanup
-  script:
-    - git fetch --prune
-    - git branch --merged develop | grep -v "develop\|main" | xargs -n 1 git branch -d
-  only:
-    - develop
+# .github/workflows/cleanup.yml - Auto-delete merged branches
+name: Cleanup Merged Branches
+on:
+  push:
+    branches: [develop]
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          git fetch --prune
+          git branch --merged develop | grep -v "develop\|main" | xargs -n 1 git branch -d
   when: manual
 ```
 

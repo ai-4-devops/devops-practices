@@ -24,7 +24,7 @@ ls -la
 
 # Verify practices loaded
 ls practices/
-# Should see: air-gapped-workflow.md, documentation-standards.md, etc.
+# Should see: 03-02-air-gapped-workflow.md, 04-01-documentation-standards.md, etc.
 
 # Verify templates loaded
 ls templates/
@@ -194,7 +194,7 @@ Expected: Claude should list:
 - documentation-standards
 - session-continuity
 - task-tracking
-- git-practices
+- 02-01-git-practices
 - efficiency-guidelines
 ```
 
@@ -202,7 +202,7 @@ Expected: Claude should list:
 ```
 User: "Can you show me the air-gapped workflow practice?"
 
-Expected: Claude should retrieve and display the full air-gapped-workflow.md content
+Expected: Claude should retrieve and display the full 03-02-air-gapped-workflow.md content
 ```
 
 ### Test 3: Get a Template
@@ -233,7 +233,7 @@ Expected: Claude should retrieve and display TRACKER-template.md content
 
 **Fix**:
 1. Check practice file exists: `ls practices/`
-2. Check filename matches exactly (case-sensitive): `air-gapped-workflow.md`
+2. Check filename matches exactly (case-sensitive): `03-02-air-gapped-workflow.md`
 3. Restart MCP server (restart Claude Code)
 
 ### Python Not Found
@@ -274,7 +274,7 @@ Claude: [Receives full practice content]
 Claude: "Here's the air-gapped workflow:
 
 The laptop where Claude runs has NO AWS access...
-[Full content from air-gapped-workflow.md]
+[Full content from 03-02-air-gapped-workflow.md]
 "
 ```
 
@@ -288,10 +288,10 @@ To update a practice:
 cd /home/ukj/work/devops/protean/devops-practices-mcp
 
 # Edit practice file
-vim practices/documentation-standards.md
+vim practices/04-01-documentation-standards.md
 
 # Commit changes
-git add practices/documentation-standards.md
+git add practices/04-01-documentation-standards.md
 git commit -m "Update documentation standards: add new RUNBOOKS guidelines"
 
 # Push to remote (if configured)
@@ -327,7 +327,7 @@ vim ~/.config/claude/config.json
 ls practices/
 
 # Edit a practice
-vim practices/air-gapped-workflow.md
+vim practices/03-02-air-gapped-workflow.md
 
 # Commit changes
 git add . && git commit -m "Update practice" && git push
