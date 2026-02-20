@@ -21,7 +21,7 @@ Thank you for contributing! This guide will help you understand our workflow and
 
 ```bash
 # Clone repository to the recommended location
-git clone <repo-url> ~/.mcp-servers/devops-practices
+git clone https://github.com/ai-4-devops/devops-practices.git ~/.mcp-servers/devops-practices
 cd ~/.mcp-servers/devops-practices
 
 # Install dependencies (using modern tooling - recommended)
@@ -144,8 +144,8 @@ git push origin feature/add-security-practice
 
 **4. Create Merge Request**
 
-- Go to GitLab
-- Create MR: `feature/add-security-practice` → `develop`
+- Go to GitHub
+- Create PR: `feature/add-security-practice` → `develop`
 - Wait for CI/CD pipeline to pass
 - Request code review
 - Address feedback if needed
@@ -154,7 +154,7 @@ git push origin feature/add-security-practice
 **5. Cleanup**
 
 ```bash
-# After MR is merged
+# After PR is merged
 git checkout develop
 git pull origin develop
 
@@ -190,7 +190,7 @@ git checkout develop
 git pull origin develop
 git checkout -b feature/fix-template-typo
 
-# Fix, commit, create MR → develop
+# Fix, commit, create PR → develop
 ```
 
 **Critical Production Bugs** (hotfix):
@@ -209,7 +209,7 @@ git add mcp-server.py
 git commit -m "Fix critical crash in MCP server template rendering"
 git push origin hotfix/mcp-server-crash
 
-# Create MR → main (fast-track approval)
+# Create PR → main (fast-track approval)
 # After merge to main:
 
 # Also merge to develop
@@ -254,7 +254,7 @@ All branches run automated checks:
 
 ### Requesting Review
 
-**Good MR Description**:
+**Good PR Description**:
 ```markdown
 ## Summary
 Add security best practices covering secrets management, access control, and audit logging.
@@ -273,7 +273,7 @@ Add security best practices covering secrets management, access control, and aud
 Closes #42
 ```
 
-### Reviewing Others' MRs
+### Reviewing Others' PRs
 
 **Check**:
 - [ ] Clear, descriptive commit messages
@@ -330,9 +330,9 @@ git commit -m "Prepare v1.2.0 release"
 git push origin release/v1.2.0
 ```
 
-**3. Create MR → main**
+**3. Create PR → main**
 
-- Create MR: `release/v1.2.0` → `main`
+- Create PR: `release/v1.2.0` → `main`
 - Get approval from team
 - Ensure CI/CD passes
 - Merge to main
@@ -498,7 +498,7 @@ feature/WIP             # Not clear
 - **[git-practices.md](practices/git-practices.md)** - Detailed git workflows
 
 ### Questions
-- Open an issue on GitLab
+- Open an issue on GitHub
 - Ask in team Slack channel
 - Contact: Uttam Jaiswal (maintainer)
 

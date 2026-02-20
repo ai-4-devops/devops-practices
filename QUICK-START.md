@@ -69,7 +69,7 @@ This keeps MCP servers organized and makes configuration easier.
 
 ```bash
 # Clone to recommended location
-git clone <repo-url> ~/.mcp-servers/devops-practices
+git clone https://github.com/ai-4-devops/devops-practices.git ~/.mcp-servers/devops-practices
 cd ~/.mcp-servers/devops-practices
 
 # Install dependencies (if needed)
