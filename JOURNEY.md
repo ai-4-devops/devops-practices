@@ -641,6 +641,187 @@ git push origin main
 
 ---
 
+## Phase 6: Version 1.4.0 - Major Enhancement Release
+
+### The Context (February 20, 2026)
+
+After v1.3.1 was successfully published, we discovered and fixed critical issues while also implementing a major reorganization.
+
+### Changes in v1.4.0
+
+**Critical Bug Fix:**
+- Fixed MCP server stdio protocol corruption
+- Root cause: Default logging wrote to stderr, corrupting JSON-RPC 2.0 messages
+- Solution: FileHandler-only logging to `~/.cache/claude/mcp-devops-practices.log`
+- Impact: Server stability now matches dev-kit reliability
+
+**Major Feature: GG-SS Reorganization**
+- Reorganized all 11 practices with Group-Sequence prefix pattern
+- Created 4 logical groups for better discoverability:
+  - Group 01: Workflow & Processes (3 practices)
+  - Group 02: Version Control & PM (2 practices)
+  - Group 03: Infrastructure & Configuration (3 practices)
+  - Group 04: Documentation Standards (3 practices)
+- Used `git mv` to preserve 100% git history
+- Inspired by dev-kit's hierarchical organization
+
+**New Features:**
+- Added 2 new MCP tools: `get_practice_summary`, `search_practices`
+- Enhanced `list_practices` with metadata extraction
+- Improved server from 237 → 337 lines
+- Total MCP tools: 5 → 7
+
+### Publication Process
+
+#### Step 1: Building the Package
+
+```bash
+cd /home/ukj/.mcp-servers/devops-practices-mcp
+
+# Clean previous builds
+rm -rf dist/ build/ *.egg-info
+
+# Build with uv (modern Python package manager)
+uv build
+
+# Output:
+# Successfully built devops_practices_mcp-1.4.0-py3-none-any.whl (80 KB)
+# Successfully built devops_practices_mcp-1.4.0.tar.gz (64 KB)
+```
+
+#### Step 2: Publishing to PyPI
+
+```bash
+# Using uv publish
+uv publish
+
+# Note: .pypirc configuration recommended for credentials
+# ~/.pypirc with [pypi] section containing username and password
+```
+
+**Result:** ✅ https://pypi.org/project/devops-practices-mcp/1.4.0/
+
+#### Step 3: Publishing to MCP Registry
+
+**Challenge Discovered:** The registry structure had changed since v1.3.1!
+
+**Old path (from Phase 5):**
+```bash
+cd /tmp/registry/cli/mcp-publisher  # ❌ No longer exists
+```
+
+**New path (February 2026):**
+```bash
+cd /tmp/registry/cmd/publisher  # ✅ Correct path
+```
+
+**Updated Build Process:**
+
+```bash
+# Clone registry (if not already done)
+cd /tmp
+git clone https://github.com/modelcontextprotocol/registry.git
+
+# Navigate to CORRECT path
+cd /tmp/registry/cmd/publisher
+
+# Build mcp-publisher
+mkdir -p ~/registry/bin
+go build -o ~/registry/bin/mcp-publisher
+
+# Make executable
+chmod +x ~/registry/bin/mcp-publisher
+```
+
+**Authentication:**
+```bash
+~/registry/bin/mcp-publisher login github
+# Opens browser for GitHub OAuth
+# Authorize and return to terminal
+```
+
+**Publish to Registry:**
+```bash
+cd /home/ukj/.mcp-servers/devops-practices-mcp
+~/registry/bin/mcp-publisher publish server.json
+```
+
+**Expected Output:**
+```
+Publishing server io.github.ai-4-devops/devops-practices to version 1.4.0
+Resolving package identifier: devops-practices-mcp
+Downloading package from pypi
+Extracting package
+Validating package
+Searching for 'mcp-name: io.github.ai-4-devops/devops-practices' in README
+✓ Successfully published
+✓ Server io.github.ai-4-devops/devops-practices version 1.4.0
+```
+
+### Key Learnings from v1.4.0
+
+**1. Registry Structure Evolution**
+- MCP registry moved from `cli/mcp-publisher` → `cmd/publisher`
+- Always check current repository structure
+- Don't blindly follow old documentation
+
+**2. Token Storage Security**
+- Use `~/.pypirc` for PyPI credentials (industry standard)
+- Keep tokens outside repository
+- Use chmod 600 for proper permissions
+
+**3. Breaking Changes Communication**
+- v1.4.0 had breaking changes (practice name changes)
+- Comprehensive CHANGELOG.md is critical
+- Provide migration guide with examples
+
+**4. Git History Preservation**
+- `git mv` preserves 100% rename history
+- Shows as "renamed" not "deleted + added"
+- Critical for code archaeology and blame
+
+**5. Version Bumping**
+- Update ALL version references consistently:
+  - pyproject.toml
+  - src/package/__init__.py
+  - server.json (both places)
+  - Update CHANGELOG.md
+
+### Timeline for v1.4.0
+
+**Preparation Phase:**
+- Fixed critical logging bug
+- Implemented GG-SS reorganization (11 practices renamed)
+- Enhanced MCP server with 2 new tools
+- Updated all documentation
+- Committed 12 commits on feature branch
+- Merged PR to main (no squash - preserved history)
+- Tagged v1.4.0 in git
+
+**Publication Phase:**
+1. Built package with `uv build` (5 seconds)
+2. Published to PyPI with `uv publish` (30 seconds)
+3. Discovered registry structure changed
+4. Found correct path: `cmd/publisher`
+5. Built mcp-publisher CLI
+6. Authenticated with GitHub OAuth
+7. Published to MCP Registry (1 minute)
+
+**Total Time:** ~2 minutes (after initial troubleshooting)
+
+### Version Comparison
+
+| Aspect | v1.3.1 | v1.4.0 | Change |
+|--------|--------|--------|--------|
+| Practices | 11 | 11 | Reorganized with GG-SS |
+| Templates | 7 | 7 | No change |
+| MCP Tools | 5 | 7 | +2 new tools |
+| Code Lines | 237 | 337 | +100 lines |
+| Stability | Unstable | Stable | Critical fix |
+| Organization | Flat | Hierarchical | 4 groups |
+
+---
+
 ## Lessons Learned
 
 ### 1. CI/CD Platform Migration
@@ -717,13 +898,26 @@ git push origin main
 - ✅ Updated server.json to use PyPI
 - ❌ Hit ownership validation error
 
-### Day 4: Final Success
+### Day 4: Final Success (v1.3.1)
 - ✅ Added mcp-name marker to README
 - ✅ Bumped version to 1.3.1
 - ✅ Republished to PyPI
 - ✅ Successfully published to MCP Registry
 - ✅ Verified installation from both PyPI and MCP Registry
 - ✅ Created this documentation
+
+### Day 5: Version 1.4.0 Release (February 20, 2026)
+- ✅ Fixed critical MCP server stability issue (stdio logging)
+- ✅ Implemented GG-SS reorganization (11 practices, 4 groups)
+- ✅ Added 2 new MCP tools (get_practice_summary, search_practices)
+- ✅ Enhanced list_practices with metadata
+- ✅ Updated comprehensive CHANGELOG.md
+- ✅ Merged PR #2 to main (12 commits, preserved history)
+- ✅ Tagged v1.4.0 in git
+- ✅ Built and published to PyPI
+- ✅ Discovered registry path changed (cli → cmd)
+- ✅ Published to MCP Registry with correct path
+- ✅ Updated JOURNEY.md with v1.4.0 experience
 
 ---
 
@@ -771,12 +965,15 @@ For anyone attempting a similar journey:
 
 The DevOps Practices MCP Server is now live and available for the Claude AI community to use. It provides 11 best practices and 7 templates for infrastructure teams, all validated and published through proper channels.
 
-**Final Status:**
+**Final Status (v1.4.0):**
 - ✅ GitHub: https://github.com/ai-4-devops/devops-practices
-- ✅ PyPI: https://pypi.org/project/devops-practices-mcp/
-- ✅ MCP Registry: io.github.ai-4-devops/devops-practices v1.3.1
+- ✅ PyPI: https://pypi.org/project/devops-practices-mcp/ (v1.4.0)
+- ✅ MCP Registry: io.github.ai-4-devops/devops-practices v1.4.0
+- ✅ Git Tags: v1.0.0, v1.2.0, v1.3.0, v1.4.0
 - ✅ CI/CD: GitHub Actions with 7 validation jobs
-- ✅ Documentation: Comprehensive README and journey documentation
+- ✅ Documentation: Comprehensive README, CHANGELOG, and journey documentation
+- ✅ Features: 11 practices (GG-SS organized), 7 templates, 7 MCP tools
+- ✅ Stability: Critical logging fix - server now stable
 
 Thank you for following this journey. I hope it helps you publish your own MCP servers successfully!
 
