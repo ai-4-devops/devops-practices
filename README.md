@@ -20,9 +20,9 @@ mcp-name: io.github.ai-4-devops/devops-practices
 
 ## Why This MCP Server?
 
-**The First Infrastructure-Focused MCP in the Registry**
+**Designed for DevOps R&D and PoC Efficiency**
 
-As of February 2026, this is the only MCP server dedicated to DevOps and infrastructure practices. While other MCPs focus on:
+When searching "devops" in the MCP Registry (as of February 2026), this is the only result. While other MCPs focus on:
 - 🔧 **Development tools** (code generation, testing, debugging)
 - 📊 **Data analysis** (databases, APIs, analytics)
 - 🎨 **Content creation** (writing, design, media)
@@ -38,8 +38,9 @@ As of February 2026, this is the only MCP server dedicated to DevOps and infrast
 - **Infrastructure-first** - Built for ops teams, not developers
 - **Reusable patterns** - Templates and standards across all your projects
 - **AI-native design** - Organized for Claude to query and apply contextually
+- **R&D optimized** - Accelerates proof-of-concept development and experimentation
 
-Perfect for DevOps teams, SREs, and infrastructure engineers working with Claude.
+Perfect for DevOps teams conducting R&D, building PoCs, and managing infrastructure with Claude.
 
 ---
 
