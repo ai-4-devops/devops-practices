@@ -18,6 +18,31 @@ mcp-name: io.github.ai-4-devops/devops-practices
 
 ---
 
+## Why This MCP Server?
+
+**The First Infrastructure-Focused MCP in the Registry**
+
+As of February 2026, this is the only MCP server dedicated to DevOps and infrastructure practices. While other MCPs focus on:
+- 🔧 **Development tools** (code generation, testing, debugging)
+- 📊 **Data analysis** (databases, APIs, analytics)
+- 🎨 **Content creation** (writing, design, media)
+
+**This MCP provides:**
+- 🏗️ **Infrastructure knowledge** - Kubernetes, deployments, configuration management
+- 📚 **DevOps practices** - Battle-tested workflows, not just code templates
+- 🔄 **Operations standards** - Runbooks, documentation, session continuity
+- 🎯 **Context-aware guidance** - Structured practices (GG-SS) for easy discovery
+
+**What makes it different:**
+- **Prescriptive, not generative** - Provides proven practices, not generated code
+- **Infrastructure-first** - Built for ops teams, not developers
+- **Reusable patterns** - Templates and standards across all your projects
+- **AI-native design** - Organized for Claude to query and apply contextually
+
+Perfect for DevOps teams, SREs, and infrastructure engineers working with Claude.
+
+---
+
 ## What This Provides
 
 This MCP server provides shared DevOps practices that are common across infrastructure projects:
