@@ -7,18 +7,24 @@ Provides shared DevOps practices and templates for all example-project infrastru
 
 import asyncio
 import logging
-from pathlib import Path
-from datetime import datetime
 import os
+import re
+from datetime import datetime
+from pathlib import Path
 
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp.types import Tool, TextContent
 
-# Configure logging
+# Configure logging to file (to avoid interfering with stdio protocol)
+log_dir = os.path.expanduser('~/.cache/claude')
+os.makedirs(log_dir, exist_ok=True)
+log_file = os.path.join(log_dir, 'mcp-devops-practices.log')
+
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[logging.FileHandler(log_file)]
 )
 logger = logging.getLogger('devops-practices')
 
@@ -42,8 +48,9 @@ def load_practices() -> dict[str, str]:
         practice_name = file_path.stem
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
-                practices[practice_name] = f.read()
-            logger.info(f"Loaded practice: {practice_name}")
+                content = f.read()
+                practices[practice_name] = content
+            logger.info(f"Loaded practice: {practice_name} ({len(content)} chars)")
         except Exception as e:
             logger.error(f"Error loading practice {practice_name}: {e}")
 
@@ -95,11 +102,44 @@ async def list_tools() -> list[Tool]:
             }
         ),
         Tool(
+            name="get_practice_summary",
+            description="Get a brief summary of a practice (first ~500 chars). Lighter than get_practice, good for quick reference.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the practice"
+                    },
+                    "max_chars": {
+                        "type": "integer",
+                        "description": "Maximum characters to return (default: 500)",
+                        "default": 500
+                    }
+                },
+                "required": ["name"]
+            }
+        ),
+        Tool(
             name="list_practices",
-            description="List all available DevOps practices",
+            description="List all available DevOps practices with metadata",
             inputSchema={
                 "type": "object",
                 "properties": {}
+            }
+        ),
+        Tool(
+            name="search_practices",
+            description="Search practices by keyword in name or content",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "keyword": {
+                        "type": "string",
+                        "description": "Keyword to search for"
+                    }
+                },
+                "required": ["keyword"]
             }
         ),
         Tool(
@@ -154,8 +194,27 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
     logger.info(f"Tool called: {name} with args: {arguments}")
 
     if name == "list_practices":
-        practices_list = list(PRACTICES.keys())
-        text = "Available practices:\n" + '\n'.join(f'- {p}' for p in practices_list)
+        practices_list = []
+        for practice_name, content in PRACTICES.items():
+            # Extract title from first heading
+            title_match = re.search(r'^#\s+(.+)$', content, re.MULTILINE)
+            title = title_match.group(1) if title_match else practice_name
+
+            practices_list.append({
+                'name': practice_name,
+                'title': title,
+                'size': f'{len(content)} chars'
+            })
+
+        # Sort by name
+        practices_list.sort(key=lambda x: x['name'])
+
+        text = "Available DevOps Practices:\n\n"
+        for practice in practices_list:
+            text += f"• **{practice['name']}**\n"
+            text += f"  Title: {practice['title']}\n"
+            text += f"  Size: {practice['size']}\n\n"
+
         return [TextContent(type="text", text=text)]
 
     elif name == "get_practice":
@@ -166,6 +225,46 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
         else:
             available = ', '.join(PRACTICES.keys())
             raise ValueError(f'Practice not found: {practice_name}. Available: {available}')
+
+    elif name == "get_practice_summary":
+        practice_name = arguments.get("name", "")
+        max_chars = arguments.get("max_chars", 500)
+        content = PRACTICES.get(practice_name)
+        if content:
+            summary = content[:max_chars]
+            if len(content) > max_chars:
+                summary += "..."
+            return [TextContent(type="text", text=summary)]
+        else:
+            available = ', '.join(PRACTICES.keys())
+            raise ValueError(f'Practice not found: {practice_name}. Available: {available}')
+
+    elif name == "search_practices":
+        keyword = arguments.get("keyword", "").lower()
+        if not keyword:
+            raise ValueError("keyword parameter is required")
+
+        results = []
+        for practice_name, content in PRACTICES.items():
+            # Search in name
+            if keyword in practice_name.lower():
+                results.append(practice_name)
+                continue
+            # Search in content
+            if keyword in content.lower():
+                results.append(practice_name)
+
+        if results:
+            text = f"Found {len(results)} practice(s) matching '{keyword}':\n\n"
+            for practice_name in results:
+                # Extract title
+                content = PRACTICES[practice_name]
+                title_match = re.search(r'^#\s+(.+)$', content, re.MULTILINE)
+                title = title_match.group(1) if title_match else practice_name
+                text += f"• {practice_name}: {title}\n"
+            return [TextContent(type="text", text=text)]
+        else:
+            return [TextContent(type="text", text=f"No practices found matching '{keyword}'")]
 
     elif name == "list_templates":
         templates_list = list(TEMPLATES.keys())
@@ -223,8 +322,9 @@ async def main():
     async with stdio_server() as (read_stream, write_stream):
         logger.info("Starting DevOps Practices MCP Server")
         logger.info(f"Base directory: {BASE_DIR}")
-        logger.info(f"Practices loaded: {', '.join(PRACTICES.keys())}")
-        logger.info(f"Templates loaded: {', '.join(TEMPLATES.keys())}")
+        logger.info(f"Practices loaded: {', '.join(sorted(PRACTICES.keys()))}")
+        logger.info(f"Templates loaded: {', '.join(sorted(TEMPLATES.keys()))}")
+        logger.info(f"Log file: {log_file}")
 
         await app.run(
             read_stream,
