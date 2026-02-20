@@ -52,7 +52,7 @@ network-infra/CLAUDE.md         → ~150 lines (only networking-specific)
 ### MCP Server + CI/CD + Tools
 - **mcp-server.py** - Python MCP server (5 tools: list/get practices & templates, render templates)
 - **health-check.sh** - Comprehensive validation script (14 checks)
-- **.gitlab-ci.yml** - Automated CI/CD pipeline (validates all changes)
+- **.github/workflows/ci.yml** - Automated GitHub Actions pipeline (validates all changes)
 - **CONTRIBUTING.md** ⭐ - Complete contribution guide with GitLab Flow workflows
 - **tools/issue-manager.sh** 🆕 - CLI tool for issue management (Advanced)
 - Zero dependencies for MCP server (Python stdlib only)
@@ -69,7 +69,7 @@ This keeps MCP servers organized and makes configuration easier.
 
 ```bash
 # Clone to recommended location
-git clone <repo-url> ~/.mcp-servers/devops-practices
+git clone https://github.com/ai-4-devops/devops-practices.git ~/.mcp-servers/devops-practices
 cd ~/.mcp-servers/devops-practices
 
 # Install dependencies (if needed)
@@ -315,7 +315,7 @@ When creating a new project:
 | [CHANGELOG.md](CHANGELOG.md) | Version history and upgrade guides |
 | [mcp-server.py](mcp-server.py) | The MCP server (5 tools) |
 | [health-check.sh](health-check.sh) | Validation script (14 checks) |
-| [.gitlab-ci.yml](.gitlab-ci.yml) | CI/CD pipeline configuration |
+| [.github/workflows/ci.yml](.github/workflows/ci.yml) | GitHub Actions pipeline configuration |
 | [practices/](practices/) | 10 practice documents |
 | [templates/](templates/) | 4 template files |
 
@@ -355,7 +355,7 @@ See [CHANGELOG.md](CHANGELOG.md) for complete version history.
 
 **Previous Releases:**
 - v1.2.0: GitLab Flow branching, CONTRIBUTING.md, enhanced 02-01-git-practices
-- v1.1.0: render_template tool, GitLab CI/CD pipeline
+- v1.1.0: render_template tool, GitHub Actions pipeline
 - v1.0.0: runbook-documentation, configuration-management, readme-maintenance
 
 ---
@@ -382,5 +382,5 @@ Now that you have the MCP server set up, if you want to contribute improvements:
 **Questions?** See [SETUP.md](SETUP.md) for detailed troubleshooting.
 
 **Maintained By**: Uttam Jaiswal
-**Last Updated**: 2026-02-17
-**Version**: 1.3.0
+**Last Updated**: 2026-02-20
+**Version**: 1.4.0

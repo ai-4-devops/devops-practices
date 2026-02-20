@@ -246,5 +246,5 @@ Examples should work across:
 
 ---
 
-**Last Updated**: 2026-02-18
+**Last Updated**: 2026-02-20
 **Purpose**: Guide Claude when working on the MCP server repository and client projects
