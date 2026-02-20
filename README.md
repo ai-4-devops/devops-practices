@@ -2,8 +2,9 @@
 
 [![CI/CD Pipeline](https://github.com/ai-4-devops/devops-practices/actions/workflows/ci.yml/badge.svg)](https://github.com/ai-4-devops/devops-practices/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-1.3.0-blue.svg)](https://github.com/ai-4-devops/devops-practices/releases)
-[![MCP Server](https://img.shields.io/badge/MCP-Server-purple.svg)](https://modelcontextprotocol.io)
+[![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)](https://github.com/ai-4-devops/devops-practices/releases)
+[![MCP Registry](https://img.shields.io/badge/MCP%20Registry-Published-green.svg)](https://registry.modelcontextprotocol.io/?search=devops-practices)
+[![PyPI](https://img.shields.io/pypi/v/devops-practices-mcp.svg)](https://pypi.org/project/devops-practices-mcp/)
 
 mcp-name: io.github.ai-4-devops/devops-practices
 
@@ -11,7 +12,9 @@ mcp-name: io.github.ai-4-devops/devops-practices
 
 **Type**: Model Context Protocol (MCP) Server for Claude Code
 
-**Version**: 1.3.0
+**Version**: 1.4.0
+
+**Status**: 🎉 **Officially Published** in the [MCP Registry](https://registry.modelcontextprotocol.io/?search=devops-practices) (Published: February 18, 2026)
 
 ---
 
@@ -236,11 +239,45 @@ Claude has access to shared DevOps practices via MCP:
 
 ## Installation & Setup
 
+### 🚀 Quick Install (Recommended)
+
+**From MCP Registry** (Easiest - via Claude Desktop):
+1. Open Claude Desktop
+2. Go to Settings → Developer → MCP Servers
+3. Search for "devops-practices"
+4. Click "Install"
+
+**From PyPI** (For command-line):
+```bash
+# Install via uvx (recommended)
+uvx devops-practices-mcp
+
+# Or via pip
+pip install devops-practices-mcp
+```
+
+Then configure in `~/.claude/config.json`:
+```json
+{
+  "mcpServers": {
+    "devops-practices": {
+      "command": "uvx",
+      "args": ["devops-practices-mcp"],
+      "env": {}
+    }
+  }
+}
+```
+
+---
+
+### 🔧 Manual Installation (For Development)
+
 **Recommended Location**: `~/.mcp-servers/devops-practices/`
 
 This keeps MCP servers organized and makes configuration easier. All examples below use this location.
 
-### 1. Clone Repository
+#### 1. Clone Repository
 ```bash
 # Clone to recommended location
 git clone <repo-url> ~/.mcp-servers/devops-practices
