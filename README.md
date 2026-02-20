@@ -8,7 +8,7 @@
 
 mcp-name: io.github.ai-4-devops/devops-practices
 
-**Purpose**: Productivity framework for DevOps engineers - track your work, not how to track it.
+**Purpose**: Productivity framework for DevOps engineers using AI assistance (Claude Code) while working on PoCs.
 
 **Type**: Model Context Protocol (MCP) Server for Claude Code
 
@@ -18,7 +18,9 @@ mcp-name: io.github.ai-4-devops/devops-practices
 
 ---
 
-> **Note:** This MCP doesn't teach you DevOps - it provides the structure (TRACKER, ISSUES, docs, SoPs) so you can focus on the actual work without worrying about how to document and track it.
+> **Who is this for?** DevOps engineers using **Claude Code (VS Code plugin)** for PoC development.
+> **What it does:** Provides structure (TRACKER, ISSUES, docs, SoPs) so you can focus on building without worrying about documentation overhead.
+> **What it's NOT:** Not a DevOps tutorial - it's a productivity framework for AI-assisted development.
 
 ---
 
@@ -67,7 +69,7 @@ When searching "devops" in the MCP Registry (as of February 2026), this is the o
 - **AI-native design** - Organized for Claude to query and apply contextually
 - **R&D optimized** - Accelerates proof-of-concept development and experimentation
 
-Perfect for DevOps teams conducting R&D, building PoCs, and managing infrastructure with Claude.
+**Perfect for:** DevOps engineers using Claude Code (VS Code plugin) to build PoCs and conduct R&D with AI assistance.
 
 ---
 
