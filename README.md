@@ -413,8 +413,8 @@ Claude: [Receives rendered template with all variables substituted]
 Claude: [Creates TRACKER.md with actual values]
 ```
 
-### For Uttam Jaiswal
-**Update a Practice:**
+### Updating Practices
+**For Contributors:**
 ```bash
 cd devops-practices-mcp
 vim practices/documentation-standards.md
