@@ -16,6 +16,11 @@ mcp-name: io.github.ai-4-devops/devops-practices
 
 **Status**: 🎉 **Officially Published** in the [MCP Registry](https://registry.modelcontextprotocol.io/?search=devops-practices) (Published: February 18, 2026)
 
+**Published Versions:**
+- 📦 **PyPI**: [v1.4.0](https://pypi.org/project/devops-practices-mcp/1.4.0/) → Git tag [v1.4.0](https://github.com/ai-4-devops/devops-practices/releases/tag/v1.4.0) (`34ca572`)
+- 🌐 **MCP Registry**: v1.4.0 → Git tag [v1.4.0](https://github.com/ai-4-devops/devops-practices/releases/tag/v1.4.0) (`34ca572`)
+- 🚀 **Latest Development**: [main branch](https://github.com/ai-4-devops/devops-practices) (may include unreleased features)
+
 ---
 
 > **Who is this for?** DevOps engineers using **Claude Code (VS Code plugin)** for PoC development.
@@ -81,6 +86,7 @@ When searching "devops" in the MCP Registry (as of February 2026), this is the o
 - ✅ **Background**: Runs silently while you work
 - ✅ **On-demand**: Claude queries practices as needed
 - ✅ **Auto-stop**: Shuts down when Claude closes
+- ✅ **Fallback**: Access practices via GitHub/local if MCP unavailable (see [Troubleshooting](#mcp-server-is-down-or-unavailable))
 
 **Configuration Options:**
 
@@ -329,8 +335,13 @@ Claude has access to shared DevOps practices via MCP:
 - Git best practices
 - Efficiency guidelines
 
+⚠️ Fallback: If MCP unavailable, see Appendix or GitHub practices
+
 ## Project-Specific: [Project Details]
 [Only project-specific instructions here]
+
+## Appendix: Critical Practices (Fallback)
+[Emergency practice summaries if MCP down - see CLAUDE-template.md]
 ```
 
 ### Benefits
@@ -338,6 +349,9 @@ Claude has access to shared DevOps practices via MCP:
 - **Consistency**: All projects follow same standards
 - **Maintainability**: Update once, all projects benefit
 - **Discoverability**: Claude can query practices when needed
+- **Resilient**: Fallback to GitHub/local/appendix if MCP unavailable
+
+**Template:** See [CLAUDE-template.md](templates/CLAUDE-template.md) for full structure including fallback appendix
 
 ---
 
@@ -768,6 +782,45 @@ git checkout -b hotfix/critical-bug
 **💡 Pro Tip:** Claude sometimes "forgets" to check MCP servers. Explicitly remind it to verify the MCP before proceeding with tasks.
 
 **Log location:** `~/.cache/claude/mcp-devops-practices.log`
+
+### MCP Server is Down or Unavailable
+
+**Symptoms:** MCP server process crashed, not responding, or cannot start
+
+**Fallback Options:**
+
+**Option 1: GitHub Practices (Recommended)**
+```
+Access practices directly from GitHub:
+https://github.com/ai-4-devops/devops-practices/tree/main/practices
+
+Ask Claude to read practices via GitHub URLs when MCP unavailable.
+```
+
+**Option 2: Local Clone**
+```bash
+# Access practices from local clone
+ls ~/.mcp-servers/devops-practices-mcp/practices/
+
+# Read practice directly
+cat ~/.mcp-servers/devops-practices-mcp/practices/03-02-air-gapped-workflow.md
+```
+
+**Option 3: CLAUDE.md Appendix**
+```
+Projects using the CLAUDE-template.md have a built-in appendix
+with critical practice summaries for emergency fallback.
+
+See: templates/CLAUDE-template.md (Appendix section)
+```
+
+**Prevention:**
+- Use [.mcp.json](.mcp.json) for project-level config (more reliable)
+- Add MCP health check to pre-session checklist
+- Keep local clone updated: `git pull origin main`
+- Monitor logs: `tail -f ~/.cache/claude/mcp-devops-practices.log`
+
+**Related:** [MIGRATION-GUIDE.md](MIGRATION-GUIDE.md#troubleshooting) for project-specific fallback setup
 
 ### Practice File Not Found
 1. Verify file exists: `ls practices/`

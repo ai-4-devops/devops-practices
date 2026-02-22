@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.4.0] - 2026-02-20
 
+**Git Tag:** [v1.4.0](https://github.com/ai-4-devops/devops-practices/releases/tag/v1.4.0) | **Commit:** `34ca572`
+**Published:** PyPI ✅ (2026-02-19) | MCP Registry ✅ (2026-02-20)
+
 ### Fixed
 
 **Critical MCP Server Stability Issue:**

@@ -281,12 +281,38 @@ This project follows standard DevOps practices provided by the **DevOps Practice
 
 **Quick reference:** See [PRACTICE-INDEX.md](../devops-practices-mcp/PRACTICE-INDEX.md) for scenario-based lookup.
 
+**⚠️ Fallback if MCP unavailable:**
+- GitHub: https://github.com/ai-4-devops/devops-practices/tree/main/practices
+- Local: `~/.mcp-servers/devops-practices-mcp/practices/`
+- Critical summaries in Appendix below
+
 ### Templates Available
 
 1. **CLAUDE.md** - Project instructions template
 2. **TRACKER.md** - Task tracking template
 3. **CURRENT-STATE.md** - Session handoff template
 4. **RUNBOOK.md** - Session log template (use for EVERY session)
+```
+
+### 4.3: Add Fallback Appendix (Recommended)
+
+**For resilience, add critical practice summaries as fallback:**
+
+Use the appendix from [CLAUDE-template.md](templates/CLAUDE-template.md) or create a minimal one:
+
+```markdown
+## Appendix: Critical Practices (Fallback if MCP Unavailable)
+
+**Full practices**: https://github.com/ai-4-devops/devops-practices/tree/main/practices
+
+### Essential Patterns
+- **Air-gapped**: Laptop → S3 → Bastion (no direct AWS from laptop)
+- **Docs**: guides/ = HOW | RUNBOOKS/ = WHAT | reports/ = WHY
+- **Git**: Always `git mv` for tracked files
+- **Tracking**: Update TRACKER.md + CURRENT-STATE.md every session
+- **Runbooks**: MANDATORY for every session in docs/RUNBOOKS/
+
+See template for full appendix with summaries.
 ```
 
 ---
@@ -499,6 +525,14 @@ git push origin main
 3. Run health check: `bash health-check.sh`
 4. Restart Claude completely
 5. Check Claude logs for MCP errors
+
+**Fallback workaround:**
+```
+If MCP server won't start, access practices directly:
+- GitHub: https://github.com/ai-4-devops/devops-practices/tree/main/practices
+- Local: cat ~/.mcp-servers/devops-practices-mcp/practices/03-02-air-gapped-workflow.md
+- Appendix in project CLAUDE.md (if you added it in Step 4.3)
+```
 
 ### Issue: Practice content is outdated
 
